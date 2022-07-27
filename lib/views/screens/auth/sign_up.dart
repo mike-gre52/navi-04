@@ -85,6 +85,10 @@ class _SignUpState extends State<SignUp> {
               icon: Icons.person_outline_rounded,
               placeholderText: 'Username',
               controller: _usernameController,
+              borderColor: royalYellow,
+              textfieldWidth: 350,
+              textfieldHeight: 65,
+              borderRadius: 10,
             ),
             SizedBox(
               height: height20,
@@ -93,6 +97,10 @@ class _SignUpState extends State<SignUp> {
               icon: Icons.mail_outline_rounded,
               placeholderText: 'Email',
               controller: _emailController,
+              borderColor: royalYellow,
+              textfieldWidth: 350,
+              textfieldHeight: 65,
+              borderRadius: 10,
             ),
             SizedBox(
               height: height20,
@@ -101,7 +109,11 @@ class _SignUpState extends State<SignUp> {
               icon: Icons.lock_outline,
               placeholderText: 'Password',
               controller: _passwordController,
+              borderColor: royalYellow,
               showVisibilityIcon: true,
+              textfieldWidth: 350,
+              textfieldHeight: 65,
+              borderRadius: 10,
             ),
             SizedBox(
               height: height30,

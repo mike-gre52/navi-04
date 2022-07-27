@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:whats_for_dinner/views/screens/add_restaurant.dart';
 import 'package:whats_for_dinner/views/screens/navigation.dart';
 
 import '../views/screens/auth/sign_in.dart';
@@ -8,10 +9,12 @@ class RouteHelper {
   static String home = '/';
   static String signIn = '/sign-in';
   static String signUp = '/sign-up';
+  static String addRestaurant = '/add-restaurant';
 
   static String getHomeRoute() => home;
   static String getSignInRoute() => signIn;
   static String getSignUpRoute() => signUp;
+  static String getAddRestaurantRoute() => addRestaurant;
 
   static List<GetPage> routes = [
     GetPage(
@@ -32,5 +35,11 @@ class RouteHelper {
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 250),
     ),
+    GetPage(
+      name: addRestaurant,
+      page: () => AddRestaurant(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 250),
+    )
   ];
 }

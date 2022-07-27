@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:whats_for_dinner/controllers/auth_controller.dart';
+import 'package:whats_for_dinner/controllers/user_controller.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/views/screens/auth/sign_up.dart';
 import 'package:whats_for_dinner/views/widgets/add_profile_image.dart';
@@ -65,6 +66,10 @@ class _SignInState extends State<SignIn> {
               icon: Icons.mail_outline_rounded,
               placeholderText: 'Email',
               controller: _emailController,
+              borderColor: royalYellow,
+              textfieldWidth: 350,
+              textfieldHeight: 65,
+              borderRadius: 10,
             ),
             SizedBox(
               height: height40,
@@ -73,7 +78,11 @@ class _SignInState extends State<SignIn> {
               icon: Icons.lock_outline,
               placeholderText: 'Password',
               controller: _passwordController,
+              borderColor: royalYellow,
               showVisibilityIcon: true,
+              textfieldWidth: 350,
+              textfieldHeight: 65,
+              borderRadius: 10,
             ),
             SizedBox(
               height: height30,

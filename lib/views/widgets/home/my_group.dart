@@ -5,7 +5,7 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/views/widgets/home/group_member.dart';
-import 'package:whats_for_dinner/views/widgets/home/header.dart';
+import 'package:whats_for_dinner/views/widgets/header.dart';
 
 class MyGroup extends StatefulWidget {
   const MyGroup({Key? key}) : super(key: key);
@@ -31,15 +31,15 @@ class _MyGroupState extends State<MyGroup> {
                 dividerColor: royalYellow,
               ),
               inGroup
-                  ? Text(
+                  ? Container()
+                  : Text(
                       'Manage Groups',
                       style: TextStyle(
                         fontSize: 14,
                         color: royalYellow,
                         fontWeight: FontWeight.w600,
                       ),
-                    )
-                  : Text(''),
+                    ),
             ],
           ),
           Container(

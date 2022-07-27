@@ -10,13 +10,23 @@ class CustomTextfield extends StatefulWidget {
   String placeholderText;
   TextEditingController controller;
   bool showVisibilityIcon;
+  Color borderColor;
+  bool showIcon;
+  double textfieldWidth;
+  int textfieldHeight;
+  int borderRadius;
 
   CustomTextfield({
     Key? key,
     required this.icon,
     required this.placeholderText,
     required this.controller,
+    required this.borderColor,
     this.showVisibilityIcon = false,
+    this.showIcon = true,
+    required this.textfieldWidth,
+    required this.textfieldHeight,
+    required this.borderRadius,
   }) : super(key: key);
 
   @override
@@ -38,19 +48,25 @@ class _CustomTextfieldState extends State<CustomTextfield> {
     double height65 = screenHeight / 13.78;
     double width350 = screenWidth / 1.18;
 
+    double textfieldWidth = screenWidth / (414 / widget.textfieldWidth);
+    double textfieldHeight = screenHeight / (896 / widget.textfieldHeight);
+    double textfieldBorderRadius = screenHeight / (896 / widget.borderRadius);
+
     return SizedBox(
-      height: height65,
-      width: width350,
+      height: textfieldHeight,
+      width: textfieldWidth,
       child: CupertinoTextField(
         cursorColor: black,
         cursorHeight: height25,
         placeholder: widget.placeholderText,
         controller: widget.controller,
         obscureText: widget.showVisibilityIcon ? hidePassword : false,
-        prefix: Padding(
-          padding: EdgeInsets.only(left: height15, right: height5),
-          child: Icon(widget.icon),
-        ),
+        prefix: widget.showIcon
+            ? Padding(
+                padding: EdgeInsets.only(left: height15, right: height5),
+                child: Icon(widget.icon),
+              )
+            : Container(),
         suffix: widget.showVisibilityIcon
             ? Padding(
                 padding: EdgeInsets.only(left: height15, right: height5),
@@ -77,11 +93,12 @@ class _CustomTextfieldState extends State<CustomTextfield> {
           height: 1.5,
         ),
         decoration: BoxDecoration(
-            border: Border.all(
-              color: royalYellow,
-              width: 2,
-            ),
-            borderRadius: BorderRadius.circular(height10)),
+          border: Border.all(
+            color: widget.borderColor,
+            width: 2,
+          ),
+          borderRadius: BorderRadius.circular(textfieldBorderRadius),
+        ),
       ),
     );
   }

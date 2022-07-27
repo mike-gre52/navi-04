@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
-import 'package:whats_for_dinner/views/widgets/home/header.dart';
+import 'package:whats_for_dinner/views/widgets/header.dart';
 import 'package:whats_for_dinner/views/widgets/home/quick_add_button.dart';
 
 class QuickAdd extends StatefulWidget {
