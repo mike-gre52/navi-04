@@ -6,6 +6,7 @@ class User {
   String email;
   String uid;
   String groupId;
+  bool inGroup;
 
   User({
     required this.name,
@@ -13,6 +14,7 @@ class User {
     required this.email,
     required this.uid,
     required this.groupId,
+    required this.inGroup,
   });
 
   Map<String, dynamic> toJson() => {
@@ -21,15 +23,18 @@ class User {
         "email": email,
         "uid": uid,
         "groupId": groupId,
+        "inGroup": inGroup,
       };
 
   static User fromJson(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
     return User(
-        name: snapshot['name'],
-        email: snapshot['email'],
-        uid: snapshot['uid'],
-        profileImage: snapshot['profilePhoto'],
-        groupId: snapshot['groupId']);
+      name: snapshot['name'],
+      email: snapshot['email'],
+      uid: snapshot['uid'],
+      profileImage: snapshot['profilePhoto'],
+      groupId: snapshot['groupId'],
+      inGroup: (snapshot['inGroup']),
+    );
   }
 }

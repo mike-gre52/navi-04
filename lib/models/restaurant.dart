@@ -18,6 +18,7 @@ class Restaurant {
     required this.isFavorite,
     required this.notes,
   });
+
   Map<String, dynamic> toJson() => {
         "name": name,
         "time": time,

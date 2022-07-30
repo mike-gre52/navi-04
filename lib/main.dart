@@ -1,9 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:whats_for_dinner/controllers/group_controller.dart';
 import 'package:whats_for_dinner/controllers/restaurant_controller.dart';
 import 'package:whats_for_dinner/controllers/user_controller.dart';
+import 'package:whats_for_dinner/data/local_data.dart';
 import 'package:whats_for_dinner/routes/routes.dart';
+import 'package:whats_for_dinner/utils/constants.dart';
 import 'package:whats_for_dinner/views/screens/auth/sign_up.dart';
 
 import 'controllers/auth_controller.dart';
@@ -15,8 +18,14 @@ Future<void> main() async {
     Get.put(AuthController());
     Get.put(UserController());
     Get.put(RestaurantController());
+    Get.put(GroupController());
   });
+  getData();
   runApp(const MyApp());
+}
+
+getData() async {
+  groupController.setGroupId(await Database().getGroupId());
 }
 
 class MyApp extends StatelessWidget {

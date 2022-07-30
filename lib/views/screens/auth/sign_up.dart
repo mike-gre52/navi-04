@@ -129,8 +129,8 @@ class _SignUpState extends State<SignUp> {
               },
               child: GradientButton(
                 buttonText: 'Sign Up',
-                firstColor: Color.fromRGBO(237, 207, 71, 1.0),
-                secondColor: Color.fromRGBO(204, 170, 64, 1.0),
+                firstColor: lightYellow,
+                secondColor: royalYellow,
               ),
             ),
             SizedBox(

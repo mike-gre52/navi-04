@@ -26,7 +26,7 @@ class Header extends StatelessWidget {
           ),
         ),
         Container(
-          height: 5,
+          height: 4,
           width: 30,
           color: dividerColor,
         )

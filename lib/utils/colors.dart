@@ -9,3 +9,5 @@ Color appBlue = const Color.fromRGBO(27, 91, 121, 1.0);
 Color lightGrey = const Color.fromRGBO(213, 213, 213, 1.0);
 Color green = const Color.fromRGBO(39, 138, 49, 1.0);
 Color red = const Color.fromRGBO(188, 40, 40, 1.0);
+
+Color lightYellow = const Color.fromRGBO(237, 207, 71, 1.0);

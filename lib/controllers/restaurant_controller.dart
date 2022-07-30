@@ -38,14 +38,10 @@ class RestaurantController extends GetxController {
         notes: notes,
       );
 
-      print('test1');
-
-      print('test2');
       await firestore
           .collection('restaurants')
           .doc('${DateTime.now()}')
           .set(restaurant.toJson());
-      print('test3');
     } catch (e) {
       Get.snackbar(
         'Error Adding Restaurant',

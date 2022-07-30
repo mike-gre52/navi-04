@@ -5,12 +5,14 @@ class GradientButton extends StatelessWidget {
   String buttonText;
   Color firstColor;
   Color secondColor;
+  bool showArrow;
 
   GradientButton({
     Key? key,
     required this.buttonText,
     required this.firstColor,
     required this.secondColor,
+    this.showArrow = true,
   }) : super(key: key);
 
   @override
@@ -35,19 +37,26 @@ class GradientButton extends StatelessWidget {
       ),
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: height30),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              buttonText,
-              style: TextStyle(color: Colors.white, fontSize: 22),
-            ),
-            const Icon(
-              Icons.arrow_forward,
-              color: Colors.white,
-            )
-          ],
-        ),
+        child: showArrow
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    buttonText,
+                    style: TextStyle(color: Colors.white, fontSize: 22),
+                  ),
+                  const Icon(
+                    Icons.arrow_forward,
+                    color: Colors.white,
+                  )
+                ],
+              )
+            : Center(
+                child: Text(
+                  buttonText,
+                  style: TextStyle(color: Colors.white, fontSize: 22),
+                ),
+              ),
       ),
     );
   }

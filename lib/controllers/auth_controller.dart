@@ -79,6 +79,7 @@ class AuthController extends GetxController {
           uid: cred.user!.uid,
           profileImage: downloadUrl,
           groupId: cred.user!.uid,
+          inGroup: false,
         );
         await firestore
             .collection('users')

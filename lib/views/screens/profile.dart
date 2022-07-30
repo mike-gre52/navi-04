@@ -5,6 +5,8 @@ import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
 import 'package:whats_for_dinner/views/widgets/custom_textfield.dart';
 import 'package:whats_for_dinner/views/widgets/header.dart';
+import 'package:whats_for_dinner/views/widgets/profile/circle_check_button.dart';
+import 'package:whats_for_dinner/views/widgets/profile/join_group.dart';
 
 import '../../models/user.dart';
 import '../widgets/app_header.dart';
@@ -32,7 +34,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         stream: userController.getUserData(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            _nameController.text = snapshot.data!.name;
+            final data = snapshot.data!;
+            _nameController.text = data.name;
             return Column(
               children: [
                 AppHeader(
@@ -52,19 +55,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CustomTextfield(
-                        icon: Icons.person,
-                        placeholderText: '',
-                        controller: _nameController,
-                        borderColor: royalYellow,
-                        textfieldWidth: double.maxFinite,
-                        textfieldHeight: 60,
-                        borderRadius: 25,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          CustomTextfield(
+                            icon: Icons.person,
+                            placeholderText: '',
+                            controller: _nameController,
+                            borderColor: royalYellow,
+                            textfieldWidth: 280,
+                            textfieldHeight: 60,
+                            borderRadius: 25,
+                          ),
+                          CircleCheckButton()
+                        ],
                       ),
                       const SizedBox(
                         height: 30,
                       ),
-                      Header(headerText: 'My Group', dividerColor: royalYellow),
+                      JoinGroup(inGroup: data.inGroup),
                     ],
                   ),
                 )
