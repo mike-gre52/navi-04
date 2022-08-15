@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:whats_for_dinner/views/screens/auth/sign_in.dart';
 import 'package:whats_for_dinner/views/screens/auth/sign_up.dart';
 import 'package:whats_for_dinner/views/screens/navigation.dart';
+import '../data/local_data.dart';
 import '../models/user.dart' as model;
 
 import '../utils/constants.dart';
@@ -33,6 +34,14 @@ class AuthController extends GetxController {
     } else {
       Get.offAll(() => const Navigation());
     }
+  }
+
+  setlocalUsername(String username) {
+    Database().setUsername(username);
+  }
+
+  setlocalColor(String color) {
+    Database().setColor(color);
   }
 
   void pickImage() async {
@@ -67,20 +76,26 @@ class AuthController extends GetxController {
           email.isNotEmpty &&
           password.isNotEmpty &&
           image != null) {
+        //save username to local storage
+        setlocalUsername(username);
+        //save local color
+        setlocalColor('0xffccaa40');
+
         // save out user to our ath and firebase firestore
         UserCredential cred = await firebaseAuth.createUserWithEmailAndPassword(
           email: email,
           password: password,
         );
+
         String downloadUrl = await _uploadToStorage(image);
         model.User user = model.User(
-          name: username,
-          email: email,
-          uid: cred.user!.uid,
-          profileImage: downloadUrl,
-          groupId: cred.user!.uid,
-          inGroup: false,
-        );
+            name: username,
+            email: email,
+            uid: cred.user!.uid,
+            profileImage: downloadUrl,
+            groupId: cred.user!.uid,
+            inGroup: false,
+            color: '0xffccaa40');
         await firestore
             .collection('users')
             .doc(cred.user!.uid)
@@ -105,6 +120,8 @@ class AuthController extends GetxController {
       if (email.isNotEmpty && password.isNotEmpty) {
         await firebaseAuth.signInWithEmailAndPassword(
             email: email, password: password);
+
+        //NEED TO SAVE DATA TO LOCAL STORAGEm----------------------------------------
       } else {
         Get.snackbar(
           'Error Logging in',

@@ -25,8 +25,11 @@ Future<void> main() async {
 }
 
 getData() async {
-  groupController.setGroupId(await Database().getGroupId());
+  groupController.setGroupId();
+  globalGroupId = await Database().getGroupId();
 }
+
+late String globalGroupId;
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);

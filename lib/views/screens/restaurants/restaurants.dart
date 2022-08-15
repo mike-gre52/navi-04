@@ -8,13 +8,19 @@ import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
 import 'package:whats_for_dinner/views/widgets/app_header.dart';
 import 'package:whats_for_dinner/views/widgets/restaurants/restaurant_cell.dart';
-import '../../controllers/restaurant_controller.dart';
+import '../../../controllers/restaurant_controller.dart';
 
-import '../../models/user.dart';
+import '../../../data/local_data.dart';
+import '../../../models/user.dart';
 
-class ResturantsScreen extends StatelessWidget {
+class ResturantsScreen extends StatefulWidget {
   const ResturantsScreen({Key? key}) : super(key: key);
 
+  @override
+  State<ResturantsScreen> createState() => _ResturantsScreenState();
+}
+
+class _ResturantsScreenState extends State<ResturantsScreen> {
   Widget buildRestaurantTile(Restaurant restaurant) => RestaurantCell(
         name: restaurant.name,
         rating: restaurant.rating,

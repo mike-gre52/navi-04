@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:whats_for_dinner/data/local_data.dart';
 
 import 'package:whats_for_dinner/models/restaurant.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
@@ -7,9 +8,10 @@ import 'package:whats_for_dinner/views/widgets/custom_textfield.dart';
 import 'package:whats_for_dinner/views/widgets/header.dart';
 import 'package:whats_for_dinner/views/widgets/profile/circle_check_button.dart';
 import 'package:whats_for_dinner/views/widgets/profile/join_group.dart';
+import 'package:whats_for_dinner/views/widgets/profile/select_color.dart';
 
-import '../../models/user.dart';
-import '../widgets/app_header.dart';
+import '../../../models/user.dart';
+import '../../widgets/app_header.dart';
 
 class ProfileScreen extends StatefulWidget {
   ProfileScreen({Key? key}) : super(key: key);
@@ -67,13 +69,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             textfieldHeight: 60,
                             borderRadius: 25,
                           ),
-                          CircleCheckButton()
+                          GestureDetector(
+                            onTap: () async {
+                              print(await Database().getColor());
+                            },
+                            child: CircleCheckButton(),
+                          )
                         ],
                       ),
                       const SizedBox(
                         height: 30,
                       ),
-                      JoinGroup(inGroup: data.inGroup),
+                      JoinGroup(
+                        inGroup: data.inGroup,
+                        username: data.name,
+                        userColor: data.color,
+                      ),
                     ],
                   ),
                 )

@@ -7,6 +7,7 @@ class User {
   String uid;
   String groupId;
   bool inGroup;
+  String color;
 
   User({
     required this.name,
@@ -15,6 +16,7 @@ class User {
     required this.uid,
     required this.groupId,
     required this.inGroup,
+    required this.color,
   });
 
   Map<String, dynamic> toJson() => {
@@ -24,6 +26,7 @@ class User {
         "uid": uid,
         "groupId": groupId,
         "inGroup": inGroup,
+        "color": color,
       };
 
   static User fromJson(DocumentSnapshot snap) {
@@ -35,6 +38,7 @@ class User {
       profileImage: snapshot['profilePhoto'],
       groupId: snapshot['groupId'],
       inGroup: (snapshot['inGroup']),
+      color: snapshot["color"],
     );
   }
 }

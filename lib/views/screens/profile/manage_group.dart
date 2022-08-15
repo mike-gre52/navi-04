@@ -4,6 +4,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:whats_for_dinner/data/local_data.dart';
 import 'package:whats_for_dinner/models/group.dart';
+import 'package:whats_for_dinner/routes/routes.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
 import 'package:whats_for_dinner/views/widgets/app_header.dart';
@@ -14,6 +15,7 @@ import 'package:whats_for_dinner/views/widgets/header.dart';
 import 'package:whats_for_dinner/views/widgets/home/group_member.dart';
 import 'package:whats_for_dinner/views/widgets/home_header.dart';
 import 'package:whats_for_dinner/views/widgets/profile/group_members.dart';
+import 'package:whats_for_dinner/views/widgets/profile/select_color.dart';
 
 class ManageGroupScreen extends StatefulWidget {
   const ManageGroupScreen({Key? key}) : super(key: key);
@@ -25,8 +27,6 @@ class ManageGroupScreen extends StatefulWidget {
 class _ManageGroupScreenState extends State<ManageGroupScreen> {
   final TextEditingController _groupNameController = TextEditingController();
 
-  var groupdId = '';
-
   @override
   void dispose() {
     super.dispose();
@@ -35,6 +35,7 @@ class _ManageGroupScreenState extends State<ManageGroupScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print('Manage group screen');
     return Scaffold(
       body: StreamBuilder<Group>(
         stream: groupController.getGroupData(),
@@ -51,7 +52,7 @@ class _ManageGroupScreenState extends State<ManageGroupScreen> {
                   textColor: black,
                   dividerColor: royalYellow,
                   rightAction: Text(
-                    'Cancel',
+                    'Back',
                     style: TextStyle(
                       color: black,
                       fontSize: 20,
@@ -94,13 +95,65 @@ class _ManageGroupScreenState extends State<ManageGroupScreen> {
                         borderRadius: 10,
                       ),
                       const SizedBox(height: 20),
-                      Header(
-                        headerText: 'Members',
-                        dividerColor: royalYellow,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Header(
+                            headerText: 'Members',
+                            dividerColor: royalYellow,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Get.toNamed(RouteHelper.selectColor);
+                            },
+                            child: Text(
+                              'Edit Color',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  color: royalYellow),
+                            ),
+                          )
+                        ],
                       ),
                       const SizedBox(height: 20),
                       GroupMembers(members: data.members),
-                      const SizedBox(height: 40),
+                      Header(
+                          headerText: 'Group Code', dividerColor: royalYellow),
+                      const SizedBox(height: 10),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: royalYellow.withAlpha(75),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              data.groupId,
+                              style: TextStyle(
+                                color: black,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            Icon(Icons.content_copy_rounded)
+                          ],
+                        ),
+                      ),
+                      Text(
+                        'Share this code to add members',
+                        style: TextStyle(
+                          color: royalYellow,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
                       GestureDetector(
                         onTap: () {
                           //Invite Member
@@ -117,6 +170,7 @@ class _ManageGroupScreenState extends State<ManageGroupScreen> {
                         onTap: () {
                           //Leave Group
                           groupController.leaveGroup();
+                          Navigator.pop(context);
                         },
                         child: BorderButton(
                           buttonText: 'Leave',

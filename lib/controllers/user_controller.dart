@@ -25,4 +25,23 @@ class UserController extends GetxController {
     );
     return data;
   }
+
+  Future<String> getlocalUsername() async {
+    return await Database().getUsername();
+  }
+
+  Future<String> getlocalColor() async {
+    return await Database().getColor();
+  }
+
+  setlocalUsername(String username) {
+    Database().setUsername(username);
+  }
+
+  setFirebaseUserColor(String color) {
+    firestore
+        .collection('users')
+        .doc(firebaseAuth.currentUser!.uid)
+        .update({"color": color});
+  }
 }

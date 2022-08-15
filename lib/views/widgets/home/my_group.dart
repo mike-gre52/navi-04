@@ -73,18 +73,21 @@ class _MyGroupState extends State<MyGroup> {
                       children: [
                         GroupMember(
                           circleText: 'M',
+                          color: '0xff478b3a',
                         ),
                         const SizedBox(
                           width: 10,
                         ),
                         GroupMember(
                           circleText: 'A',
+                          color: '0xff478b3a',
                         ),
                         const SizedBox(
                           width: 10,
                         ),
                         GroupMember(
                           circleText: '+3',
+                          color: '4286625219',
                         ),
                       ],
                     ),

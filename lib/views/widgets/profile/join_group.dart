@@ -1,9 +1,11 @@
 import 'dart:ui';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
+import 'package:whats_for_dinner/models/group.dart';
 import 'package:whats_for_dinner/routes/routes.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
@@ -15,7 +17,14 @@ import 'package:whats_for_dinner/views/widgets/profile/circle_check_button.dart'
 
 class JoinGroup extends StatefulWidget {
   bool inGroup = false;
-  JoinGroup({Key? key, required this.inGroup}) : super(key: key);
+  String username;
+  String userColor;
+  JoinGroup({
+    Key? key,
+    required this.inGroup,
+    required this.username,
+    required this.userColor,
+  }) : super(key: key);
 
   @override
   State<JoinGroup> createState() => _JoinGroupState();
@@ -41,8 +50,9 @@ class _JoinGroupState extends State<JoinGroup> {
                 Align(
                   alignment: Alignment.center,
                   child: GestureDetector(
-                    onTap: () {
-                      Get.toNamed(RouteHelper.manageGroup);
+                    onTap: () async {
+                      await groupController.setGroupId().then(
+                          (value) => Get.toNamed(RouteHelper.manageGroup));
                     },
                     child: BorderButton(
                       buttonColor: royalYellow,
@@ -80,7 +90,15 @@ class _JoinGroupState extends State<JoinGroup> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        groupController.addGroupMember(_groupIdController.text);
+                        final newMember = Member(
+                          name: widget.username,
+                          id: firebaseAuth.currentUser!.uid,
+                          color: widget.userColor,
+                        );
+                        groupController.addGroupMember(
+                          _groupIdController.text,
+                          newMember,
+                        );
                       },
                       child: CircleCheckButton(),
                     ),

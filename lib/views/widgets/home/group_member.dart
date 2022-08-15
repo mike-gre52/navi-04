@@ -5,24 +5,32 @@ import 'package:whats_for_dinner/utils/colors.dart';
 
 class GroupMember extends StatelessWidget {
   String circleText;
+  String color;
   GroupMember({
     required this.circleText,
+    required this.color,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    Color memberColor = royalYellow;
+    memberColor = Color(int.parse(color));
+    print(circleText);
     return Column(
       children: [
         Column(
           children: [
             Container(
-              height: 65,
-              width: 65,
+              height: 50,
+              width: 50,
               decoration: BoxDecoration(
                 color: Colors.white,
                 shape: BoxShape.circle,
-                border: Border.all(width: 3, color: royalYellow),
+                border: Border.all(
+                  width: 3,
+                  color: memberColor,
+                ),
                 boxShadow: const [
                   BoxShadow(
                     color: Color.fromRGBO(180, 180, 180, 1.0),
@@ -37,12 +45,13 @@ class GroupMember extends StatelessWidget {
                   circleText.substring(0, 1).toUpperCase(),
                   style: TextStyle(
                       fontSize: 25,
-                      color: royalYellow,
+                      color: memberColor,
                       fontWeight: FontWeight.w500),
                 ),
               ),
             ),
             SizedBox(height: 5),
+            /*
             Text(
               circleText.substring(0, 1).toUpperCase() +
                   circleText.substring(1),
@@ -51,7 +60,8 @@ class GroupMember extends StatelessWidget {
                 color: black,
                 fontWeight: FontWeight.w600,
               ),
-            )
+            ),
+            */
           ],
         )
       ],

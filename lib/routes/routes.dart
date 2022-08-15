@@ -1,7 +1,8 @@
 import 'package:get/get.dart';
-import 'package:whats_for_dinner/views/screens/add_restaurant.dart';
-import 'package:whats_for_dinner/views/screens/create_group.dart';
-import 'package:whats_for_dinner/views/screens/manage_group.dart';
+import 'package:whats_for_dinner/views/screens/profile/select_color_screen.dart';
+import 'package:whats_for_dinner/views/screens/restaurants/add_restaurant.dart';
+import 'package:whats_for_dinner/views/screens/profile/create_group.dart';
+import 'package:whats_for_dinner/views/screens/profile/manage_group.dart';
 import 'package:whats_for_dinner/views/screens/navigation.dart';
 
 import '../views/screens/auth/sign_in.dart';
@@ -14,6 +15,7 @@ class RouteHelper {
   static String addRestaurant = '/add-restaurant';
   static String createGroup = '/create-group';
   static String manageGroup = '/manage-group';
+  static String selectColor = '/select-color';
 
   static String getHomeRoute() => home;
   static String getSignInRoute() => signIn;
@@ -21,11 +23,12 @@ class RouteHelper {
   static String getAddRestaurantRoute() => addRestaurant;
   static String getCreateGroupRoute() => createGroup;
   static String getManageGroupRoute() => manageGroup;
+  static String getSelectColorRoute() => selectColor;
 
   static List<GetPage> routes = [
     GetPage(
       name: home,
-      page: () => Navigation(),
+      page: () => const Navigation(),
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 250),
     ),
@@ -49,13 +52,19 @@ class RouteHelper {
     ),
     GetPage(
       name: createGroup,
-      page: () => CreateGroupScreen(),
+      page: () => const CreateGroupScreen(),
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 250),
     ),
     GetPage(
       name: manageGroup,
-      page: () => ManageGroupScreen(),
+      page: () => const ManageGroupScreen(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 250),
+    ),
+    GetPage(
+      name: selectColor,
+      page: () => const SelectColorScreen(),
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 250),
     ),
