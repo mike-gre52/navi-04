@@ -19,7 +19,6 @@ class UserController extends GetxController {
         .map(
       (snapshot) {
         User user = User.fromJson(snapshot);
-        print(user.inGroup);
         return user;
       },
     );

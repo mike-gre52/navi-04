@@ -6,7 +6,7 @@ import 'package:whats_for_dinner/models/restaurant.dart';
 import 'package:whats_for_dinner/routes/routes.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
-import 'package:whats_for_dinner/views/widgets/app_header.dart';
+import 'package:whats_for_dinner/views/widgets/app/app_header.dart';
 import 'package:whats_for_dinner/views/widgets/restaurants/restaurant_cell.dart';
 import '../../../controllers/restaurant_controller.dart';
 
@@ -70,15 +70,20 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
                       ),
                     ),
                   ),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(),
-                  height: 600, // need to calculate available space
                   child: ListView(
-                    padding: EdgeInsets.all(0),
-                    children: restaurants.map(buildRestaurantTile).toList(),
+                    scrollDirection: Axis.horizontal,
+                    children: chips,
                   ),
-                )
+                ),
+                Expanded(
+                  child: Container(
+                    margin: EdgeInsets.symmetric(),
+                    child: ListView(
+                      padding: EdgeInsets.all(0),
+                      children: restaurants.map(buildRestaurantTile).toList(),
+                    ),
+                  ),
+                ),
               ],
             );
           } else {
@@ -87,5 +92,26 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
         },
       ),
     );
+  }
+}
+
+List<Chip> chips = [
+  Chip(
+    label: Row(
+      children: const [
+        Icon(Icons.delivery_dining_rounded),
+        SizedBox(width: 5),
+        Text('Delivery'),
+      ],
+    ),
+  ),
+];
+
+class CustomChip extends StatelessWidget {
+  const CustomChip({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Chip(label: Text(''));
   }
 }

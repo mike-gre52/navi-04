@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:whats_for_dinner/main.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
-import 'package:whats_for_dinner/views/widgets/header.dart';
+import 'package:whats_for_dinner/views/widgets/app/header.dart';
 import 'package:whats_for_dinner/views/widgets/home/home_circle_button.dart';
 import 'package:whats_for_dinner/views/widgets/home/my_group.dart';
 import 'package:whats_for_dinner/views/widgets/home/quick_add.dart';
 
 import '../../models/user.dart';
-import '../widgets/home_header.dart';
+import '../widgets/home/home_header.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);

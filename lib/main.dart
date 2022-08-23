@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:whats_for_dinner/controllers/group_controller.dart';
+import 'package:whats_for_dinner/controllers/lists_controller.dart';
 import 'package:whats_for_dinner/controllers/restaurant_controller.dart';
 import 'package:whats_for_dinner/controllers/user_controller.dart';
 import 'package:whats_for_dinner/data/local_data.dart';
@@ -19,17 +20,21 @@ Future<void> main() async {
     Get.put(UserController());
     Get.put(RestaurantController());
     Get.put(GroupController());
+    Get.put(ListsController());
   });
-  getData();
+  await getData();
   runApp(const MyApp());
 }
 
 getData() async {
   groupController.setGroupId();
   globalGroupId = await Database().getGroupId();
+  await authController.getUserData();
 }
 
+late String globalUsername;
 late String globalGroupId;
+late String globalColor;
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);

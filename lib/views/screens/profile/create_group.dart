@@ -4,9 +4,9 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
-import 'package:whats_for_dinner/views/widgets/app_header.dart';
-import 'package:whats_for_dinner/views/widgets/custom_textfield.dart';
-import 'package:whats_for_dinner/views/widgets/gradient_button.dart';
+import 'package:whats_for_dinner/views/widgets/app/app_header.dart';
+import 'package:whats_for_dinner/views/widgets/app/custom_textfield.dart';
+import 'package:whats_for_dinner/views/widgets/app/gradient_button.dart';
 
 class CreateGroupScreen extends StatefulWidget {
   const CreateGroupScreen({Key? key}) : super(key: key);
@@ -44,7 +44,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
             ),
           ),
           onIconClick: () {
-            //pop screen
+            Navigator.pop(context);
           },
         ),
         const SizedBox(

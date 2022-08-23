@@ -4,14 +4,14 @@ import 'package:whats_for_dinner/data/local_data.dart';
 import 'package:whats_for_dinner/models/restaurant.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
-import 'package:whats_for_dinner/views/widgets/custom_textfield.dart';
-import 'package:whats_for_dinner/views/widgets/header.dart';
+import 'package:whats_for_dinner/views/widgets/app/custom_textfield.dart';
+import 'package:whats_for_dinner/views/widgets/app/header.dart';
 import 'package:whats_for_dinner/views/widgets/profile/circle_check_button.dart';
 import 'package:whats_for_dinner/views/widgets/profile/join_group.dart';
 import 'package:whats_for_dinner/views/widgets/profile/select_color.dart';
 
 import '../../../models/user.dart';
-import '../../widgets/app_header.dart';
+import '../../widgets/app/app_header.dart';
 
 class ProfileScreen extends StatefulWidget {
   ProfileScreen({Key? key}) : super(key: key);

@@ -8,6 +8,7 @@ import 'package:whats_for_dinner/routes/routes.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
 import 'package:whats_for_dinner/views/screens/home.dart';
+import 'package:whats_for_dinner/views/screens/lists/lists.dart';
 import 'package:whats_for_dinner/views/screens/profile/profile.dart';
 import 'package:whats_for_dinner/views/screens/restaurants/restaurants.dart';
 
@@ -33,16 +34,7 @@ class _NavigationState extends State<Navigation> {
     List pages = [
       HomeScreen(),
       ResturantsScreen(),
-      GestureDetector(
-        onTap: () {
-          authController.signOut();
-        },
-        child: Container(
-          child: Center(
-            child: Text('Page 3'),
-          ),
-        ),
-      ),
+      ListsScreen(),
       Container(child: Center(child: Text('Page 4'))),
       ProfileScreen(),
     ];

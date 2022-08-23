@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:whats_for_dinner/main.dart';
 import 'package:whats_for_dinner/views/screens/auth/sign_in.dart';
 import 'package:whats_for_dinner/views/screens/auth/sign_up.dart';
 import 'package:whats_for_dinner/views/screens/navigation.dart';
@@ -26,6 +28,20 @@ class AuthController extends GetxController {
     _user = Rx<User?>(firebaseAuth.currentUser);
     _user.bindStream(firebaseAuth.authStateChanges());
     ever(_user, _setInitialScreen);
+  }
+
+  Future<void> getUserData() async {
+    final docRef =
+        firestore.collection('users').doc(firebaseAuth.currentUser!.uid);
+    await docRef.get().then(
+      (DocumentSnapshot doc) {
+        final data = doc.data() as Map<String, dynamic>;
+        globalGroupId = data['groupId'];
+        globalUsername = data['name'];
+        globalColor = data['color'];
+      },
+      onError: (e) => print("Error getting document: $e"),
+    );
   }
 
   _setInitialScreen(User? user) {

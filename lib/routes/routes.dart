@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:whats_for_dinner/views/screens/lists/add_list.dart';
+import 'package:whats_for_dinner/views/screens/lists/list.dart';
 import 'package:whats_for_dinner/views/screens/profile/select_color_screen.dart';
 import 'package:whats_for_dinner/views/screens/restaurants/add_restaurant.dart';
 import 'package:whats_for_dinner/views/screens/profile/create_group.dart';
@@ -16,6 +18,8 @@ class RouteHelper {
   static String createGroup = '/create-group';
   static String manageGroup = '/manage-group';
   static String selectColor = '/select-color';
+  static String singleList = '/single-list';
+  static String addList = '/add-list';
 
   static String getHomeRoute() => home;
   static String getSignInRoute() => signIn;
@@ -24,6 +28,8 @@ class RouteHelper {
   static String getCreateGroupRoute() => createGroup;
   static String getManageGroupRoute() => manageGroup;
   static String getSelectColorRoute() => selectColor;
+  static String getSingleList() => singleList;
+  static String getAddList() => addList;
 
   static List<GetPage> routes = [
     GetPage(
@@ -65,6 +71,18 @@ class RouteHelper {
     GetPage(
       name: selectColor,
       page: () => const SelectColorScreen(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 250),
+    ),
+    GetPage(
+      name: singleList,
+      page: () => ListScreen(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 250),
+    ),
+    GetPage(
+      name: addList,
+      page: () => AddListScreen(),
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 250),
     ),

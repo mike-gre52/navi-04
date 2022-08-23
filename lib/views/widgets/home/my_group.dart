@@ -5,7 +5,7 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/views/widgets/home/group_member.dart';
-import 'package:whats_for_dinner/views/widgets/header.dart';
+import 'package:whats_for_dinner/views/widgets/app/header.dart';
 
 class MyGroup extends StatefulWidget {
   const MyGroup({Key? key}) : super(key: key);

@@ -1,0 +1,45 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/src/foundation/key.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:whats_for_dinner/models/list.dart';
+import 'package:whats_for_dinner/utils/constants.dart';
+import 'package:whats_for_dinner/views/widgets/lists/list_item.dart';
+
+class ListColumn extends StatelessWidget {
+  String listId;
+  ListColumn({
+    Key? key,
+    required this.listId,
+  }) : super(key: key);
+
+  Widget buildListItem(Item item) => ListItem(
+        listId: listId,
+        showCheckBox: true,
+        item: item,
+      );
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<List<Item>>(
+        stream: listController.getListItems(listId),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final listItems = snapshot.data!;
+            return Expanded(
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Container(
+                  margin: const EdgeInsets.only(top: 5, left: 30, right: 30),
+                  width: double.infinity,
+                  child: ListView(
+                      padding: const EdgeInsets.only(top: 0),
+                      children: listItems.reversed.map(buildListItem).toList()),
+                ),
+              ),
+            );
+          } else {
+            return Container();
+          }
+        });
+  }
+}

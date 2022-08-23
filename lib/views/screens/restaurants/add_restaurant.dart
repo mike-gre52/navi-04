@@ -5,9 +5,9 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
-import 'package:whats_for_dinner/views/widgets/app_header.dart';
-import 'package:whats_for_dinner/views/widgets/custom_textfield.dart';
-import 'package:whats_for_dinner/views/widgets/notes_textfield.dart';
+import 'package:whats_for_dinner/views/widgets/app/app_header.dart';
+import 'package:whats_for_dinner/views/widgets/app/custom_textfield.dart';
+import 'package:whats_for_dinner/views/widgets/restaurants/notes_textfield.dart';
 import 'package:whats_for_dinner/views/widgets/restaurants/delivery_segmented_control.dart';
 import 'package:whats_for_dinner/views/widgets/restaurants/price_segmented_control.dart';
 import 'package:whats_for_dinner/views/widgets/restaurants/select_rating.dart';
@@ -76,7 +76,9 @@ class _AddRestaurantState extends State<AddRestaurant> {
                 fontWeight: FontWeight.w600,
               ),
             ),
-            onIconClick: () {},
+            onIconClick: () {
+              Navigator.pop(context);
+            },
           ),
           //NEED TO MAKE SURE TIME IS A NUMBER - WILL SET THE KEYBOARD TO NUMPAD BUT STILL NEED TO VERIFY
           Container(

@@ -9,10 +9,10 @@ import 'package:whats_for_dinner/models/group.dart';
 import 'package:whats_for_dinner/routes/routes.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
-import 'package:whats_for_dinner/views/widgets/border_button.dart';
-import 'package:whats_for_dinner/views/widgets/custom_textfield.dart';
+import 'package:whats_for_dinner/views/widgets/app/border_button.dart';
+import 'package:whats_for_dinner/views/widgets/app/custom_textfield.dart';
 import 'package:whats_for_dinner/views/widgets/home/group_member.dart';
-import 'package:whats_for_dinner/views/widgets/header.dart';
+import 'package:whats_for_dinner/views/widgets/app/header.dart';
 import 'package:whats_for_dinner/views/widgets/profile/circle_check_button.dart';
 
 class JoinGroup extends StatefulWidget {
@@ -40,23 +40,18 @@ class _JoinGroupState extends State<JoinGroup> {
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Header(
-                  headerText: 'My Group',
-                  dividerColor: royalYellow,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Align(
-                  alignment: Alignment.center,
-                  child: GestureDetector(
-                    onTap: () async {
-                      await groupController.setGroupId().then(
-                          (value) => Get.toNamed(RouteHelper.manageGroup));
-                    },
-                    child: BorderButton(
-                      buttonColor: royalYellow,
-                      buttonText: 'Manage Group',
+                GestureDetector(
+                  onTap: () async {
+                    await groupController
+                        .setGroupId()
+                        .then((value) => Get.toNamed(RouteHelper.manageGroup));
+                  },
+                  child: Text(
+                    'Manage Group',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                      color: royalYellow,
                     ),
                   ),
                 ),

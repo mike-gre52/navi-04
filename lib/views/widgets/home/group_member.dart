@@ -16,7 +16,6 @@ class GroupMember extends StatelessWidget {
   Widget build(BuildContext context) {
     Color memberColor = royalYellow;
     memberColor = Color(int.parse(color));
-    print(circleText);
     return Column(
       children: [
         Column(

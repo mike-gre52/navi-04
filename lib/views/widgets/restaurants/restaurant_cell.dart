@@ -50,8 +50,9 @@ class RestaurantCell extends StatelessWidget {
                 children: [
                   Text(
                     name,
-                    maxLines: 1,
+                    maxLines: 2,
                     style: TextStyle(
+                      height: 0.95,
                       fontSize: 20,
                       fontWeight: FontWeight.w800,
                       color: black,
@@ -135,7 +136,7 @@ class RestaurantCell extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(width: 30),
+            const SizedBox(width: 15),
             isFavorite
                 ? Icon(
                     Icons.star_rounded,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 
-import '../../controllers/auth_controller.dart';
+import '../../../controllers/auth_controller.dart';
 
 class AddProfileImage extends StatelessWidget {
   AddProfileImage({Key? key}) : super(key: key);

@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:whats_for_dinner/controllers/auth_controller.dart';
 import 'package:whats_for_dinner/controllers/user_controller.dart';
+import 'package:whats_for_dinner/main.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/views/screens/auth/sign_up.dart';
-import 'package:whats_for_dinner/views/widgets/add_profile_image.dart';
-import 'package:whats_for_dinner/views/widgets/bottom_text.dart';
-import 'package:whats_for_dinner/views/widgets/custom_textfield.dart';
-import 'package:whats_for_dinner/views/widgets/gradient_button.dart';
+import 'package:whats_for_dinner/views/widgets/auth/add_profile_image.dart';
+import 'package:whats_for_dinner/views/widgets/auth/bottom_text.dart';
+import 'package:whats_for_dinner/views/widgets/app/custom_textfield.dart';
+import 'package:whats_for_dinner/views/widgets/app/gradient_button.dart';
 
 import '../../../routes/routes.dart';
 import '../../../utils/constants.dart';

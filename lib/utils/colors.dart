@@ -11,6 +11,7 @@ Color green = const Color.fromRGBO(39, 138, 49, 1.0);
 Color red = const Color.fromRGBO(188, 40, 40, 1.0);
 
 Color lightYellow = const Color.fromRGBO(237, 207, 71, 1.0);
+Color lightGreen = const Color.fromRGBO(124, 227, 111, 1.0);
 
 //Group Member Colors
 Color color1 = const Color.fromRGBO(192, 32, 70, 1.0);

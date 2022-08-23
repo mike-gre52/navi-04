@@ -3,7 +3,7 @@ import 'package:get/route_manager.dart';
 import 'package:whats_for_dinner/data/local_data.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
-import 'package:whats_for_dinner/views/widgets/border_button.dart';
+import 'package:whats_for_dinner/views/widgets/app/border_button.dart';
 
 class SelectColor extends StatelessWidget {
   const SelectColor({Key? key}) : super(key: key);

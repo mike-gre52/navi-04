@@ -19,7 +19,6 @@ class GroupController extends GetxController {
   var groupInstance = Group.static();
 
   Stream<Group> getGroupData() {
-    print('in get group');
     Stream<Group> data =
         firestore.collection('groups').doc(controllerGroupId).snapshots().map(
       (snapshot) {

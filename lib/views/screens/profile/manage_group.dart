@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
@@ -7,13 +8,13 @@ import 'package:whats_for_dinner/models/group.dart';
 import 'package:whats_for_dinner/routes/routes.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
-import 'package:whats_for_dinner/views/widgets/app_header.dart';
-import 'package:whats_for_dinner/views/widgets/border_button.dart';
-import 'package:whats_for_dinner/views/widgets/custom_textfield.dart';
-import 'package:whats_for_dinner/views/widgets/gradient_button.dart';
-import 'package:whats_for_dinner/views/widgets/header.dart';
+import 'package:whats_for_dinner/views/widgets/app/app_header.dart';
+import 'package:whats_for_dinner/views/widgets/app/border_button.dart';
+import 'package:whats_for_dinner/views/widgets/app/custom_textfield.dart';
+import 'package:whats_for_dinner/views/widgets/app/gradient_button.dart';
+import 'package:whats_for_dinner/views/widgets/app/header.dart';
 import 'package:whats_for_dinner/views/widgets/home/group_member.dart';
-import 'package:whats_for_dinner/views/widgets/home_header.dart';
+import 'package:whats_for_dinner/views/widgets/home/home_header.dart';
 import 'package:whats_for_dinner/views/widgets/profile/group_members.dart';
 import 'package:whats_for_dinner/views/widgets/profile/select_color.dart';
 
@@ -35,7 +36,6 @@ class _ManageGroupScreenState extends State<ManageGroupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('Manage group screen');
     return Scaffold(
       body: StreamBuilder<Group>(
         stream: groupController.getGroupData(),
@@ -141,7 +141,13 @@ class _ManageGroupScreenState extends State<ManageGroupScreen> {
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                            Icon(Icons.content_copy_rounded)
+                            GestureDetector(
+                              onTap: (() {
+                                Clipboard.setData(
+                                    ClipboardData(text: data.groupId));
+                              }),
+                              child: Icon(Icons.content_copy_rounded),
+                            )
                           ],
                         ),
                       ),
