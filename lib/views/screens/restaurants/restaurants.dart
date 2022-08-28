@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:whats_for_dinner/models/filter.dart';
 import 'package:whats_for_dinner/models/restaurant.dart';
 import 'package:whats_for_dinner/routes/routes.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
@@ -42,8 +44,10 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final restaurants = snapshot.data!;
-            restaurants.shuffle();
-            restaurants.shuffle();
+            final filteredRestaurants = restaurantController.filterRestaurants(
+                restaurants, restaurantController.filter);
+            filteredRestaurants.shuffle();
+            print(filteredRestaurants.length);
             return Column(
               children: [
                 AppHeader(
@@ -80,7 +84,8 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
                     margin: EdgeInsets.symmetric(),
                     child: ListView(
                       padding: EdgeInsets.all(0),
-                      children: restaurants.map(buildRestaurantTile).toList(),
+                      children:
+                          filteredRestaurants.map(buildRestaurantTile).toList(),
                     ),
                   ),
                 ),
@@ -95,23 +100,81 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
   }
 }
 
-List<Chip> chips = [
-  Chip(
-    label: Row(
-      children: const [
-        Icon(Icons.delivery_dining_rounded),
-        SizedBox(width: 5),
-        Text('Delivery'),
-      ],
-    ),
+List<CustomChip> chips = [
+  CustomChip(
+    chipText: '',
+    chipIcon: CupertinoIcons.slider_horizontal_3,
+    onClick: () {
+      Get.toNamed(RouteHelper.restaurantFilter);
+    },
+  ),
+  CustomChip(
+    chipText: 'Favorite',
+    chipIcon: Icons.star_rounded,
+    onClick: () {
+      //Get.toNamed(RouteHelper.restaurantFilter);
+    },
+  ),
+  CustomChip(
+    chipText: 'Delivery',
+    chipIcon: Icons.delivery_dining,
+    onClick: () {
+      //Get.toNamed(RouteHelper.restaurantFilter);
+    },
+  ),
+  CustomChip(
+    chipText: 'Cost',
+    chipIcon: Icons.price_change,
+    onClick: () {
+      //Get.toNamed(RouteHelper.restaurantFilter);
+    },
+  ),
+  CustomChip(
+    chipText: 'Time',
+    chipIcon: Icons.timer,
+    onClick: () {
+      //Get.toNamed(RouteHelper.restaurantFilter);
+    },
+  ),
+  CustomChip(
+    chipText: 'Rating',
+    chipIcon: Icons.star_rounded,
+    onClick: () {
+      //Get.toNamed(RouteHelper.restaurantFilter);
+    },
   ),
 ];
 
 class CustomChip extends StatelessWidget {
-  const CustomChip({Key? key}) : super(key: key);
+  String chipText;
+  IconData chipIcon;
+  Function onClick;
+  CustomChip({
+    Key? key,
+    required this.chipText,
+    required this.chipIcon,
+    required this.onClick,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Chip(label: Text(''));
+    return GestureDetector(
+      onTap: () {
+        onClick();
+      },
+      child: Container(
+        margin: const EdgeInsets.only(left: 10),
+        child: Chip(
+          elevation: 3,
+          backgroundColor: Colors.white,
+          label: Row(
+            children: [
+              Icon(chipIcon),
+              Text(chipText),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

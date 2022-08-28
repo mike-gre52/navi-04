@@ -1,54 +1,45 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
+import 'package:whats_for_dinner/models/filter.dart';
+import 'package:whats_for_dinner/routes/routes.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
 import 'package:whats_for_dinner/views/widgets/app/app_header.dart';
 import 'package:whats_for_dinner/views/widgets/app/custom_textfield.dart';
-import 'package:whats_for_dinner/views/widgets/restaurants/notes_textfield.dart';
 import 'package:whats_for_dinner/views/widgets/restaurants/delivery_segmented_control.dart';
 import 'package:whats_for_dinner/views/widgets/restaurants/price_segmented_control.dart';
 import 'package:whats_for_dinner/views/widgets/restaurants/select_rating.dart';
 
-class AddRestaurant extends StatefulWidget {
-  AddRestaurant({Key? key}) : super(key: key);
+class FilterRestaurantScreens extends StatefulWidget {
+  const FilterRestaurantScreens({Key? key}) : super(key: key);
 
   @override
-  State<AddRestaurant> createState() => _AddRestaurantState();
+  State<FilterRestaurantScreens> createState() =>
+      _FilterRestaurantScreensState();
 }
 
-class _AddRestaurantState extends State<AddRestaurant> {
-  TextEditingController _nameController = TextEditingController();
+class _FilterRestaurantScreensState extends State<FilterRestaurantScreens> {
   TextEditingController _timeController = TextEditingController();
-  TextEditingController _notesController = TextEditingController();
 
-  bool doesDelivery = true;
+  bool onlyDelivery = false;
+  bool onlyFavorite = false;
   int rating = 1;
-  int price = 1;
+  int price = 3;
 
   Object _selectedSegment = 0;
 
-  @override
-  void dispose() {
-    super.dispose();
-    _nameController.dispose();
-    _timeController.dispose();
-    _notesController.dispose();
-  }
-
   void setDeliveryStatus(value) {
     if (value == 0) {
-      doesDelivery = true;
+      onlyDelivery = true;
     } else {
-      doesDelivery = false;
+      onlyDelivery = false;
     }
   }
 
   void setPriceStatus(value) {
     price = value;
-    print(price);
   }
 
   void newRatingSelected(newValue) {
@@ -61,57 +52,46 @@ class _AddRestaurantState extends State<AddRestaurant> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AppHeader(
-            headerText: 'Add Restaurant',
-            headerColor: appRed,
-            borderColor: royalYellow,
-            textColor: Colors.white,
-            dividerColor: Colors.white,
-            rightAction: const Text(
-              'Cancel',
+            headerText: 'Filter',
+            headerColor: Colors.white,
+            borderColor: appRed,
+            textColor: black,
+            dividerColor: appRed,
+            rightAction: Text(
+              'Done',
               style: TextStyle(
-                color: Colors.white,
+                color: black,
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
               ),
             ),
             onIconClick: () {
-              Navigator.pop(context);
+              int maxTime;
+              bool useTime;
+              if (_timeController.text == '') {
+                maxTime = 0;
+                useTime = false;
+              } else {
+                maxTime = int.parse(_timeController.text);
+                useTime = true;
+              }
+
+              final filter = Filter(
+                maxTime: maxTime,
+                minRating: rating,
+                maxPrice: price,
+                onlyDelivery: onlyDelivery,
+                onlyFavorite: onlyFavorite,
+                useFilter: true,
+                useTime: useTime,
+              );
+
+              restaurantController.setfilter(filter);
+
+              Get.toNamed(RouteHelper.home);
             },
-          ),
-          //NEED TO MAKE SURE TIME IS A NUMBER - WILL SET THE KEYBOARD TO NUMPAD BUT STILL NEED TO VERIFY
-          Container(
-            margin: EdgeInsets.only(left: 30, top: 30),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  margin: EdgeInsets.only(left: 5),
-                  child: Text(
-                    'Name',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: black,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-                Container(
-                  child: CustomTextfield(
-                    icon: Icons.person,
-                    placeholderText: '',
-                    controller: _nameController,
-                    borderColor: appRed,
-                    showIcon: false,
-                    textfieldWidth: 350,
-                    textfieldHeight: 65,
-                    borderRadius: 10,
-                  ),
-                ),
-              ],
-            ),
           ),
           Container(
             margin: EdgeInsets.symmetric(horizontal: 30),
@@ -125,7 +105,7 @@ class _AddRestaurantState extends State<AddRestaurant> {
                     Container(
                       margin: EdgeInsets.only(left: 5, top: 30),
                       child: Text(
-                        'Time',
+                        'Max Time',
                         style: TextStyle(
                             fontSize: 18,
                             color: black,
@@ -146,25 +126,46 @@ class _AddRestaurantState extends State<AddRestaurant> {
                     )
                   ],
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(left: 5, top: 30),
-                      child: Text(
-                        'Rating',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: black,
-                          fontWeight: FontWeight.w500,
+                Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        //width: double.infinity,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(left: 5, top: 30),
+                              child: Text(
+                                'Min Rating',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: black,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ),
-                    SelectRating(
-                      rating: rating,
-                      onTap: newRatingSelected,
-                    ),
-                  ],
+                      SelectRating(
+                        rating: rating,
+                        onTap: newRatingSelected,
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(left: 5, top: 5),
+                        child: Text(
+                          'Clear',
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: black,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -181,7 +182,7 @@ class _AddRestaurantState extends State<AddRestaurant> {
                     Container(
                       margin: EdgeInsets.only(left: 5, top: 30),
                       child: Text(
-                        'Price',
+                        'Max Price?',
                         style: TextStyle(
                             fontSize: 18,
                             color: black,
@@ -199,7 +200,7 @@ class _AddRestaurantState extends State<AddRestaurant> {
                     Container(
                       margin: EdgeInsets.only(left: 5, top: 30),
                       child: Text(
-                        'Delivery',
+                        'Only Delivery?',
                         style: TextStyle(
                             fontSize: 18,
                             color: black,
@@ -215,64 +216,39 @@ class _AddRestaurantState extends State<AddRestaurant> {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(left: 30, top: 15),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
-                  margin: EdgeInsets.only(left: 5),
+                  margin: const EdgeInsets.only(left: 30, top: 20),
                   child: Text(
-                    'Notes',
+                    'Favorite',
                     style: TextStyle(
                         fontSize: 18,
                         color: black,
                         fontWeight: FontWeight.w500),
                   ),
                 ),
-                NotesTextfield(
-                  controller: _notesController,
-                  borderColor: appRed,
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      onlyFavorite = !onlyFavorite;
+                    });
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 15, top: 20),
+                    child: Icon(
+                      onlyFavorite
+                          ? Icons.star_rounded
+                          : Icons.star_outline_rounded,
+                      size: 40,
+                      color: appRed,
+                    ),
+                  ),
                 ),
               ],
             ),
           ),
-          Align(
-            alignment: Alignment.center,
-            child: GestureDetector(
-              onTap: () {
-                restaurantController.addRestaurant(
-                  _nameController.text,
-                  int.parse(_timeController.text),
-                  rating,
-                  price,
-                  doesDelivery,
-                  _notesController.text,
-                  false,
-                );
-                Navigator.pop(context);
-              },
-              child: Container(
-                height: 60,
-                width: 100,
-                margin: const EdgeInsets.only(
-                  top: 30,
-                ),
-                decoration: BoxDecoration(
-                  color: appRed,
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: const Center(
-                  child: Text(
-                    'Add',
-                    style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600),
-                  ),
-                ),
-              ),
-            ),
-          )
         ],
       ),
     );

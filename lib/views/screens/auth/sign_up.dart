@@ -30,6 +30,8 @@ class _SignUpState extends State<SignUp> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
+  bool isLoading = false;
+
   @override
   void dispose() {
     super.dispose();
@@ -43,7 +45,7 @@ class _SignUpState extends State<SignUp> {
       _usernameController.text,
       _emailController.text,
       _passwordController.text,
-      authController.profileImage,
+      //authController.profileImage,
     );
   }
 
@@ -55,93 +57,119 @@ class _SignUpState extends State<SignUp> {
     double height30 = screenHeight / 29.86;
     double height40 = screenHeight / 22.4;
     double height100 = screenHeight / 8.96;
+    double height105 = screenHeight / 8.5333;
     double height200 = screenHeight / 4.48;
     double height250 = screenHeight / 3.584;
     double fontSize35 = screenHeight / 25.6;
 
     return Scaffold(
-      body: Container(
-        margin: EdgeInsets.symmetric(horizontal: 32),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            AddProfileImage(),
-            SizedBox(
-              height: height40,
+      body: Stack(
+        children: [
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 32),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                //AddProfileImage(),
+                SizedBox(
+                  height: height100,
+                ),
+                Text(
+                  'Sign Up',
+                  style: TextStyle(
+                    color: black,
+                    fontSize: fontSize35,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(
+                  height: height30,
+                ),
+                CustomTextfield(
+                  icon: Icons.person_outline_rounded,
+                  placeholderText: 'Username',
+                  controller: _usernameController,
+                  borderColor: royalYellow,
+                  textfieldWidth: 350,
+                  textfieldHeight: 65,
+                  borderRadius: 10,
+                ),
+                SizedBox(
+                  height: height20,
+                ),
+                CustomTextfield(
+                  icon: Icons.mail_outline_rounded,
+                  placeholderText: 'Email',
+                  controller: _emailController,
+                  borderColor: royalYellow,
+                  textfieldWidth: 350,
+                  textfieldHeight: 65,
+                  borderRadius: 10,
+                ),
+                SizedBox(
+                  height: height20,
+                ),
+                CustomTextfield(
+                  icon: Icons.lock_outline,
+                  placeholderText: 'Password',
+                  controller: _passwordController,
+                  borderColor: royalYellow,
+                  showVisibilityIcon: true,
+                  textfieldWidth: 350,
+                  textfieldHeight: 65,
+                  borderRadius: 10,
+                ),
+                SizedBox(
+                  height: height30,
+                ),
+                GestureDetector(
+                  onTap: () async {
+                    setState(() {
+                      isLoading = true;
+                    });
+
+                    await authController.registerUser(
+                      _usernameController.text,
+                      _emailController.text,
+                      _passwordController.text,
+                      //pickedImageSignUp.value,
+                    );
+
+                    setState(() {
+                      isLoading = false;
+                    });
+                    //get data from firebase or set global data
+                  },
+                  child: GradientButton(
+                    buttonText: 'Sign Up',
+                    firstColor: lightYellow,
+                    secondColor: royalYellow,
+                  ),
+                ),
+                SizedBox(
+                  height: height100,
+                ),
+                BottomText(
+                  firstText: 'Already have an account ',
+                  secondText: 'Login',
+                  buttonRoute: RouteHelper.getSignInRoute(),
+                )
+              ],
             ),
-            Text(
-              'Sign Up',
-              style: TextStyle(
-                color: black,
-                fontSize: fontSize35,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            SizedBox(
-              height: height30,
-            ),
-            CustomTextfield(
-              icon: Icons.person_outline_rounded,
-              placeholderText: 'Username',
-              controller: _usernameController,
-              borderColor: royalYellow,
-              textfieldWidth: 350,
-              textfieldHeight: 65,
-              borderRadius: 10,
-            ),
-            SizedBox(
-              height: height20,
-            ),
-            CustomTextfield(
-              icon: Icons.mail_outline_rounded,
-              placeholderText: 'Email',
-              controller: _emailController,
-              borderColor: royalYellow,
-              textfieldWidth: 350,
-              textfieldHeight: 65,
-              borderRadius: 10,
-            ),
-            SizedBox(
-              height: height20,
-            ),
-            CustomTextfield(
-              icon: Icons.lock_outline,
-              placeholderText: 'Password',
-              controller: _passwordController,
-              borderColor: royalYellow,
-              showVisibilityIcon: true,
-              textfieldWidth: 350,
-              textfieldHeight: 65,
-              borderRadius: 10,
-            ),
-            SizedBox(
-              height: height30,
-            ),
-            GestureDetector(
-              onTap: () {
-                authController.registerUser(
-                  _usernameController.text,
-                  _emailController.text,
-                  _passwordController.text,
-                  pickedImageSignUp.value,
-                );
-              },
-              child: GradientButton(
-                buttonText: 'Sign Up',
-                firstColor: lightYellow,
-                secondColor: royalYellow,
-              ),
-            ),
-            SizedBox(
-              height: height100,
-            ),
-            BottomText(
-              firstText: 'Already have an account ',
-              secondText: 'Login',
-              buttonRoute: RouteHelper.getSignInRoute(),
-            )
-          ],
-        ),
+          ),
+          isLoading
+              ? Container(
+                  margin: EdgeInsets.only(top: height105),
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: CupertinoActivityIndicator(
+                      color: royalYellow,
+                      radius: 20,
+                    ),
+                  ),
+                )
+              : Container(),
+        ],
       ),
     );
   }

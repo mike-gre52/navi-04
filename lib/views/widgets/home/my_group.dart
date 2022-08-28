@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
-import 'package:whats_for_dinner/views/widgets/home/group_member.dart';
+import 'package:whats_for_dinner/views/widgets/profile/group_member.dart';
 import 'package:whats_for_dinner/views/widgets/app/header.dart';
 
 class MyGroup extends StatefulWidget {

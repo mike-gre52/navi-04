@@ -16,7 +16,7 @@ class DeliverySegmentedControll extends StatefulWidget {
 }
 
 class _DeliverySegmentedControllState extends State<DeliverySegmentedControll> {
-  Object _selectedSegment = 0;
+  Object _selectedSegment = 1;
 
   @override
   Widget build(BuildContext context) {

@@ -3,6 +3,7 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:whats_for_dinner/controllers/auth_controller.dart';
+import 'package:whats_for_dinner/main.dart';
 import 'package:whats_for_dinner/models/user.dart';
 import 'package:whats_for_dinner/routes/routes.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
@@ -30,12 +31,26 @@ class _NavigationState extends State<Navigation> {
   }
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     List pages = [
-      HomeScreen(),
-      ResturantsScreen(),
-      ListsScreen(),
-      Container(child: Center(child: Text('Page 4'))),
+      //const HomeScreen(),
+      const ResturantsScreen(),
+      const ListsScreen(),
+      Container(
+        child: GestureDetector(
+          onTap: () {
+            authController.signOut();
+          },
+          child: const Center(
+            child: Text('Page 4'),
+          ),
+        ),
+      ),
       ProfileScreen(),
     ];
     return Scaffold(
@@ -49,11 +64,11 @@ class _NavigationState extends State<Navigation> {
           decoration: BoxDecoration(
             border: Border(
               top: BorderSide(
-                color: (_selectedIndex == 1)
+                color: (_selectedIndex == 0)
                     ? appRed
-                    : (_selectedIndex == 2)
+                    : (_selectedIndex == 1)
                         ? appGreen
-                        : (_selectedIndex == 3)
+                        : (_selectedIndex == 2)
                             ? appBlue
                             : royalYellow,
                 width: 3,
@@ -78,11 +93,11 @@ class _NavigationState extends State<Navigation> {
               fontWeight: FontWeight.w600,
             ),
             selectedIconTheme: IconThemeData(
-              color: (_selectedIndex == 1)
+              color: (_selectedIndex == 0)
                   ? appRed
-                  : (_selectedIndex == 2)
+                  : (_selectedIndex == 1)
                       ? appGreen
-                      : (_selectedIndex == 3)
+                      : (_selectedIndex == 2)
                           ? appBlue
                           : royalYellow,
             ),
@@ -93,13 +108,13 @@ class _NavigationState extends State<Navigation> {
             currentIndex: _selectedIndex,
             onTap: onTapNav,
             items: const [
-              BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.home_rounded,
-                  size: 40,
-                ),
-                label: 'Home',
-              ),
+              //  BottomNavigationBarItem(
+              //    icon: Icon(
+              //      Icons.home_rounded,
+              //      size: 40,
+              //    ),
+              //    label: 'Home',
+              //  ),
               BottomNavigationBarItem(
                 icon: Icon(
                   Icons.format_list_bulleted_rounded,

@@ -25,10 +25,6 @@ class UserController extends GetxController {
     return data;
   }
 
-  Future<String> getlocalUsername() async {
-    return await Database().getUsername();
-  }
-
   Future<String> getlocalColor() async {
     return await Database().getColor();
   }

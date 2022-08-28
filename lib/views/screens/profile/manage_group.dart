@@ -13,7 +13,7 @@ import 'package:whats_for_dinner/views/widgets/app/border_button.dart';
 import 'package:whats_for_dinner/views/widgets/app/custom_textfield.dart';
 import 'package:whats_for_dinner/views/widgets/app/gradient_button.dart';
 import 'package:whats_for_dinner/views/widgets/app/header.dart';
-import 'package:whats_for_dinner/views/widgets/home/group_member.dart';
+import 'package:whats_for_dinner/views/widgets/profile/group_member.dart';
 import 'package:whats_for_dinner/views/widgets/home/home_header.dart';
 import 'package:whats_for_dinner/views/widgets/profile/group_members.dart';
 import 'package:whats_for_dinner/views/widgets/profile/select_color.dart';
@@ -105,10 +105,10 @@ class _ManageGroupScreenState extends State<ManageGroupScreen> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              Get.toNamed(RouteHelper.selectColor);
+                              Get.toNamed(RouteHelper.allMembers);
                             },
                             child: Text(
-                              'Edit Color',
+                              'All members',
                               style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w400,
@@ -119,6 +119,19 @@ class _ManageGroupScreenState extends State<ManageGroupScreen> {
                       ),
                       const SizedBox(height: 20),
                       GroupMembers(members: data.members),
+                      GestureDetector(
+                        onTap: () {
+                          Get.toNamed(RouteHelper.selectColor);
+                        },
+                        child: Text(
+                          'Edit Color',
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              color: royalYellow),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
                       Header(
                           headerText: 'Group Code', dividerColor: royalYellow),
                       const SizedBox(height: 10),
@@ -146,7 +159,9 @@ class _ManageGroupScreenState extends State<ManageGroupScreen> {
                                 Clipboard.setData(
                                     ClipboardData(text: data.groupId));
                               }),
-                              child: Icon(Icons.content_copy_rounded),
+                              child: const Icon(
+                                Icons.content_copy_rounded,
+                              ),
                             )
                           ],
                         ),

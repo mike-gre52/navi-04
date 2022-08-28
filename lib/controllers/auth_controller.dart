@@ -23,7 +23,7 @@ class AuthController extends GetxController {
   User get user => _user.value!;
 
   @override
-  void onReady() {
+  void onReady() async {
     super.onReady();
     _user = Rx<User?>(firebaseAuth.currentUser);
     _user.bindStream(firebaseAuth.authStateChanges());
@@ -44,10 +44,11 @@ class AuthController extends GetxController {
     );
   }
 
-  _setInitialScreen(User? user) {
+  _setInitialScreen(User? user) async {
     if (user == null) {
       Get.offAll(() => SignIn());
     } else {
+      await getData();
       Get.offAll(() => const Navigation());
     }
   }
@@ -85,13 +86,16 @@ class AuthController extends GetxController {
   }
 
   // registering the user
-  void registerUser(
-      String username, String email, String password, File? image) async {
+  Future<void> registerUser(
+    String username,
+    String email,
+    String password,
+    //File? image,
+  ) async {
     try {
-      if (username.isNotEmpty &&
-          email.isNotEmpty &&
-          password.isNotEmpty &&
-          image != null) {
+      if (username.isNotEmpty && email.isNotEmpty && password.isNotEmpty //&&
+          //image != null
+          ) {
         //save username to local storage
         setlocalUsername(username);
         //save local color
@@ -103,19 +107,22 @@ class AuthController extends GetxController {
           password: password,
         );
 
-        String downloadUrl = await _uploadToStorage(image);
+        //String downloadUrl = await _uploadToStorage(image);
         model.User user = model.User(
             name: username,
             email: email,
             uid: cred.user!.uid,
-            profileImage: downloadUrl,
+            profileImage: '',
             groupId: cred.user!.uid,
             inGroup: false,
-            color: '0xffccaa40');
+            color: '4278933797');
         await firestore
             .collection('users')
             .doc(cred.user!.uid)
             .set(user.toJson());
+
+        //get data
+        await getData();
       } else {
         Get.snackbar(
           'Error Creating Account',
@@ -131,12 +138,13 @@ class AuthController extends GetxController {
     }
   }
 
-  void loginUser(String email, String password) async {
+  Future<void> loginUser(String email, String password) async {
     try {
       if (email.isNotEmpty && password.isNotEmpty) {
         await firebaseAuth.signInWithEmailAndPassword(
             email: email, password: password);
 
+        await getData();
         //NEED TO SAVE DATA TO LOCAL STORAGEm----------------------------------------
       } else {
         Get.snackbar(

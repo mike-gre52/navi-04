@@ -4,31 +4,30 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:whats_for_dinner/models/group.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/views/widgets/profile/group_member.dart';
+import 'package:whats_for_dinner/views/widgets/profile/single_member_cell.dart';
 
-class GroupMembers extends StatelessWidget {
+class AllGroupMembers extends StatelessWidget {
   List<Member> members;
-  GroupMembers({
+  AllGroupMembers({
     Key? key,
     required this.members,
   }) : super(key: key);
 
-  Widget buildMemberCell(String name, String color) => GroupMember(
-        circleText: name,
+  Widget buildMemberCell(String name, String color) => SingleMemberCell(
+        name: name,
         color: color,
       );
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 60,
-      width: double.maxFinite,
-      child: Stack(
-        children: List.generate(
-          members.length,
-          (index) => Positioned(
-            left: index * 40,
-            child: buildMemberCell(members[index].name, members[index].color),
-          ),
+    return Expanded(
+      child: Container(
+        width: double.maxFinite,
+        child: ListView(
+          padding: EdgeInsets.all(0),
+          children: members
+              .map((member) => buildMemberCell(member.name, member.color))
+              .toList(),
         ),
       ),
     );

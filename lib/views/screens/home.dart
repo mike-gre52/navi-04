@@ -56,7 +56,6 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(
                   height: 60,
                 ),
-                const MyGroup(),
                 const SizedBox(
                   height: 60,
                 ),

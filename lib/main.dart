@@ -22,13 +22,11 @@ Future<void> main() async {
     Get.put(GroupController());
     Get.put(ListsController());
   });
-  await getData();
+  //await getData();
   runApp(const MyApp());
 }
 
 getData() async {
-  groupController.setGroupId();
-  globalGroupId = await Database().getGroupId();
   await authController.getUserData();
 }
 
@@ -42,6 +40,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      defaultTransition: Transition.upToDown,
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -51,6 +50,12 @@ class MyApp extends StatelessWidget {
       //home: const SignUp(),
       initialRoute: RouteHelper.getSignInRoute(),
       getPages: RouteHelper.routes,
+      builder: (context, child) {
+        return MediaQuery(
+          child: child!,
+          data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+        );
+      },
     );
   }
 }

@@ -87,17 +87,13 @@ class ColorSquare extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (() async {
-        String oldColor = await Database().getColor();
+      onTap: (() {
         //sets local color
         Database().setColor(color.value.toString());
         //sets firebase color
         userController.setFirebaseUserColor(color.value.toString());
         //set firebase group color
-        groupController.setFirebaseUserColorInGroup(
-          color.value.toString(),
-          oldColor,
-        );
+        groupController.setFirebaseUserColorInGroup(color.value.toString());
         Navigator.pop(context);
       }),
       child: Container(

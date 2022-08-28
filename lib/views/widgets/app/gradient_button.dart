@@ -22,10 +22,12 @@ class GradientButton extends StatelessWidget {
     double screenWidth = mediaQuery.size.width;
     double height30 = screenHeight / 29.86;
     double height65 = screenHeight / 13.78;
-    double width160 = screenWidth / 2.5875;
+    double width165 = screenWidth / 2.509;
+    double fontSize22 = screenHeight / 40.727;
+
     return Container(
       height: height65,
-      width: width160,
+      width: width165,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
         gradient: LinearGradient(
@@ -43,7 +45,7 @@ class GradientButton extends StatelessWidget {
                 children: [
                   Text(
                     buttonText,
-                    style: TextStyle(color: Colors.white, fontSize: 22),
+                    style: TextStyle(color: Colors.white, fontSize: fontSize22),
                   ),
                   const Icon(
                     Icons.arrow_forward,
@@ -54,7 +56,7 @@ class GradientButton extends StatelessWidget {
             : Center(
                 child: Text(
                   buttonText,
-                  style: TextStyle(color: Colors.white, fontSize: 22),
+                  style: TextStyle(color: Colors.white, fontSize: fontSize22),
                 ),
               ),
       ),

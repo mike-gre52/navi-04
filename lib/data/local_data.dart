@@ -3,17 +3,6 @@ import 'package:whats_for_dinner/utils/constants.dart';
 
 class Database {
   // Group Id
-  Future<void> setGroupId(String groupId) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('groupId', groupId);
-  }
-
-  Future<String> getGroupId() async {
-    final prefs = await SharedPreferences.getInstance();
-    final groupId = prefs.getString('groupId');
-    if (groupId == null) return ' ';
-    return groupId;
-  }
 
   // Username
   Future<void> setUsername(String newUsername) async {

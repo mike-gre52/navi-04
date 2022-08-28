@@ -26,6 +26,8 @@ class _SignInState extends State<SignIn> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
+  bool isLoading = false;
+
   @override
   void dispose() {
     super.dispose();
@@ -42,75 +44,101 @@ class _SignInState extends State<SignIn> {
     double height200 = screenHeight / 4.48;
     double height250 = screenHeight / 3.584;
     double fontSize35 = screenHeight / 25.6;
+    double height205 = screenHeight / 4.3707;
 
     return Scaffold(
-      body: Container(
-        margin: EdgeInsets.symmetric(horizontal: 32),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: height200,
+      body: Stack(
+        children: [
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 32),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: height200,
+                ),
+                Text(
+                  'Login',
+                  style: TextStyle(
+                    color: black,
+                    fontSize: fontSize35,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(
+                  height: height40,
+                ),
+                CustomTextfield(
+                  icon: Icons.mail_outline_rounded,
+                  placeholderText: 'Email',
+                  controller: _emailController,
+                  borderColor: royalYellow,
+                  textfieldWidth: 350,
+                  textfieldHeight: 65,
+                  borderRadius: 10,
+                ),
+                SizedBox(
+                  height: height40,
+                ),
+                CustomTextfield(
+                  icon: Icons.lock_outline,
+                  placeholderText: 'Password',
+                  controller: _passwordController,
+                  borderColor: royalYellow,
+                  showVisibilityIcon: true,
+                  textfieldWidth: 350,
+                  textfieldHeight: 65,
+                  borderRadius: 10,
+                ),
+                SizedBox(
+                  height: height30,
+                ),
+                GestureDetector(
+                  onTap: () async {
+                    setState(() {
+                      isLoading = true;
+                    });
+
+                    await authController.loginUser(
+                      _emailController.text,
+                      _passwordController.text,
+                    );
+
+                    setState(() {
+                      isLoading = false;
+                    });
+                    //get data from firebase
+                  },
+                  child: GradientButton(
+                    buttonText: 'Login',
+                    firstColor: lightYellow,
+                    secondColor: royalYellow,
+                  ),
+                ),
+                SizedBox(
+                  height: height250,
+                ),
+                BottomText(
+                  firstText: 'Don\'t have an account? ',
+                  secondText: 'Sign Up',
+                  buttonRoute: RouteHelper.getSignUpRoute(),
+                ),
+              ],
             ),
-            Text(
-              'Login',
-              style: TextStyle(
-                color: black,
-                fontSize: fontSize35,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            SizedBox(
-              height: height40,
-            ),
-            CustomTextfield(
-              icon: Icons.mail_outline_rounded,
-              placeholderText: 'Email',
-              controller: _emailController,
-              borderColor: royalYellow,
-              textfieldWidth: 350,
-              textfieldHeight: 65,
-              borderRadius: 10,
-            ),
-            SizedBox(
-              height: height40,
-            ),
-            CustomTextfield(
-              icon: Icons.lock_outline,
-              placeholderText: 'Password',
-              controller: _passwordController,
-              borderColor: royalYellow,
-              showVisibilityIcon: true,
-              textfieldWidth: 350,
-              textfieldHeight: 65,
-              borderRadius: 10,
-            ),
-            SizedBox(
-              height: height30,
-            ),
-            GestureDetector(
-              onTap: () {
-                authController.loginUser(
-                  _emailController.text,
-                  _passwordController.text,
-                );
-              },
-              child: GradientButton(
-                buttonText: 'Login',
-                firstColor: lightYellow,
-                secondColor: royalYellow,
-              ),
-            ),
-            SizedBox(
-              height: height250,
-            ),
-            BottomText(
-              firstText: 'Don\'t have an account? ',
-              secondText: 'Sign Up',
-              buttonRoute: RouteHelper.getSignUpRoute(),
-            ),
-          ],
-        ),
+          ),
+          isLoading
+              ? Container(
+                  margin: EdgeInsets.only(top: height205),
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: CupertinoActivityIndicator(
+                      color: royalYellow,
+                      radius: 20,
+                    ),
+                  ),
+                )
+              : Container(),
+        ],
       ),
     );
   }

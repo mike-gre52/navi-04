@@ -11,7 +11,7 @@ import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
 import 'package:whats_for_dinner/views/widgets/app/border_button.dart';
 import 'package:whats_for_dinner/views/widgets/app/custom_textfield.dart';
-import 'package:whats_for_dinner/views/widgets/home/group_member.dart';
+import 'package:whats_for_dinner/views/widgets/profile/group_member.dart';
 import 'package:whats_for_dinner/views/widgets/app/header.dart';
 import 'package:whats_for_dinner/views/widgets/profile/circle_check_button.dart';
 
@@ -42,9 +42,7 @@ class _JoinGroupState extends State<JoinGroup> {
               children: [
                 GestureDetector(
                   onTap: () async {
-                    await groupController
-                        .setGroupId()
-                        .then((value) => Get.toNamed(RouteHelper.manageGroup));
+                    Get.toNamed(RouteHelper.manageGroup);
                   },
                   child: Text(
                     'Manage Group',

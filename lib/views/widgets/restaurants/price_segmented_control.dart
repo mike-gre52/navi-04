@@ -15,7 +15,7 @@ class PriceSegmentedControll extends StatefulWidget {
 }
 
 class _PriceSegmentedControllState extends State<PriceSegmentedControll> {
-  Object _selectedSegment = 0;
+  Object _selectedSegment = 2;
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +61,7 @@ class _PriceSegmentedControllState extends State<PriceSegmentedControll> {
         if (value != null) {
           setState(() {
             _selectedSegment = value;
-            widget.setPriceStatus(value);
+            widget.setPriceStatus((value as int) + 1);
           });
         }
       },
