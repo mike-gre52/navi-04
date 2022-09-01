@@ -27,27 +27,18 @@ class AllMembersScreen extends StatefulWidget {
 }
 
 class _AllMembersScreenState extends State<AllMembersScreen> {
-  final TextEditingController _groupNameController = TextEditingController();
-
-  @override
-  void dispose() {
-    super.dispose();
-    _groupNameController.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StreamBuilder<Group>(
-        stream: groupController.getGroupData(),
+      body: StreamBuilder<List<Member>>(
+        stream: groupController.getGroupMembers(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final data = snapshot.data!;
-            _groupNameController.text = data.groupName;
             return Column(
               children: [
                 AppHeader(
-                  headerText: data.groupName,
+                  headerText: 'Members',
                   headerColor: Colors.white,
                   borderColor: royalYellow,
                   textColor: black,
@@ -65,7 +56,7 @@ class _AllMembersScreenState extends State<AllMembersScreen> {
                     Navigator.pop(context);
                   },
                 ),
-                AllGroupMembers(members: data.members),
+                AllGroupMembers(members: data),
               ],
             );
           } else {

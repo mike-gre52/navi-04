@@ -4,6 +4,7 @@ import 'package:whats_for_dinner/data/local_data.dart';
 import 'package:whats_for_dinner/models/restaurant.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
+import 'package:whats_for_dinner/views/widgets/app/border_button.dart';
 import 'package:whats_for_dinner/views/widgets/app/custom_textfield.dart';
 import 'package:whats_for_dinner/views/widgets/app/header.dart';
 import 'package:whats_for_dinner/views/widgets/profile/circle_check_button.dart';
@@ -68,6 +69,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             textfieldWidth: 280,
                             textfieldHeight: 60,
                             borderRadius: 25,
+                            onSubmit: (_) {},
                           ),
                           GestureDetector(
                             onTap: () async {
@@ -85,6 +87,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         username: data.name,
                         userColor: data.color,
                       ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          authController.signOut();
+                        },
+                        child: BorderButton(
+                          buttonColor: red,
+                          buttonText: 'Sign Out',
+                          borderRadius: 30,
+                        ),
+                      )
                     ],
                   ),
                 )

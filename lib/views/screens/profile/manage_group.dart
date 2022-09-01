@@ -93,6 +93,7 @@ class _ManageGroupScreenState extends State<ManageGroupScreen> {
                         textfieldWidth: double.maxFinite,
                         textfieldHeight: 60,
                         borderRadius: 10,
+                        onSubmit: (_) {},
                       ),
                       const SizedBox(height: 20),
                       Row(
@@ -118,7 +119,7 @@ class _ManageGroupScreenState extends State<ManageGroupScreen> {
                         ],
                       ),
                       const SizedBox(height: 20),
-                      GroupMembers(members: data.members),
+                      const GroupMembers(),
                       GestureDetector(
                         onTap: () {
                           Get.toNamed(RouteHelper.selectColor);

@@ -58,11 +58,18 @@ class SingleMemberCell extends StatelessWidget {
                   ),
                 ),
               ),
-              Text(
-                name.substring(0, 1).toUpperCase() + name.substring(1),
-                style: TextStyle(
-                  fontSize: 20,
-                  color: black,
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.only(right: 10),
+                  child: Text(
+                    name.substring(0, 1).toUpperCase() + name.substring(1),
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: black,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               )
             ],

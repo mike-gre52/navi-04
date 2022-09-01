@@ -3,33 +3,23 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Group {
   String groupName;
   String groupId;
-  List<Member> members;
 
   Group({
     required this.groupName,
     required this.groupId,
-    required this.members,
   });
 
   Group.static({
     this.groupName = '',
     this.groupId = '',
-    this.members = const [],
   });
 
   Group fromJson(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
-    if (snapshot['members'] != null) {
-      members = <Member>[];
-      snapshot['members'].forEach((member) {
-        members.add(Member.static().fromJson(member));
-      });
-    }
 
     final group = Group(
       groupName: snapshot['groupName'],
       groupId: snapshot['groupId'],
-      members: members,
     );
 
     return group;
@@ -39,9 +29,6 @@ class Group {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['groupName'] = this.groupName;
     data['groupId'] = this.groupId;
-    if (this.members != null) {
-      data['members'] = this.members.map((v) => v.toJson()).toList();
-    }
     return data;
   }
 }
@@ -63,7 +50,7 @@ class Member {
     this.id = '',
   });
 
-  Member fromJson(Map<String, dynamic> json) {
+  static Member fromJson(Map<String, dynamic> json) {
     final members = Member(
       name: json['name'],
       color: json['color'],

@@ -93,6 +93,7 @@ class _SignUpState extends State<SignUp> {
                   textfieldWidth: 350,
                   textfieldHeight: 65,
                   borderRadius: 10,
+                  onSubmit: (_) {},
                 ),
                 SizedBox(
                   height: height20,
@@ -105,6 +106,7 @@ class _SignUpState extends State<SignUp> {
                   textfieldWidth: 350,
                   textfieldHeight: 65,
                   borderRadius: 10,
+                  onSubmit: (_) {},
                 ),
                 SizedBox(
                   height: height20,
@@ -118,6 +120,7 @@ class _SignUpState extends State<SignUp> {
                   textfieldWidth: 350,
                   textfieldHeight: 65,
                   borderRadius: 10,
+                  onSubmit: (_) {},
                 ),
                 SizedBox(
                   height: height30,

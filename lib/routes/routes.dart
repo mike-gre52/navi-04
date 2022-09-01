@@ -9,6 +9,7 @@ import 'package:whats_for_dinner/views/screens/profile/manage_group.dart';
 import 'package:whats_for_dinner/views/screens/navigation.dart';
 import 'package:whats_for_dinner/views/screens/restaurants/filter_restaurants.dart';
 import 'package:whats_for_dinner/views/screens/restaurants/restaurants.dart';
+import 'package:whats_for_dinner/views/screens/restaurants/view_restaurant.dart';
 
 import '../views/screens/auth/sign_in.dart';
 import '../views/screens/auth/sign_up.dart';
@@ -26,6 +27,7 @@ class RouteHelper {
   static String restaurantFilter = '/restaurant-filter';
   static String restaurants = '/restaurants';
   static String allMembers = '/all-members';
+  static String viewRestaurant = '/view-restaurant';
 
   static String getHomeRoute() => home;
   static String getSignInRoute() => signIn;
@@ -39,6 +41,7 @@ class RouteHelper {
   static String getRestaurantFilter() => restaurantFilter;
   static String getRestaurants() => restaurants;
   static String getAllMembers() => allMembers;
+  static String getViewRestaurants() => viewRestaurant;
 
   static List<GetPage> routes = [
     GetPage(
@@ -110,6 +113,12 @@ class RouteHelper {
     GetPage(
       name: allMembers,
       page: () => const AllMembersScreen(),
+      transition: Transition.rightToLeft,
+      transitionDuration: const Duration(milliseconds: 250),
+    ),
+    GetPage(
+      name: viewRestaurant,
+      page: () => const ViewRestaurant(),
       transition: Transition.rightToLeft,
       transitionDuration: const Duration(milliseconds: 250),
     ),

@@ -66,8 +66,7 @@ class RestaurantController extends GetxController {
         } else {
           if (currentRestaurant.rating >= filterData.minRating) {
             //filter Price
-            print('looped price ${currentRestaurant.price}');
-            print('filter price ${filterData.maxPrice}');
+
             if (currentRestaurant.price <= filterData.maxPrice) {
               //filter Delivery
 
@@ -120,9 +119,17 @@ class RestaurantController extends GetxController {
     return data;
   }
 
-  addRestaurant(String name, int time, int rating, int price, bool doesDelivery,
-      String notes, bool isFavorite) async {
+  addRestaurant(
+    String name,
+    int time,
+    int rating,
+    int price,
+    bool doesDelivery,
+    String notes,
+    bool isFavorite,
+  ) async {
     try {
+      final restaurantId = DateTime.now().toString();
       Restaurant restaurant = Restaurant(
         name: name,
         time: time,
@@ -131,13 +138,14 @@ class RestaurantController extends GetxController {
         doesDelivery: doesDelivery,
         isFavorite: isFavorite,
         notes: notes,
+        id: restaurantId,
       );
 
       firestore
           .collection('groups')
           .doc(globalGroupId)
           .collection('restaurants')
-          .doc('${DateTime.now()}')
+          .doc(restaurantId)
           .set(restaurant.toJson());
     } catch (e) {
       Get.snackbar(
@@ -145,5 +153,14 @@ class RestaurantController extends GetxController {
         '$e',
       );
     }
+  }
+
+  toggleRestaurantFavorite(String restaurantId, bool isFavorite) {
+    firestore
+        .collection('groups')
+        .doc(globalGroupId)
+        .collection('restaurants')
+        .doc(restaurantId)
+        .update({'isFavorite': !isFavorite});
   }
 }

@@ -18,6 +18,9 @@ class BorderButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenHeight = mediaQuery.size.height;
+    double fontSize22 = screenHeight / 40.727;
     return Container(
       height: 60,
       width: buttonWidth,
@@ -30,6 +33,7 @@ class BorderButton extends StatelessWidget {
           buttonText,
           style: TextStyle(
             color: buttonColor,
+            fontSize: fontSize22,
           ),
         ),
       ),

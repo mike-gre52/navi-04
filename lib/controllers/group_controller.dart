@@ -23,9 +23,26 @@ class GroupController extends GetxController {
     return data;
   }
 
+  Stream<List<Member>> getGroupMembers() {
+    Stream<List<Member>> data = firestore
+        .collection('groups')
+        .doc(globalGroupId)
+        .collection('members')
+        .snapshots()
+        .map(
+      (snapshot) {
+        List<Member> members =
+            snapshot.docs.map((doc) => Member.fromJson(doc.data())).toList();
+        return members;
+      },
+    );
+    return data;
+  }
+
   void leaveGroup() {
     final username = globalUsername;
     final color = globalColor;
+    /*
     final member = Member(
       name: username,
       color: color,
@@ -34,6 +51,14 @@ class GroupController extends GetxController {
     firestore.collection('groups').doc(globalGroupId).update({
       'members': FieldValue.arrayRemove([member.toJson()])
     });
+    */
+
+    firestore
+        .collection('groups')
+        .doc(globalGroupId)
+        .collection('members')
+        .doc(firebaseAuth.currentUser!.uid)
+        .delete();
 
     setUserGroupId(firebaseAuth.currentUser!.uid);
     setUserInGroupStatusFalse();
@@ -61,10 +86,7 @@ class GroupController extends GetxController {
         .update({"inGroup": false});
   }
 
-  createGroup(String groupName) async {
-    final username = globalUsername;
-    final color = globalColor;
-
+  String generateUniqueId() {
     String newGroupId = '';
     for (var i = 0; i < 4; i++) {
       final uniqueId = UniqueKey().toString();
@@ -75,21 +97,35 @@ class GroupController extends GetxController {
         newGroupId = newGroupId + '-' + shortedId;
       }
     }
+    return newGroupId;
+  }
+
+  createGroup(String groupName) async {
+    final username = globalUsername;
+    final color = globalColor;
+
+    String newGroupId = generateUniqueId();
 
     globalGroupId = newGroupId;
     final group = Group(
       groupName: groupName,
       groupId: newGroupId,
-      members: [
-        Member(
-            name: username,
-            color: color,
-            id: '${firebaseAuth.currentUser!.uid}'),
-      ],
+    );
+
+    final member = Member(
+      name: username,
+      color: color,
+      id: '${firebaseAuth.currentUser!.uid}',
     );
 
     //creates group in group collection
     firestore.collection('groups').doc(globalGroupId).set(group.toJson());
+    firestore
+        .collection('groups')
+        .doc(globalGroupId)
+        .collection('members')
+        .doc(firebaseAuth.currentUser!.uid)
+        .set(member.toJson());
 
     setUserGroupId(globalGroupId);
     setUserInGroupStatusTrue();
@@ -100,20 +136,39 @@ class GroupController extends GetxController {
 
     try {
       //will try to add user to group - will throw if the group does not exist
+      /*
       await firestore.collection('groups').doc(groupId).update({
         'members': FieldValue.arrayUnion(
           [member.toJson()],
         )
       });
+      */
 
-      //updates users group id
-      setUserGroupId(groupId);
-      setUserInGroupStatusTrue();
+      final snap = await firestore.collection('groups').doc(groupId).get();
+      if (snap.exists) {
+        //group id valid
+        await firestore
+            .collection('groups')
+            .doc(groupId)
+            .collection('members')
+            .doc(firebaseAuth.currentUser!.uid)
+            .set(member.toJson());
 
-      Get.snackbar(
-        'Success',
-        'You have succesfully joined!',
-      );
+        //updates users group id
+        setUserGroupId(groupId);
+        setUserInGroupStatusTrue();
+
+        Get.snackbar(
+          'Success',
+          'You have succesfully joined!',
+        );
+      } else {
+        //group id invalid
+        Get.snackbar(
+          'Invalid Group Id',
+          'The group Id \'$groupId\' is not valid.',
+        );
+      }
     } catch (e) {
       Get.snackbar(
         'Invalid Group Id',
@@ -123,25 +178,13 @@ class GroupController extends GetxController {
   }
 
   setFirebaseUserColorInGroup(String newColor) async {
-    final username = globalUsername;
+    await firestore
+        .collection('groups')
+        .doc(globalGroupId)
+        .collection('members')
+        .doc(firebaseAuth.currentUser!.uid)
+        .update({'color': newColor});
 
-    final newMemberData = Member(
-      name: username,
-      color: newColor,
-      id: firebaseAuth.currentUser!.uid,
-    );
-    final oldMemberData = Member(
-      name: username,
-      color: globalColor,
-      id: firebaseAuth.currentUser!.uid,
-    );
-
-    firestore.collection('groups').doc(globalGroupId).update({
-      "members": FieldValue.arrayRemove([oldMemberData.toJson()])
-    });
-    firestore.collection('groups').doc(globalGroupId).update({
-      "members": FieldValue.arrayUnion([newMemberData.toJson()])
-    });
     globalColor = newColor;
   }
 }

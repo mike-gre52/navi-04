@@ -24,9 +24,9 @@ class _AddRestaurantState extends State<AddRestaurant> {
   TextEditingController _timeController = TextEditingController();
   TextEditingController _notesController = TextEditingController();
 
-  bool doesDelivery = true;
+  bool doesDelivery = false;
   int rating = 1;
-  int price = 1;
+  int price = 3;
 
   Object _selectedSegment = 0;
 
@@ -108,6 +108,7 @@ class _AddRestaurantState extends State<AddRestaurant> {
                     textfieldWidth: 350,
                     textfieldHeight: 65,
                     borderRadius: 10,
+                    onSubmit: (_) {},
                   ),
                 ),
               ],
@@ -142,6 +143,7 @@ class _AddRestaurantState extends State<AddRestaurant> {
                         showIcon: false,
                         textfieldHeight: 50,
                         borderRadius: 10,
+                        onSubmit: (_) {},
                       ),
                     )
                   ],

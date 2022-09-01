@@ -95,6 +95,13 @@ class _ListScreenState extends State<ListScreen> {
                   textfieldWidth: 275,
                   textfieldHeight: 60,
                   borderRadius: 20,
+                  onSubmit: (_) {
+                    listController.addListItem(
+                      _itemController.text,
+                      list.id,
+                    );
+                    _itemController.clear();
+                  },
                 ),
                 GestureDetector(
                   onTap: () {

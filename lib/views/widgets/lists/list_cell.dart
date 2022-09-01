@@ -39,10 +39,10 @@ class _ListCellState extends State<ListCell> {
           if (snapshot.hasData) {
             final listItems = snapshot.data!;
             return AnimatedContainer(
-              margin: const EdgeInsets.only(top: 10),
+              margin: const EdgeInsets.only(top: 10, bottom: 10),
               duration: Duration(milliseconds: animationDuration),
               curve: Curves.easeIn,
-              height: isOpened ? (widget.itemCount * 25) + 100 : 100,
+              height: isOpened ? (widget.itemCount * 24) + 100 : 100,
               width: double.maxFinite,
               decoration: BoxDecoration(
                 color: Colors.white,

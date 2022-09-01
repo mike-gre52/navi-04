@@ -76,6 +76,7 @@ class _SignInState extends State<SignIn> {
                   textfieldWidth: 350,
                   textfieldHeight: 65,
                   borderRadius: 10,
+                  onSubmit: (_) {},
                 ),
                 SizedBox(
                   height: height40,
@@ -89,6 +90,7 @@ class _SignInState extends State<SignIn> {
                   textfieldWidth: 350,
                   textfieldHeight: 65,
                   borderRadius: 10,
+                  onSubmit: (_) {},
                 ),
                 SizedBox(
                   height: height30,

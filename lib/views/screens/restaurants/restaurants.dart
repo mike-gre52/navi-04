@@ -22,19 +22,19 @@ class ResturantsScreen extends StatefulWidget {
   State<ResturantsScreen> createState() => _ResturantsScreenState();
 }
 
+List<Restaurant> filteredRestaurants = [];
+
 class _ResturantsScreenState extends State<ResturantsScreen> {
   Widget buildRestaurantTile(Restaurant restaurant) => RestaurantCell(
-        name: restaurant.name,
-        rating: restaurant.rating,
-        price: restaurant.price,
-        doesDelivery: restaurant.doesDelivery,
-        time: restaurant.time,
-        isFavorite: restaurant.isFavorite,
+        restaurant: restaurant,
       );
 
   void addRestaurantIconButton() {
     Get.toNamed(RouteHelper.getAddRestaurantRoute());
   }
+
+  bool isFavoriteSelected = false;
+  bool isDeliverySelected = false;
 
   @override
   Widget build(BuildContext context) {
@@ -44,10 +44,127 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final restaurants = snapshot.data!;
-            final filteredRestaurants = restaurantController.filterRestaurants(
+            filteredRestaurants = restaurantController.filterRestaurants(
                 restaurants, restaurantController.filter);
             filteredRestaurants.shuffle();
-            print(filteredRestaurants.length);
+            List<CustomChip> chips = [
+              CustomChip(
+                chipText: '',
+                chipIcon: CupertinoIcons.slider_horizontal_3,
+                onClick: () {
+                  Get.toNamed(RouteHelper.restaurantFilter);
+                },
+              ),
+              CustomChip(
+                chipText: 'Favorite',
+                chipIcon: Icons.star_rounded,
+                isSelected: isFavoriteSelected,
+                onClick: () {
+                  //Get.toNamed(RouteHelper.restaurantFilter);
+                  setState(() {
+                    isDeliverySelected = false;
+                    if (isFavoriteSelected) {
+                      isFavoriteSelected = false;
+                      restaurantController.setfilter(
+                        Filter(
+                          maxTime: 0,
+                          minRating: 1,
+                          maxPrice: 3,
+                          onlyDelivery: false,
+                          onlyFavorite: false,
+                          useFilter: false,
+                          useTime: false,
+                        ),
+                      );
+                    } else {
+                      isFavoriteSelected = true;
+                      restaurantController.setfilter(
+                        Filter(
+                          maxTime: 0,
+                          minRating: 1,
+                          maxPrice: 3,
+                          onlyDelivery: false,
+                          onlyFavorite: true,
+                          useFilter: true,
+                          useTime: false,
+                        ),
+                      );
+                    }
+                  });
+                },
+              ),
+              CustomChip(
+                chipText: 'Delivery',
+                chipIcon: Icons.delivery_dining,
+                isSelected: isDeliverySelected,
+                onClick: () {
+                  //Get.toNamed(RouteHelper.restaurantFilter);
+                  setState(() {
+                    isFavoriteSelected = false;
+                    if (isDeliverySelected) {
+                      isDeliverySelected = false;
+                      restaurantController.setfilter(
+                        Filter(
+                          maxTime: 0,
+                          minRating: 1,
+                          maxPrice: 3,
+                          onlyDelivery: false,
+                          onlyFavorite: false,
+                          useFilter: false,
+                          useTime: false,
+                        ),
+                      );
+                    } else {
+                      isDeliverySelected = true;
+                      restaurantController.setfilter(
+                        Filter(
+                          maxTime: 0,
+                          minRating: 1,
+                          maxPrice: 3,
+                          onlyDelivery: true,
+                          onlyFavorite: false,
+                          useFilter: true,
+                          useTime: false,
+                        ),
+                      );
+                    }
+                  });
+                },
+              ),
+              CustomChip(
+                chipText: 'Cost',
+                chipIcon: Icons.price_change,
+                onClick: () {
+                  Get.toNamed(RouteHelper.restaurantFilter);
+                },
+              ),
+              CustomChip(
+                chipText: 'Time',
+                chipIcon: Icons.timer,
+                onClick: () {
+                  Get.toNamed(RouteHelper.restaurantFilter);
+                },
+              ),
+              CustomChip(
+                chipText: 'Top Rated',
+                chipIcon: Icons.star_rounded,
+                onClick: () {
+                  setState(() {
+                    restaurantController.setfilter(
+                      Filter(
+                        maxTime: 0,
+                        minRating: 4,
+                        maxPrice: 3,
+                        onlyDelivery: true,
+                        onlyFavorite: false,
+                        useFilter: true,
+                        useTime: false,
+                      ),
+                    );
+                  });
+                },
+              ),
+            ];
             return Column(
               children: [
                 AppHeader(
@@ -100,60 +217,17 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
   }
 }
 
-List<CustomChip> chips = [
-  CustomChip(
-    chipText: '',
-    chipIcon: CupertinoIcons.slider_horizontal_3,
-    onClick: () {
-      Get.toNamed(RouteHelper.restaurantFilter);
-    },
-  ),
-  CustomChip(
-    chipText: 'Favorite',
-    chipIcon: Icons.star_rounded,
-    onClick: () {
-      //Get.toNamed(RouteHelper.restaurantFilter);
-    },
-  ),
-  CustomChip(
-    chipText: 'Delivery',
-    chipIcon: Icons.delivery_dining,
-    onClick: () {
-      //Get.toNamed(RouteHelper.restaurantFilter);
-    },
-  ),
-  CustomChip(
-    chipText: 'Cost',
-    chipIcon: Icons.price_change,
-    onClick: () {
-      //Get.toNamed(RouteHelper.restaurantFilter);
-    },
-  ),
-  CustomChip(
-    chipText: 'Time',
-    chipIcon: Icons.timer,
-    onClick: () {
-      //Get.toNamed(RouteHelper.restaurantFilter);
-    },
-  ),
-  CustomChip(
-    chipText: 'Rating',
-    chipIcon: Icons.star_rounded,
-    onClick: () {
-      //Get.toNamed(RouteHelper.restaurantFilter);
-    },
-  ),
-];
-
 class CustomChip extends StatelessWidget {
   String chipText;
   IconData chipIcon;
   Function onClick;
+  bool isSelected;
   CustomChip({
     Key? key,
     required this.chipText,
     required this.chipIcon,
     required this.onClick,
+    this.isSelected = false,
   }) : super(key: key);
 
   @override
@@ -166,7 +240,9 @@ class CustomChip extends StatelessWidget {
         margin: const EdgeInsets.only(left: 10),
         child: Chip(
           elevation: 3,
-          backgroundColor: Colors.white,
+          backgroundColor: isSelected
+              ? const Color.fromRGBO(121, 32, 27, 0.2)
+              : Colors.white,
           label: Row(
             children: [
               Icon(chipIcon),

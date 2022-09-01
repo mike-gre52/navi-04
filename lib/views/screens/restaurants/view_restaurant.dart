@@ -1,45 +1,59 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
-import 'package:whats_for_dinner/models/filter.dart';
-import 'package:whats_for_dinner/routes/routes.dart';
+import 'package:whats_for_dinner/models/restaurant.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
 import 'package:whats_for_dinner/views/widgets/app/app_header.dart';
 import 'package:whats_for_dinner/views/widgets/app/custom_textfield.dart';
+import 'package:whats_for_dinner/views/widgets/restaurants/notes_textfield.dart';
 import 'package:whats_for_dinner/views/widgets/restaurants/delivery_segmented_control.dart';
 import 'package:whats_for_dinner/views/widgets/restaurants/price_segmented_control.dart';
 import 'package:whats_for_dinner/views/widgets/restaurants/select_rating.dart';
 
-class FilterRestaurantScreens extends StatefulWidget {
-  const FilterRestaurantScreens({Key? key}) : super(key: key);
+class ViewRestaurant extends StatefulWidget {
+  const ViewRestaurant({
+    Key? key,
+  }) : super(key: key);
 
   @override
-  State<FilterRestaurantScreens> createState() =>
-      _FilterRestaurantScreensState();
+  State<ViewRestaurant> createState() => _ViewRestaurantState();
 }
 
-class _FilterRestaurantScreensState extends State<FilterRestaurantScreens> {
+class _ViewRestaurantState extends State<ViewRestaurant> {
+  TextEditingController _nameController = TextEditingController();
   TextEditingController _timeController = TextEditingController();
+  TextEditingController _notesController = TextEditingController();
 
-  bool onlyDelivery = false;
-  bool onlyFavorite = false;
+  final restaurant = Get.arguments as Restaurant;
+
+  bool doesDelivery = false;
   int rating = 1;
   int price = 3;
 
   Object _selectedSegment = 0;
 
+  @override
+  void dispose() {
+    super.dispose();
+    _nameController.dispose();
+    _timeController.dispose();
+    _notesController.dispose();
+  }
+
   void setDeliveryStatus(value) {
     if (value == 0) {
-      onlyDelivery = true;
+      doesDelivery = true;
     } else {
-      onlyDelivery = false;
+      doesDelivery = false;
     }
   }
 
   void setPriceStatus(value) {
     price = value;
+    print(price);
   }
 
   void newRatingSelected(newValue) {
@@ -50,54 +64,61 @@ class _FilterRestaurantScreensState extends State<FilterRestaurantScreens> {
 
   @override
   Widget build(BuildContext context) {
+    print(restaurant.doesDelivery);
     return Scaffold(
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AppHeader(
-            headerText: 'Filter',
-            headerColor: Colors.white,
-            borderColor: appRed,
-            textColor: black,
-            dividerColor: appRed,
-            rightAction: Text(
-              'Done',
+            headerText: 'Add Restaurant',
+            headerColor: appRed,
+            borderColor: royalYellow,
+            textColor: Colors.white,
+            dividerColor: Colors.white,
+            rightAction: const Text(
+              'Cancel',
               style: TextStyle(
-                color: black,
+                color: Colors.white,
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
               ),
             ),
             onIconClick: () {
-              int maxTime;
-              bool useTime;
-              if (_timeController.text == '') {
-                maxTime = 0;
-                useTime = false;
-              } else {
-                maxTime = int.parse(_timeController.text);
-                useTime = true;
-              }
-
-              final filter = Filter(
-                maxTime: maxTime,
-                minRating: rating,
-                maxPrice: price,
-                onlyDelivery: onlyDelivery,
-                onlyFavorite: onlyFavorite,
-                useFilter: true,
-                useTime: useTime,
-              );
-              print(filter.maxTime);
-              print(filter.minRating);
-              print(filter.maxPrice);
-              print(filter.onlyDelivery);
-              print(filter.onlyFavorite);
-              print(filter.useFilter);
-              print(filter.useTime);
-              restaurantController.setfilter(filter);
-
-              Get.toNamed(RouteHelper.home);
+              Navigator.pop(context);
             },
+          ),
+          //NEED TO MAKE SURE TIME IS A NUMBER - WILL SET THE KEYBOARD TO NUMPAD BUT STILL NEED TO VERIFY
+          Container(
+            margin: const EdgeInsets.only(left: 30, top: 30),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  margin: EdgeInsets.only(left: 5),
+                  child: Text(
+                    'Name',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: black,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                Container(
+                  child: CustomTextfield(
+                    icon: Icons.person,
+                    placeholderText: '',
+                    controller: _nameController,
+                    borderColor: appRed,
+                    showIcon: false,
+                    textfieldWidth: 350,
+                    textfieldHeight: 65,
+                    borderRadius: 10,
+                    onSubmit: (_) {},
+                  ),
+                ),
+              ],
+            ),
           ),
           Container(
             margin: EdgeInsets.symmetric(horizontal: 30),
@@ -111,7 +132,7 @@ class _FilterRestaurantScreensState extends State<FilterRestaurantScreens> {
                     Container(
                       margin: EdgeInsets.only(left: 5, top: 30),
                       child: Text(
-                        'Max Time',
+                        'Time',
                         style: TextStyle(
                             fontSize: 18,
                             color: black,
@@ -133,46 +154,25 @@ class _FilterRestaurantScreensState extends State<FilterRestaurantScreens> {
                     )
                   ],
                 ),
-                Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        //width: double.infinity,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              margin: EdgeInsets.only(left: 5, top: 30),
-                              child: Text(
-                                'Min Rating',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  color: black,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ],
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(left: 5, top: 30),
+                      child: Text(
+                        'Rating',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: black,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
-                      SelectRating(
-                        rating: rating,
-                        onTap: newRatingSelected,
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(left: 5, top: 5),
-                        child: Text(
-                          'Clear',
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: black,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                    SelectRating(
+                      rating: rating,
+                      onTap: newRatingSelected,
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -189,7 +189,7 @@ class _FilterRestaurantScreensState extends State<FilterRestaurantScreens> {
                     Container(
                       margin: EdgeInsets.only(left: 5, top: 30),
                       child: Text(
-                        'Max Price?',
+                        'Price',
                         style: TextStyle(
                             fontSize: 18,
                             color: black,
@@ -207,7 +207,7 @@ class _FilterRestaurantScreensState extends State<FilterRestaurantScreens> {
                     Container(
                       margin: EdgeInsets.only(left: 5, top: 30),
                       child: Text(
-                        'Only Delivery?',
+                        'Delivery',
                         style: TextStyle(
                             fontSize: 18,
                             color: black,
@@ -223,39 +223,64 @@ class _FilterRestaurantScreensState extends State<FilterRestaurantScreens> {
             ),
           ),
           Container(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
+            margin: EdgeInsets.only(left: 30, top: 15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  margin: const EdgeInsets.only(left: 30, top: 20),
+                  margin: EdgeInsets.only(left: 5),
                   child: Text(
-                    'Favorite',
+                    'Notes',
                     style: TextStyle(
                         fontSize: 18,
                         color: black,
                         fontWeight: FontWeight.w500),
                   ),
                 ),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      onlyFavorite = !onlyFavorite;
-                    });
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.only(left: 15, top: 20),
-                    child: Icon(
-                      onlyFavorite
-                          ? Icons.star_rounded
-                          : Icons.star_outline_rounded,
-                      size: 40,
-                      color: appRed,
-                    ),
-                  ),
+                NotesTextfield(
+                  controller: _notesController,
+                  borderColor: appRed,
                 ),
               ],
             ),
           ),
+          Align(
+            alignment: Alignment.center,
+            child: GestureDetector(
+              onTap: () {
+                restaurantController.addRestaurant(
+                  _nameController.text,
+                  int.parse(_timeController.text),
+                  rating,
+                  price,
+                  doesDelivery,
+                  _notesController.text,
+                  false,
+                );
+                Navigator.pop(context);
+              },
+              child: Container(
+                height: 60,
+                width: 100,
+                margin: const EdgeInsets.only(
+                  top: 30,
+                ),
+                decoration: BoxDecoration(
+                  color: appRed,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: const Center(
+                  child: Text(
+                    'Add',
+                    style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600),
+                  ),
+                ),
+              ),
+            ),
+          )
         ],
       ),
     );

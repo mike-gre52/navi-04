@@ -15,19 +15,21 @@ class CustomTextfield extends StatefulWidget {
   double textfieldWidth;
   int textfieldHeight;
   int borderRadius;
+  void Function(String) onSubmit;
 
-  CustomTextfield({
-    Key? key,
-    required this.icon,
-    required this.placeholderText,
-    required this.controller,
-    required this.borderColor,
-    this.showVisibilityIcon = false,
-    this.showIcon = true,
-    required this.textfieldWidth,
-    required this.textfieldHeight,
-    required this.borderRadius,
-  }) : super(key: key);
+  CustomTextfield(
+      {Key? key,
+      required this.icon,
+      required this.placeholderText,
+      required this.controller,
+      required this.borderColor,
+      this.showVisibilityIcon = false,
+      this.showIcon = true,
+      required this.textfieldWidth,
+      required this.textfieldHeight,
+      required this.borderRadius,
+      required this.onSubmit})
+      : super(key: key);
 
   @override
   State<CustomTextfield> createState() => _CustomTextfieldState();
@@ -56,6 +58,7 @@ class _CustomTextfieldState extends State<CustomTextfield> {
       height: textfieldHeight,
       width: textfieldWidth,
       child: CupertinoTextField(
+        onSubmitted: widget.onSubmit,
         cursorColor: black,
         cursorHeight: height25,
         placeholder: widget.placeholderText,

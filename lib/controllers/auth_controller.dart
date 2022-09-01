@@ -46,10 +46,10 @@ class AuthController extends GetxController {
 
   _setInitialScreen(User? user) async {
     if (user == null) {
-      Get.offAll(() => SignIn());
+      Get.offAll(() => SignIn(), transition: Transition.cupertino);
     } else {
       await getData();
-      Get.offAll(() => const Navigation());
+      Get.offAll(() => const Navigation(), transition: Transition.cupertino);
     }
   }
 
