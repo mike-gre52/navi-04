@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:get/get.dart';
+import 'package:whats_for_dinner/routes/routes.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
 
@@ -39,88 +41,96 @@ class ListItem extends StatelessWidget {
     double width200 = screenWidth / 2.07;
     return Column(
       children: [
-        Container(
-          margin: showCheckBox
-              ? EdgeInsets.only(top: height10, bottom: height10)
-              : const EdgeInsets.only(top: 0),
-          //height: showCheckBox ? 60 : 25,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  showCheckBox
-                      ? GestureDetector(
-                          onTap: () {
-                            listController.toggleListItemCheckedStatus(
-                                item.id, listId, item.isChecked);
-                          },
-                          child: item.isChecked
-                              ? Container(
-                                  height: height40,
-                                  width: height40,
-                                  decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.circular(height10),
-                                    color: appGreen,
-                                  ),
-                                  child: const Center(
-                                    child: Icon(
-                                      Icons.check_rounded,
-                                      color: Colors.white,
-                                      size: 28,
-                                    ),
-                                  ),
-                                )
-                              : Container(
-                                  height: height40,
-                                  width: height40,
-                                  decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.circular(height10),
-                                    border: Border.all(
+        GestureDetector(
+          onTap: (() {
+            if (showCheckBox) {
+              Get.toNamed(RouteHelper.editListItem, arguments: [item, listId]);
+            }
+          }),
+          child: Container(
+            color: Colors.transparent,
+            margin: showCheckBox
+                ? EdgeInsets.only(top: height10, bottom: height10)
+                : const EdgeInsets.only(top: 0),
+            //height: showCheckBox ? 60 : 25,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    showCheckBox
+                        ? GestureDetector(
+                            onTap: () {
+                              listController.toggleListItemCheckedStatus(
+                                  item.id, listId, item.isChecked);
+                            },
+                            child: item.isChecked
+                                ? Container(
+                                    height: height40,
+                                    width: height40,
+                                    decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.circular(height10),
                                       color: appGreen,
-                                      width: 2,
+                                    ),
+                                    child: const Center(
+                                      child: Icon(
+                                        Icons.check_rounded,
+                                        color: Colors.white,
+                                        size: 28,
+                                      ),
+                                    ),
+                                  )
+                                : Container(
+                                    height: height40,
+                                    width: height40,
+                                    decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.circular(height10),
+                                      border: Border.all(
+                                        color: appGreen,
+                                        width: 2,
+                                      ),
                                     ),
                                   ),
-                                ),
-                        )
-                      : Container(
-                          height: height10,
-                          width: height10,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(2),
-                            color: appGreen,
+                          )
+                        : Container(
+                            height: height10,
+                            width: height10,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(2),
+                              color: appGreen,
+                            ),
                           ),
-                        ),
-                  SizedBox(width: width10),
-                  Container(
-                    constraints: BoxConstraints(
-                      maxWidth: showCheckBox ? width275 : width200,
-                    ),
-                    child: Text(
-                      item.name,
-                      style: TextStyle(
-                        fontSize: showCheckBox ? fontSize20 : fontSize16,
-                        fontWeight: FontWeight.w400,
-                        color: item.isChecked ? Colors.black38 : black,
+                    SizedBox(width: width10),
+                    Container(
+                      constraints: BoxConstraints(
+                        maxWidth: showCheckBox ? width275 : width200,
                       ),
-                      maxLines: showCheckBox ? null : 1,
-                      overflow: showCheckBox ? null : TextOverflow.ellipsis,
+                      child: Text(
+                        item.name,
+                        style: TextStyle(
+                          fontSize: showCheckBox ? fontSize20 : fontSize16,
+                          fontWeight: FontWeight.w400,
+                          color: item.isChecked ? Colors.black38 : black,
+                        ),
+                        maxLines: showCheckBox ? null : 1,
+                        overflow: showCheckBox ? null : TextOverflow.ellipsis,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              showCheckBox
-                  ? GestureDetector(
-                      onTap: () {
-                        listController.deleteListItem(item.id, listId);
-                      },
-                      child: const Icon(Icons.close_rounded),
-                    )
-                  : Container()
-            ],
+                  ],
+                ),
+                showCheckBox
+                    ? GestureDetector(
+                        onTap: () {
+                          listController.deleteListItem(item.id, listId);
+                        },
+                        child: const Icon(Icons.close_rounded),
+                      )
+                    : Container()
+              ],
+            ),
           ),
         ),
         showCheckBox

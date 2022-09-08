@@ -136,4 +136,15 @@ class ListsController extends GetxController {
         .doc(listId) //specific list
         .delete();
   }
+
+  void editListItemName(String itemId, String listId, String newName) {
+    firestore
+        .collection('groups')
+        .doc(globalGroupId)
+        .collection('lists')
+        .doc(listId)
+        .collection('Items')
+        .doc(itemId)
+        .update({'name': newName});
+  }
 }

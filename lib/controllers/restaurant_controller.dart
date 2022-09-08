@@ -163,4 +163,62 @@ class RestaurantController extends GetxController {
         .doc(restaurantId)
         .update({'isFavorite': !isFavorite});
   }
+
+  List<Restaurant> sortByPrice(
+      List<Restaurant> restaurants, bool expensiveFirst) {
+    List<Restaurant> orderedList = [];
+
+    List<Restaurant> onePriceList = [];
+    List<Restaurant> twoPriceList = [];
+    List<Restaurant> threePriceList = [];
+
+    for (var i = 0; i < restaurants.length; i++) {
+      final restaurant = restaurants[i];
+      if (restaurant.price == 1) {
+        onePriceList.add(restaurant);
+      } else if (restaurant.price == 2) {
+        twoPriceList.add(restaurant);
+      } else if (restaurant.price == 3) {
+        threePriceList.add(restaurant);
+      }
+      if (expensiveFirst) {
+        orderedList = threePriceList + twoPriceList + onePriceList;
+      } else {
+        orderedList = onePriceList + twoPriceList + threePriceList;
+      }
+    }
+
+    return orderedList;
+  }
+
+  List<Restaurant> sortRestaurantFromSlowestToFastest(
+      List<Restaurant> restaurants) {
+    List<Restaurant> orderedList = [];
+    for (var i = 0; i < restaurants.length; i++) {
+      final restaurant = restaurants[i];
+      final time = restaurant.time;
+      if (orderedList.isEmpty) {
+        orderedList.add(restaurant);
+      } else if (orderedList.length == 1) {
+        if (orderedList[0].time < time) {
+          orderedList.insert(1, restaurant);
+        } else {
+          orderedList.insert(0, restaurant);
+        }
+      } else {
+        print('after 2');
+        bool addedValue = false;
+        for (var z = 0; z < orderedList.length; z++) {
+          if (orderedList[z].time > time) {
+            orderedList.insert(z, restaurant);
+            addedValue = true;
+          }
+        }
+        if (addedValue == false) {
+          orderedList.insert(orderedList.length - 1, restaurant);
+        }
+      }
+    }
+    return orderedList;
+  }
 }
