@@ -6,22 +6,29 @@ import 'package:whats_for_dinner/utils/constants.dart';
 import 'package:whats_for_dinner/views/widgets/lists/list_item.dart';
 
 class ListColumn extends StatelessWidget {
-  String listId;
+  ListData list;
+  bool isRecentlyDeleted;
+
   ListColumn({
     Key? key,
-    required this.listId,
+    required this.list,
+    required this.isRecentlyDeleted,
   }) : super(key: key);
 
   Widget buildListItem(Item item) => ListItem(
-        listId: listId,
+        listId: list.id,
         showCheckBox: true,
         item: item,
+        list: list,
+        recentlyDeleted: isRecentlyDeleted,
       );
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<Item>>(
-        stream: listController.getListItems(listId),
+        stream: isRecentlyDeleted
+            ? listController.getRecentlyDeletedListItems(list.id)
+            : listController.getListItems(list.id),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final listItems = snapshot.data!;

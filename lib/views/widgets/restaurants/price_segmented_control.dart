@@ -5,9 +5,11 @@ import 'package:whats_for_dinner/utils/colors.dart';
 
 class PriceSegmentedControll extends StatefulWidget {
   Function setPriceStatus;
+  int initialValue;
   PriceSegmentedControll({
     Key? key,
     required this.setPriceStatus,
+    required this.initialValue,
   }) : super(key: key);
 
   @override
@@ -16,6 +18,11 @@ class PriceSegmentedControll extends StatefulWidget {
 
 class _PriceSegmentedControllState extends State<PriceSegmentedControll> {
   Object _selectedSegment = 2;
+  @override
+  void initState() {
+    _selectedSegment = widget.initialValue - 1;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,9 +50,9 @@ class _PriceSegmentedControllState extends State<PriceSegmentedControll> {
           ),
         ),
         2: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10),
+          padding: EdgeInsets.symmetric(horizontal: 0),
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.symmetric(vertical: 0),
             child: Text(
               '\$\$\$',
               style: TextStyle(

@@ -192,6 +192,7 @@ class _AddRestaurantState extends State<AddRestaurant> {
                     ),
                     PriceSegmentedControll(
                       setPriceStatus: setPriceStatus,
+                      initialValue: 3,
                     )
                   ],
                 ),
@@ -210,6 +211,7 @@ class _AddRestaurantState extends State<AddRestaurant> {
                     ),
                     DeliverySegmentedControll(
                       setDeliveryStatus: setDeliveryStatus,
+                      initialValue: 1,
                     ),
                   ],
                 ),

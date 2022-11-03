@@ -36,6 +36,7 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
   bool isFavoriteSelected = false;
   bool isDeliverySelected = false;
   bool isTopRatedSelected = false;
+  int sortTime = 0;
   int sortCost = 0;
 
   @override
@@ -57,6 +58,17 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
               filteredRestaurants =
                   restaurantController.sortByPrice(filteredRestaurants, false);
             }
+            if (sortTime == 1) {
+              filteredRestaurants = restaurantController
+                  .sortRestaurantFromSlowestToFastest(filteredRestaurants);
+            }
+            if (sortTime == 2) {
+              filteredRestaurants = restaurantController
+                  .sortRestaurantFromSlowestToFastest(filteredRestaurants)
+                  .reversed
+                  .toList();
+            }
+
             List<CustomChip> chips = [
               CustomChip(
                 chipText: '',
@@ -146,6 +158,7 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
                 isSelected: sortCost == 1 || sortCost == 2,
                 onClick: () {
                   sortCost += 1;
+                  sortTime = 0;
                   if (sortCost > 2) {
                     setState(() {
                       sortCost = 0;
@@ -160,8 +173,20 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
               CustomChip(
                 chipText: 'Time',
                 chipIcon: Icons.timer,
+                isSelected: sortTime == 1 || sortTime == 2,
                 onClick: () {
                   //filter from longest to shortest and vice versa
+                  sortTime += 1;
+                  sortCost = 0;
+                  if (sortTime > 2) {
+                    setState(() {
+                      sortTime = 0;
+                    });
+                  } else {
+                    setState(() {
+                      sortTime = sortTime;
+                    });
+                  }
                 },
               ),
               CustomChip(
@@ -208,6 +233,7 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
                     isDeliverySelected = false;
                     isFavoriteSelected = false;
                     isTopRatedSelected = false;
+                    sortCost = 0;
                     restaurantController.setfilter(
                       Filter(
                         maxTime: 0,

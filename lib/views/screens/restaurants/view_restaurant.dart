@@ -63,14 +63,28 @@ class _ViewRestaurantState extends State<ViewRestaurant> {
   }
 
   @override
+  void initState() {
+    _nameController.text = restaurant.name;
+    _timeController.text = restaurant.time.toString();
+    rating = restaurant.rating;
+    setDeliveryStatus(restaurant.doesDelivery);
+    setPriceStatus(restaurant.price);
+    _notesController.text = restaurant.notes;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     print(restaurant.doesDelivery);
+    //set data
+
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AppHeader(
-            headerText: 'Add Restaurant',
+            headerText:
+                restaurant.name[0].toUpperCase() + restaurant.name.substring(1),
             headerColor: appRed,
             borderColor: royalYellow,
             textColor: Colors.white,
@@ -198,6 +212,7 @@ class _ViewRestaurantState extends State<ViewRestaurant> {
                     ),
                     PriceSegmentedControll(
                       setPriceStatus: setPriceStatus,
+                      initialValue: restaurant.price,
                     )
                   ],
                 ),
@@ -216,6 +231,7 @@ class _ViewRestaurantState extends State<ViewRestaurant> {
                     ),
                     DeliverySegmentedControll(
                       setDeliveryStatus: setDeliveryStatus,
+                      initialValue: restaurant.doesDelivery ? 0 : 1,
                     ),
                   ],
                 ),
@@ -248,7 +264,7 @@ class _ViewRestaurantState extends State<ViewRestaurant> {
             alignment: Alignment.center,
             child: GestureDetector(
               onTap: () {
-                restaurantController.addRestaurant(
+                restaurantController.updateRestaurant(
                   _nameController.text,
                   int.parse(_timeController.text),
                   rating,
@@ -256,6 +272,7 @@ class _ViewRestaurantState extends State<ViewRestaurant> {
                   doesDelivery,
                   _notesController.text,
                   false,
+                  restaurant.id,
                 );
                 Navigator.pop(context);
               },
@@ -271,7 +288,7 @@ class _ViewRestaurantState extends State<ViewRestaurant> {
                 ),
                 child: const Center(
                   child: Text(
-                    'Add',
+                    'Update',
                     style: TextStyle(
                         fontSize: 18,
                         color: Colors.white,

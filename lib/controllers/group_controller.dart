@@ -161,6 +161,9 @@ class GroupController extends GetxController {
         Get.snackbar(
           'Success',
           'You have succesfully joined!',
+          onTap: (snack) {
+            print('hello');
+          },
         );
       } else {
         //group id invalid

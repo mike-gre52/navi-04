@@ -7,14 +7,10 @@ import 'package:whats_for_dinner/utils/constants.dart';
 import 'package:whats_for_dinner/views/widgets/lists/list_item.dart';
 
 class ListCell extends StatefulWidget {
-  String name;
-  int itemCount;
-  String listId;
+  ListData list;
   ListCell({
     Key? key,
-    required this.name,
-    required this.itemCount,
-    required this.listId,
+    required this.list,
   }) : super(key: key);
 
   @override
@@ -23,9 +19,11 @@ class ListCell extends StatefulWidget {
 
 class _ListCellState extends State<ListCell> {
   Widget buildListItem(Item item) => ListItem(
-        listId: widget.listId,
+        listId: widget.list.id,
         showCheckBox: false,
         item: item,
+        list: widget.list,
+        recentlyDeleted: false,
       );
 
   bool isOpened = false;
@@ -34,7 +32,7 @@ class _ListCellState extends State<ListCell> {
   Widget build(BuildContext context) {
     int animationDuration = 200;
     return StreamBuilder<List<Item>>(
-        stream: listController.getListItems(widget.listId),
+        stream: listController.getListItems(widget.list.id),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final listItems = snapshot.data!;
@@ -42,7 +40,7 @@ class _ListCellState extends State<ListCell> {
               margin: const EdgeInsets.only(top: 10, bottom: 10),
               duration: Duration(milliseconds: animationDuration),
               curve: Curves.easeIn,
-              height: isOpened ? (widget.itemCount * 24) + 100 : 100,
+              height: isOpened ? (widget.list.itemCount * 24) + 100 : 100,
               width: double.maxFinite,
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -66,9 +64,9 @@ class _ListCellState extends State<ListCell> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          widget.name,
+                          widget.list.name,
                           style: TextStyle(
-                              fontSize: 30,
+                              fontSize: 25,
                               fontWeight: FontWeight.w600,
                               color: black,
                               height: 1),
@@ -102,7 +100,7 @@ class _ListCellState extends State<ListCell> {
                                         CrossAxisAlignment.center,
                                     children: [
                                       Text(
-                                        '${widget.itemCount} items',
+                                        '${widget.list.itemCount} items',
                                         style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w400,

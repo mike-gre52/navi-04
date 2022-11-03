@@ -7,6 +7,7 @@ import 'package:whats_for_dinner/models/list.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
 import 'package:whats_for_dinner/views/widgets/app/custom_textfield.dart';
+import 'package:whats_for_dinner/views/widgets/lists/list_bottom_popup.dart';
 import 'package:whats_for_dinner/views/widgets/lists/list_column.dart';
 
 import '../../widgets/app/app_header.dart';
@@ -32,33 +33,6 @@ class _ListScreenState extends State<ListScreen> {
     _itemController.dispose();
   }
 
-  _showDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (_) => CupertinoAlertDialog(
-        title: const Text('Are you sure you want to delete this list?'),
-        content: const Text('All data will be lost'),
-        actions: [
-          CupertinoDialogAction(
-            child: const Text('Cancel'),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          CupertinoDialogAction(
-            child: const Text('Yes'),
-            onPressed: () {
-              Navigator.pop(context);
-              listController.deleteList(list.id);
-              Navigator.pop(context);
-            },
-          ),
-        ],
-      ),
-      barrierDismissible: true,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,13 +44,37 @@ class _ListScreenState extends State<ListScreen> {
             borderColor: royalYellow,
             textColor: Colors.white,
             dividerColor: Colors.white,
-            rightAction: const Text(
-              'Back',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-              ),
+            rightAction: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    showModalBottomSheet(
+                        context: context,
+                        //isScrollControlled: true,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(20),
+                          ),
+                        ),
+                        builder: (context) => ListBottomPopup(list: list));
+                  },
+                  child: const Icon(
+                    Icons.more_vert,
+                    color: Colors.white,
+                    size: 34,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                const Text(
+                  'Back',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
             ),
             onIconClick: () {
               Navigator.pop(context);
@@ -134,29 +132,10 @@ class _ListScreenState extends State<ListScreen> {
             ),
           ),
           ListColumn(
-            listId: list.id,
+            list: list,
+            isRecentlyDeleted: false,
           ),
         ],
-      ),
-      floatingActionButton: Container(
-        height: 50,
-        width: 50,
-        decoration: const BoxDecoration(
-          color: Color.fromRGBO(200, 200, 200, 0.9),
-          shape: BoxShape.circle,
-        ),
-        child: GestureDetector(
-          onTap: () {
-            _showDialog(context);
-            //listController.deleteList(list.id);
-            //Navigator.pop(context);
-          },
-          child: Icon(
-            Icons.delete_outline_rounded,
-            size: 40,
-            color: red,
-          ),
-        ),
       ),
     );
   }

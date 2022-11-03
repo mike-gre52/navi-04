@@ -198,6 +198,7 @@ class _FilterRestaurantScreensState extends State<FilterRestaurantScreens> {
                     ),
                     PriceSegmentedControll(
                       setPriceStatus: setPriceStatus,
+                      initialValue: 3,
                     )
                   ],
                 ),
@@ -216,6 +217,7 @@ class _FilterRestaurantScreensState extends State<FilterRestaurantScreens> {
                     ),
                     DeliverySegmentedControll(
                       setDeliveryStatus: setDeliveryStatus,
+                      initialValue: 1,
                     ),
                   ],
                 ),

@@ -97,7 +97,6 @@ class RestaurantController extends GetxController {
 
       }
     } else {
-      print('no filter on');
       return restaurants;
     }
 
@@ -155,6 +154,42 @@ class RestaurantController extends GetxController {
     }
   }
 
+  updateRestaurant(
+    String name,
+    int time,
+    int rating,
+    int price,
+    bool doesDelivery,
+    String notes,
+    bool isFavorite,
+    String restaurantId,
+  ) {
+    try {
+      Restaurant restaurant = Restaurant(
+        name: name,
+        time: time,
+        rating: rating,
+        price: price,
+        doesDelivery: doesDelivery,
+        isFavorite: isFavorite,
+        notes: notes,
+        id: restaurantId,
+      );
+
+      firestore
+          .collection('groups')
+          .doc(globalGroupId)
+          .collection('restaurants')
+          .doc(restaurantId)
+          .update(restaurant.toJson());
+    } catch (e) {
+      Get.snackbar(
+        'Error Adding Restaurant',
+        '$e',
+      );
+    }
+  }
+
   toggleRestaurantFavorite(String restaurantId, bool isFavorite) {
     firestore
         .collection('groups')
@@ -193,32 +228,29 @@ class RestaurantController extends GetxController {
 
   List<Restaurant> sortRestaurantFromSlowestToFastest(
       List<Restaurant> restaurants) {
+    print('filter');
     List<Restaurant> orderedList = [];
     for (var i = 0; i < restaurants.length; i++) {
-      final restaurant = restaurants[i];
-      final time = restaurant.time;
+      final currentRestaurant = restaurants[i];
+      final currentTime = currentRestaurant.time;
       if (orderedList.isEmpty) {
-        orderedList.add(restaurant);
-      } else if (orderedList.length == 1) {
-        if (orderedList[0].time < time) {
-          orderedList.insert(1, restaurant);
-        } else {
-          orderedList.insert(0, restaurant);
-        }
+        orderedList.insert(i, currentRestaurant);
       } else {
-        print('after 2');
-        bool addedValue = false;
-        for (var z = 0; z < orderedList.length; z++) {
-          if (orderedList[z].time > time) {
-            orderedList.insert(z, restaurant);
-            addedValue = true;
+        for (var y = 0; y < orderedList.length; y++) {
+          print(currentTime);
+          if (currentTime <= orderedList[y].time) {
+            orderedList.insert(y, currentRestaurant);
+            break;
           }
-        }
-        if (addedValue == false) {
-          orderedList.insert(orderedList.length - 1, restaurant);
+          if (y == orderedList.length - 1) {
+            orderedList.insert(y + 1, currentRestaurant);
+            break;
+          }
         }
       }
     }
+
+    print(orderedList.length);
     return orderedList;
   }
 }

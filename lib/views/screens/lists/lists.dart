@@ -24,9 +24,7 @@ class _ListsScreenState extends State<ListsScreen> {
           Get.toNamed(RouteHelper.singleList, arguments: list);
         }),
         child: ListCell(
-          name: list.name,
-          itemCount: list.itemCount,
-          listId: list.id,
+          list: list,
         ),
       );
 

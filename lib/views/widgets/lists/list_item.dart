@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -12,11 +13,15 @@ class ListItem extends StatelessWidget {
   String listId;
   bool showCheckBox;
   Item item;
+  ListData list;
+  bool recentlyDeleted;
 
   ListItem({
     required this.listId,
     required this.showCheckBox,
     required this.item,
+    required this.list,
+    required this.recentlyDeleted,
     Key? key,
   }) : super(key: key);
 
@@ -45,6 +50,8 @@ class ListItem extends StatelessWidget {
           onTap: (() {
             if (showCheckBox) {
               Get.toNamed(RouteHelper.editListItem, arguments: [item, listId]);
+            } else {
+              Get.toNamed(RouteHelper.singleList, arguments: list);
             }
           }),
           child: Container(
@@ -82,18 +89,20 @@ class ListItem extends StatelessWidget {
                                       ),
                                     ),
                                   )
-                                : Container(
-                                    height: height40,
-                                    width: height40,
-                                    decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.circular(height10),
-                                      border: Border.all(
-                                        color: appGreen,
-                                        width: 2,
+                                : recentlyDeleted
+                                    ? Container()
+                                    : Container(
+                                        height: height40,
+                                        width: height40,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(height10),
+                                          border: Border.all(
+                                            color: appGreen,
+                                            width: 2,
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ),
                           )
                         : Container(
                             height: height10,
@@ -124,9 +133,17 @@ class ListItem extends StatelessWidget {
                 showCheckBox
                     ? GestureDetector(
                         onTap: () {
-                          listController.deleteListItem(item.id, listId);
+                          recentlyDeleted
+                              ? listController.restoreListItem(item, listId)
+                              : listController.deleteListItem(
+                                  item, listId, true, true);
                         },
-                        child: const Icon(Icons.close_rounded),
+                        child: Icon(
+                          recentlyDeleted
+                              ? CupertinoIcons.arrowshape_turn_up_left_circle
+                              : Icons.close_rounded,
+                          size: 28,
+                        ),
                       )
                     : Container()
               ],
@@ -137,7 +154,7 @@ class ListItem extends StatelessWidget {
             ? Container(
                 height: 1,
                 width: double.infinity,
-                color: appGreen,
+                color: recentlyDeleted ? grey : appGreen,
               )
             : Container()
       ],

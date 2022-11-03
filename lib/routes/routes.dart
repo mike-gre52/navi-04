@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:whats_for_dinner/views/screens/lists/add_list.dart';
 import 'package:whats_for_dinner/views/screens/lists/edit_list_item.dart';
 import 'package:whats_for_dinner/views/screens/lists/list.dart';
+import 'package:whats_for_dinner/views/screens/lists/recently_deleted.dart';
 import 'package:whats_for_dinner/views/screens/profile/all_members.dart';
 import 'package:whats_for_dinner/views/screens/profile/select_color_screen.dart';
 import 'package:whats_for_dinner/views/screens/restaurants/add_restaurant.dart';
@@ -30,6 +31,7 @@ class RouteHelper {
   static String allMembers = '/all-members';
   static String viewRestaurant = '/view-restaurant';
   static String editListItem = '/editListItem';
+  static String recentlyDeleted = '/recentlyDeleted';
 
   static String getHomeRoute() => home;
   static String getSignInRoute() => signIn;
@@ -45,6 +47,7 @@ class RouteHelper {
   static String getAllMembers() => allMembers;
   static String getViewRestaurants() => viewRestaurant;
   static String getEditListItem() => editListItem;
+  static String getRecentlyDeleted() => recentlyDeleted;
 
   static List<GetPage> routes = [
     GetPage(
@@ -122,12 +125,18 @@ class RouteHelper {
     GetPage(
       name: viewRestaurant,
       page: () => const ViewRestaurant(),
-      transition: Transition.rightToLeft,
+      transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 250),
     ),
     GetPage(
       name: editListItem,
       page: () => const EditListItemScreen(),
+      transition: Transition.cupertino,
+      transitionDuration: const Duration(milliseconds: 250),
+    ),
+    GetPage(
+      name: recentlyDeleted,
+      page: () => const RecentlyDeleted(),
       transition: Transition.cupertino,
       transitionDuration: const Duration(milliseconds: 250),
     ),

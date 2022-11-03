@@ -5,9 +5,11 @@ import 'package:whats_for_dinner/utils/colors.dart';
 
 class DeliverySegmentedControll extends StatefulWidget {
   Function setDeliveryStatus;
+  int initialValue;
   DeliverySegmentedControll({
     Key? key,
     required this.setDeliveryStatus,
+    required this.initialValue,
   }) : super(key: key);
 
   @override
@@ -17,6 +19,12 @@ class DeliverySegmentedControll extends StatefulWidget {
 
 class _DeliverySegmentedControllState extends State<DeliverySegmentedControll> {
   Object _selectedSegment = 1;
+
+  @override
+  void initState() {
+    _selectedSegment = widget.initialValue;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
