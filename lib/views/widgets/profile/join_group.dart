@@ -81,6 +81,7 @@ class _JoinGroupState extends State<JoinGroup> {
                       textfieldHeight: 60,
                       borderRadius: 10,
                       onSubmit: (_) {},
+                      onChanged: (_) {},
                     ),
                     GestureDetector(
                       onTap: () {

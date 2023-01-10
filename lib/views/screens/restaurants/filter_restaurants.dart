@@ -129,6 +129,7 @@ class _FilterRestaurantScreensState extends State<FilterRestaurantScreens> {
                         textfieldHeight: 50,
                         borderRadius: 10,
                         onSubmit: (_) {},
+                        onChanged: (_) {},
                       ),
                     )
                   ],

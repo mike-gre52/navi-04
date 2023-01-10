@@ -65,8 +65,8 @@ class AuthController extends GetxController {
     final pickedImage =
         await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedImage != null) {
-      Get.snackbar('Profile Picture',
-          'You have successfully selected your profile picture!');
+      Get.snackbar(
+          'Profile Picture', 'You have successfully selected [] image');
     }
     pickedImageSignUp = Rx<File?>(File(pickedImage!.path));
     print(' test: ${profileImage} ');

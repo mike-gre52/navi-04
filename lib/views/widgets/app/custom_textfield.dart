@@ -15,21 +15,25 @@ class CustomTextfield extends StatefulWidget {
   double textfieldWidth;
   int textfieldHeight;
   int borderRadius;
+  TextInputType keyboard;
+  void Function(String?) onChanged;
   void Function(String) onSubmit;
 
-  CustomTextfield(
-      {Key? key,
-      required this.icon,
-      required this.placeholderText,
-      required this.controller,
-      required this.borderColor,
-      this.showVisibilityIcon = false,
-      this.showIcon = true,
-      required this.textfieldWidth,
-      required this.textfieldHeight,
-      required this.borderRadius,
-      required this.onSubmit})
-      : super(key: key);
+  CustomTextfield({
+    Key? key,
+    required this.icon,
+    required this.placeholderText,
+    required this.controller,
+    required this.borderColor,
+    this.showVisibilityIcon = false,
+    this.showIcon = true,
+    required this.textfieldWidth,
+    required this.textfieldHeight,
+    required this.borderRadius,
+    required this.onSubmit,
+    required this.onChanged,
+    this.keyboard = TextInputType.text,
+  }) : super(key: key);
 
   @override
   State<CustomTextfield> createState() => _CustomTextfieldState();
@@ -63,6 +67,8 @@ class _CustomTextfieldState extends State<CustomTextfield> {
         cursorHeight: height25,
         placeholder: widget.placeholderText,
         controller: widget.controller,
+        keyboardType: widget.keyboard,
+        onChanged: widget.onChanged,
         obscureText: widget.showVisibilityIcon ? hidePassword : false,
         prefix: widget.showIcon
             ? Padding(

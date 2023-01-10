@@ -70,6 +70,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             textfieldHeight: 60,
                             borderRadius: 25,
                             onSubmit: (_) {},
+                            onChanged: (_) {},
                           ),
                           GestureDetector(
                             onTap: () async {

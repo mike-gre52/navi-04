@@ -1,30 +1,27 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:whats_for_dinner/models/list.dart';
+import 'package:whats_for_dinner/routes/routes.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
 import 'package:whats_for_dinner/views/widgets/app/border_button.dart';
 import 'package:whats_for_dinner/views/widgets/app/custom_textfield.dart';
 
-class EditListItemScreen extends StatefulWidget {
-  const EditListItemScreen({Key? key}) : super(key: key);
+class AddRecipeScreen extends StatefulWidget {
+  const AddRecipeScreen({Key? key}) : super(key: key);
 
   @override
-  State<EditListItemScreen> createState() => _EditListItemScreenState();
+  State<AddRecipeScreen> createState() => _AddRecipeScreenState();
 }
 
-class _EditListItemScreenState extends State<EditListItemScreen> {
-  final TextEditingController _listItemController = TextEditingController();
-
-  final data = Get.arguments as List;
+class _AddRecipeScreenState extends State<AddRecipeScreen> {
+  final TextEditingController _linkController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final item = data[0] as Item;
-    final listId = data[1] as String;
-    _listItemController.text = item.name;
     return Scaffold(
         body: SafeArea(
       child: Container(
@@ -40,7 +37,7 @@ class _EditListItemScreenState extends State<EditListItemScreen> {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      'Edit name:',
+                      'Add Recipe link:',
                       style: TextStyle(
                         fontSize: 18,
                         color: black,
@@ -66,10 +63,10 @@ class _EditListItemScreenState extends State<EditListItemScreen> {
             ),
             const SizedBox(height: 15),
             CustomTextfield(
-              icon: Icons.person,
-              placeholderText: 'item',
-              controller: _listItemController,
-              borderColor: appGreen,
+              icon: CupertinoIcons.link,
+              placeholderText: 'recipe link',
+              controller: _linkController,
+              borderColor: appBlue,
               textfieldWidth: double.maxFinite,
               textfieldHeight: 60,
               borderRadius: 10,
@@ -79,15 +76,32 @@ class _EditListItemScreenState extends State<EditListItemScreen> {
             const SizedBox(height: 25),
             GestureDetector(
               onTap: () {
-                listController.editListItemName(
-                    item.id, listId, _listItemController.text);
+                recipeController.addLinkRecipe(_linkController.text);
                 Navigator.pop(context);
               },
               child: BorderButton(
-                buttonColor: appGreen,
+                buttonColor: appBlue,
                 buttonText: 'Submit',
               ),
             ),
+            const SizedBox(height: 25),
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Want to create a recipe from scratch?',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                Get.toNamed(RouteHelper.getAddRestaurantRoute());
+              },
+              child: Text(
+                'Click Here',
+                style: TextStyle(
+                    color: appBlue, fontWeight: FontWeight.w600, fontSize: 22),
+              ),
+            )
           ],
         ),
       ),

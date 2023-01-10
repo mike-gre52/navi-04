@@ -33,6 +33,19 @@ class ListBottomPopup extends StatelessWidget {
           CupertinoDialogAction(
             child: const Text('Yes'),
             onPressed: () {
+              /*
+              StreamBuilder<List<Item>>(
+                  stream: listController.getListItems(list.id),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      listItems = snapshot.data!;
+                      listController.clearRecentlyDeleted(list.id, listItems);
+                      return Container();
+                    } else {
+                      return Container();
+                    }
+                  });
+                  */
               Navigator.pop(context);
               listController.deleteList(list.id, listItems);
               Navigator.pop(context);
@@ -94,7 +107,10 @@ class ListBottomPopup extends StatelessWidget {
                   PopupButton(
                     icon: CupertinoIcons.plus_rectangle,
                     buttonName: 'Add Recipe Items (Coming Soon)',
-                    onClick: () {},
+                    onClick: () {
+                      Get.toNamed(RouteHelper.addToListSelectRecipeScreen,
+                          arguments: list);
+                    },
                   ),
                   PopupButton(
                     icon: CupertinoIcons.delete,

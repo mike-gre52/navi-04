@@ -1,0 +1,62 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/src/foundation/key.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:get/get.dart';
+import 'package:whats_for_dinner/models/recipe.dart';
+import 'package:whats_for_dinner/routes/routes.dart';
+
+class EditInstructionCell extends StatelessWidget {
+  int counterValue;
+  Instruction instruction;
+  Function deleteInstruction;
+  Function editInstruction;
+  Function addInstruction;
+
+  EditInstructionCell({
+    Key? key,
+    required this.instruction,
+    required this.counterValue,
+    required this.deleteInstruction,
+    required this.editInstruction,
+    required this.addInstruction,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Text(counterValue.toString()),
+              Expanded(child: Container()),
+              GestureDetector(
+                onTap: () {
+                  Get.toNamed(RouteHelper.editRecipeItemScreen, arguments: [
+                    'Instruction',
+                    instruction,
+                    counterValue,
+                    editInstruction,
+                    addInstruction,
+                    false
+                  ]);
+                },
+                child: const Icon(Icons.edit),
+              ),
+              GestureDetector(
+                onTap: () {
+                  deleteInstruction(counterValue - 1);
+                },
+                child: Icon(Icons.delete),
+              )
+            ],
+          ),
+          Text(
+            instruction.instruction,
+            style: const TextStyle(fontSize: 16),
+          ),
+        ],
+      ),
+    );
+  }
+}

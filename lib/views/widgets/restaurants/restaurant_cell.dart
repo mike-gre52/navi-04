@@ -21,7 +21,7 @@ class RestaurantCell extends StatelessWidget {
         Get.toNamed(RouteHelper.viewRestaurant, arguments: restaurant);
       },
       child: Container(
-        margin: EdgeInsets.only(top: 10, left: 10, right: 10),
+        margin: const EdgeInsets.only(top: 10, left: 10, right: 10),
         height: 110,
         width: 380,
         decoration: BoxDecoration(
@@ -37,10 +37,15 @@ class RestaurantCell extends StatelessWidget {
           ],
         ),
         child: Container(
-          margin: EdgeInsets.only(left: 30, top: 10, bottom: 10, right: 5),
+          margin:
+              const EdgeInsets.only(left: 30, top: 10, bottom: 10, right: 5),
           child: Row(
             children: [
               Container(
+                margin: const EdgeInsets.only(
+                  top: 5,
+                  bottom: 5,
+                ),
                 width: 150,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

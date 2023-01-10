@@ -82,13 +82,14 @@ class _ListCellState extends State<ListCell> {
                                         margin: const EdgeInsets.only(top: 5),
                                         width: 250,
                                         child: ListView(
-                                            physics:
-                                                const NeverScrollableScrollPhysics(),
-                                            padding:
-                                                const EdgeInsets.only(top: 0),
-                                            children: listItems.reversed
-                                                .map(buildListItem)
-                                                .toList()),
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          padding:
+                                              const EdgeInsets.only(top: 0),
+                                          children: listItems.reversed
+                                              .map(buildListItem)
+                                              .toList(),
+                                        ),
                                       ),
                                     )
                                   : Container(),

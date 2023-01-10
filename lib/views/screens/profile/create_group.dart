@@ -78,6 +78,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                 textfieldHeight: 60,
                 borderRadius: 10,
                 onSubmit: (_) {},
+                onChanged: (_) {},
               ),
               const SizedBox(
                 height: 40,

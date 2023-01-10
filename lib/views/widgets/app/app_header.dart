@@ -10,6 +10,7 @@ class AppHeader extends StatelessWidget {
   Color dividerColor;
   Widget rightAction;
   Function onIconClick;
+  bool safeArea;
   AppHeader({
     required this.headerText,
     required this.headerColor,
@@ -18,6 +19,7 @@ class AppHeader extends StatelessWidget {
     required this.dividerColor,
     required this.rightAction,
     required this.onIconClick,
+    this.safeArea = false,
     Key? key,
   }) : super(key: key);
 
@@ -26,7 +28,7 @@ class AppHeader extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          height: 120,
+          height: safeArea ? 90 : 120,
           width: double.maxFinite,
           decoration: BoxDecoration(
             color: headerColor,

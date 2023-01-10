@@ -8,12 +8,14 @@ import '../../../utils/colors.dart';
 class NotesTextfield extends StatefulWidget {
   TextEditingController controller;
   Color borderColor;
+  double height;
 
-  NotesTextfield({
-    Key? key,
-    required this.controller,
-    required this.borderColor,
-  }) : super(key: key);
+  NotesTextfield(
+      {Key? key,
+      required this.controller,
+      required this.borderColor,
+      required this.height})
+      : super(key: key);
 
   @override
   State<NotesTextfield> createState() => _NotesTextfieldState();
@@ -35,7 +37,7 @@ class _NotesTextfieldState extends State<NotesTextfield> {
     double width350 = screenWidth / 1.18;
 
     return Container(
-      height: 200,
+      height: widget.height,
       width: width350,
       child: CupertinoTextField(
         cursorColor: black,

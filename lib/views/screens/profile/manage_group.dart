@@ -94,6 +94,7 @@ class _ManageGroupScreenState extends State<ManageGroupScreen> {
                         textfieldHeight: 60,
                         borderRadius: 10,
                         onSubmit: (_) {},
+                        onChanged: (_) {},
                       ),
                       const SizedBox(height: 20),
                       Row(

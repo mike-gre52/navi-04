@@ -50,14 +50,15 @@ class _ListScreenState extends State<ListScreen> {
                 GestureDetector(
                   onTap: () {
                     showModalBottomSheet(
-                        context: context,
-                        //isScrollControlled: true,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(20),
-                          ),
+                      context: context,
+                      //isScrollControlled: true,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(20),
                         ),
-                        builder: (context) => ListBottomPopup(list: list));
+                      ),
+                      builder: (context) => ListBottomPopup(list: list),
+                    );
                   },
                   child: const Icon(
                     Icons.more_vert,
@@ -93,6 +94,7 @@ class _ListScreenState extends State<ListScreen> {
                   textfieldWidth: 275,
                   textfieldHeight: 60,
                   borderRadius: 20,
+                  onChanged: (_) {},
                   onSubmit: (_) {
                     listController.addListItem(
                       _itemController.text,

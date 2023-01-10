@@ -25,7 +25,11 @@ class ListsController extends GetxController {
         .snapshots()
         .map(
           (snapshot) => snapshot.docs
-              .map((doc) => ListData.static().fromJson(doc.data()))
+              .map(
+                (doc) => ListData.static().fromJson(
+                  doc.data(),
+                ),
+              )
               .toList(),
         );
     return data;
@@ -132,7 +136,7 @@ class ListsController extends GetxController {
         .collection('lists')
         .doc(listId) //specific list
         .update({'itemCount': FieldValue.increment(-1)});
-
+    /*
     if (showSnackBar) {
       Get.snackbar(
         '',
@@ -164,6 +168,7 @@ class ListsController extends GetxController {
         },
       );
     }
+    */
   }
 
   void restoreListItem(Item item, String listId) {
@@ -248,9 +253,7 @@ class ListsController extends GetxController {
         .update({'isChecked': !isChecked});
   }
 
-  void createList(
-    String listName,
-  ) {
+  void createList(String listName) {
     final String listId = DateTime.now().toString();
     final list = ListData(
       name: listName,

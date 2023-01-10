@@ -11,6 +11,7 @@ import 'package:whats_for_dinner/utils/constants.dart';
 import 'package:whats_for_dinner/views/screens/home.dart';
 import 'package:whats_for_dinner/views/screens/lists/lists.dart';
 import 'package:whats_for_dinner/views/screens/profile/profile.dart';
+import 'package:whats_for_dinner/views/screens/recipes/recipes.dart';
 import 'package:whats_for_dinner/views/screens/restaurants/restaurants.dart';
 
 class Navigation extends StatefulWidget {
@@ -41,16 +42,7 @@ class _NavigationState extends State<Navigation> {
       //const HomeScreen(),
       const ResturantsScreen(),
       const ListsScreen(),
-      Container(
-        child: GestureDetector(
-          onTap: () {
-            authController.signOut();
-          },
-          child: const Center(
-            child: Text('Page 4'),
-          ),
-        ),
-      ),
+      const RecipesScreen(),
       ProfileScreen(),
     ];
     return Scaffold(

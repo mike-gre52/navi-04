@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:whats_for_dinner/controllers/group_controller.dart';
 import 'package:whats_for_dinner/controllers/lists_controller.dart';
+import 'package:whats_for_dinner/controllers/recipes_controller.dart';
 import 'package:whats_for_dinner/controllers/restaurant_controller.dart';
 import 'package:whats_for_dinner/controllers/user_controller.dart';
 import 'package:whats_for_dinner/data/local_data.dart';
@@ -21,6 +22,7 @@ Future<void> main() async {
     Get.put(RestaurantController());
     Get.put(GroupController());
     Get.put(ListsController());
+    Get.put(RecipeController());
   });
   //await getData();
   runApp(const MyApp());

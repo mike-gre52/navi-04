@@ -109,6 +109,7 @@ class _AddRestaurantState extends State<AddRestaurant> {
                     textfieldHeight: 65,
                     borderRadius: 10,
                     onSubmit: (_) {},
+                    onChanged: (_) {},
                   ),
                 ),
               ],
@@ -144,6 +145,7 @@ class _AddRestaurantState extends State<AddRestaurant> {
                         textfieldHeight: 50,
                         borderRadius: 10,
                         onSubmit: (_) {},
+                        onChanged: (_) {},
                       ),
                     )
                   ],
@@ -236,6 +238,7 @@ class _AddRestaurantState extends State<AddRestaurant> {
                 NotesTextfield(
                   controller: _notesController,
                   borderColor: appRed,
+                  height: 200,
                 ),
               ],
             ),

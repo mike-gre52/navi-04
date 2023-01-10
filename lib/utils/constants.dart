@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:whats_for_dinner/controllers/group_controller.dart';
 import 'package:whats_for_dinner/controllers/lists_controller.dart';
+import 'package:whats_for_dinner/controllers/recipes_controller.dart';
 import 'package:whats_for_dinner/models/group.dart';
 
 import '../controllers/auth_controller.dart';
@@ -20,3 +21,4 @@ var userController = UserController.instance;
 var restaurantController = RestaurantController.instance;
 var groupController = GroupController.instance;
 var listController = ListsController.instance;
+var recipeController = RecipeController.instance;
