@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:whats_for_dinner/main.dart';
@@ -39,7 +42,18 @@ class RecipeController extends GetxController {
         .set(recipe.toJson());
   }
 
+  void deleteRecipeImageFromStorage(String recipeId) {
+    try {
+      firebaseStorage.ref().child(globalGroupId).child(recipeId).delete();
+    } catch (e) {
+      throw ("Error deleting recipe Image");
+    }
+  }
+
   void deleteRecipe(Recipe recipe) {
+    if (!recipe.isImport) {
+      deleteRecipeImageFromStorage(recipe.id);
+    }
     firestore
         .collection('groups')
         .doc(globalGroupId)
@@ -67,20 +81,22 @@ class RecipeController extends GetxController {
     return data;
   }
 
-  void addLinkRecipe(String url) {
-    String recipeName = parseUrl(url);
+  void addLinkRecipe(String url, String bookmarkName) {
+    String recipeName = bookmarkName;
 
     Recipe recipe = Recipe(
       name: recipeName,
       prepTime: 0,
       cookTime: 0,
-      servings: 0,
+      totalTime: 0,
+      servings: '',
       id: generateId(),
       imageUrl: '',
       ingredients: [],
       instructions: [],
       sourceUrl: url,
       isLink: true,
+      isImport: false,
     );
 
     firestore
@@ -102,7 +118,24 @@ class RecipeController extends GetxController {
           .update({'ingredients': json});
     } catch (e) {
       Get.snackbar(
-        'Error Adding Restaurant',
+        'Error Updating Ingredients ',
+        '$e',
+      );
+    }
+  }
+
+  void updateImageUrl(Recipe recipe, String url) {
+    print('upadting url');
+    try {
+      firestore
+          .collection('groups')
+          .doc(globalGroupId)
+          .collection('recipes')
+          .doc(recipe.id)
+          .update({'imageUrl': url});
+    } catch (e) {
+      Get.snackbar(
+        'Error uploading image',
         '$e',
       );
     }

@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:get/get.dart';
+import 'package:whats_for_dinner/main.dart';
 
 import '../utils/constants.dart';
 
@@ -12,9 +13,12 @@ class ImageController {
   late Rx<File?> _pickedImage;
   bool isImageSelected = false;
 
-  File? get profileImage => _pickedImage.value;
+  File? get image => _pickedImage.value;
 
-  void pickImage(bool takePhoto, Function setImageStatus) async {
+  void pickImage(
+    bool takePhoto,
+    Function onSubmit,
+  ) async {
     XFile? pickedImage;
     if (takePhoto) {
       pickedImage = await ImagePicker()
@@ -23,7 +27,7 @@ class ImageController {
       pickedImage = await ImagePicker()
           .pickImage(source: ImageSource.gallery, imageQuality: 1);
     }
-    print(pickedImage);
+    //print(pickedImage);
     if (pickedImage != null) {
       Get.snackbar(
           'Recipe Picture', 'You have successfully selected a recipe picture!');
@@ -33,19 +37,19 @@ class ImageController {
     Rx<File?> image = Rx<File?>(File(pickedImage!.path));
     _pickedImage = image;
     isImageSelected = true;
-    setImageStatus();
+    onSubmit();
     //Future<String> url = uploadToStorage(profileImage!);
   }
 
   // upload to firebase storage
-  Future<String> uploadToStorage(File image) async {
-    Reference ref = firebaseStorage.ref().child('profilePics').child('test1');
-    //.child(firebaseAuth.currentUser!.uid);
-    print('uploaded');
+  Future<String> uploadToStorage(
+    File image,
+    Reference ref,
+  ) async {
     UploadTask uploadTask = ref.putFile(image);
     TaskSnapshot snap = await uploadTask;
     String downloadUrl = await snap.ref.getDownloadURL();
-    print(downloadUrl);
+
     return downloadUrl;
   }
 }

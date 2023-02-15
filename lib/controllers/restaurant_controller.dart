@@ -21,8 +21,9 @@ class RestaurantController extends GetxController {
     useTime: false,
   );
 
-  void setfilter(Filter newFilter) {
+  Filter setfilter(Filter newFilter) {
     _filterData = newFilter;
+    return newFilter;
   }
 
   Filter get filter => _filterData;

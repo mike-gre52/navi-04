@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:whats_for_dinner/controllers/image_controller.dart';
+import 'package:whats_for_dinner/main.dart';
 import 'package:whats_for_dinner/routes/routes.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
@@ -50,6 +52,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
   bool showTimeError = false;
   bool showAmountError = false;
   bool isformValid = true;
+  bool isLoading = false;
 
   void setImageStatus() {
     setState(() {
@@ -117,6 +120,20 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
       });
       return false;
     }
+  }
+
+  void deleteIngredient(index) {
+    setState(() {
+      recipeIngredients.removeAt(index);
+      ingredientCounter = 0;
+    });
+  }
+
+  void deleteInstruction(index) {
+    setState(() {
+      recipeInstructions.removeAt(index);
+      instructionCounter = 0;
+    });
   }
 
   @override
@@ -195,12 +212,13 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                                         borderRadius:
                                             BorderRadius.circular(8.0),
                                         child: Image.file(
-                                          imageController.profileImage!,
+                                          imageController.image!,
                                           height: 150.0,
                                           width: 100.0,
                                           fit: BoxFit.cover,
                                         ),
-                                      ))
+                                      ),
+                                    )
                                   : Container(
                                       height: 75,
                                       width: 75,
@@ -255,8 +273,8 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                                   controller: _recipePrepTimeController,
                                   width: 75,
                                   placeHolderText: '',
-                                  useTextKeyboard: true,
                                   onChanged: checkTimeInput,
+                                  centerText: true,
                                 ),
                                 HeaderAndTextField(
                                   header: 'Cook Time',
@@ -264,21 +282,21 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                                   width: 75,
                                   placeHolderText: '',
                                   onChanged: checkTimeInput,
+                                  centerText: true,
                                 ),
                                 HeaderAndTextField(
                                   header: 'Servings',
                                   controller: _recipeServingsController,
                                   width: 75,
                                   placeHolderText: '',
-                                  onChanged: checkTimeInput,
+                                  onChanged: (_) {},
+                                  centerText: true,
                                 ),
                               ],
                             ),
                             showTimeError
                                 ? Container(
-                                    margin:
-                                        const EdgeInsets.symmetric(vertical: 5),
-                                    height: 20,
+                                    height: 25,
                                     alignment: Alignment.centerRight,
                                     child: Text(
                                       'Input must be a valid number',
@@ -318,17 +336,22 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                                   header: 'Amount',
                                   controller: _amountController,
                                   width: 75,
-                                  placeHolderText: '5',
+                                  placeHolderText: '',
                                   onChanged: checkAmountInput,
+                                  subText: 'Ex: 2, 0.5',
+                                  showSubText: true,
+                                  centerText: true,
                                 ),
                                 HeaderAndTextField(
                                   header: 'Name',
                                   controller: _ingredientController,
                                   width: 200,
                                   leftAlign: true,
-                                  placeHolderText: 'cups flour',
+                                  placeHolderText: '',
                                   useTextKeyboard: true,
                                   onChanged: (_) {},
+                                  subText: 'Ex: cups flour, tbs salt',
+                                  showSubText: true,
                                 ),
                                 SizedBox(
                                   height: 50,
@@ -351,9 +374,9 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                                             id: generateId(),
                                           );
                                           recipeIngredients.add(ingredient);
-                                          //_ingredientController.clear();
-                                          // _measurementController.clear();
-                                          // _amountController.clear();
+                                          _ingredientController.clear();
+                                          _measurementController.clear();
+                                          _amountController.clear();
                                         }
                                       });
                                     },
@@ -368,7 +391,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                             ),
                             showAmountError
                                 ? Container(
-                                    margin: EdgeInsets.only(top: 5),
+                                    margin: EdgeInsets.symmetric(vertical: 5),
                                     height: 20,
                                     alignment: Alignment.centerRight,
                                     child: Text(
@@ -380,7 +403,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                                     ),
                                   )
                                 : Container(
-                                    height: 25,
+                                    height: 30,
                                   ),
                           ],
                         ),
@@ -397,7 +420,10 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                           color: backgroundGrey,
                         ),
                         child: RecipeIngredientList(
-                            ingredients: recipeIngredients),
+                          ingredients: recipeIngredients,
+                          showDelete: true,
+                          deleteIngredient: deleteIngredient,
+                        ),
                       ),
                       //Instructions tab
                       Container(
@@ -453,38 +479,72 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                             color: backgroundGrey,
                           ),
                           child: RecipeInstructionList(
-                              instructions: recipeInstructions)),
-                      const SizedBox(height: 40),
+                            instructions: recipeInstructions,
+                            showDelete: true,
+                            deleteInstruction: deleteInstruction,
+                          )),
+                      const SizedBox(height: 20),
+                      Container(
+                        height: 20,
+                        child: isLoading
+                            ? CupertinoActivityIndicator(
+                                radius: 15,
+                                color: appBlue,
+                                animating: true,
+                              )
+                            : null,
+                      ),
+
+                      const SizedBox(height: 20),
                       //Submit Button
                       Column(
                         children: [
                           GestureDetector(
                             onTap: () async {
                               if (validateSubmit()) {
+                                setState(() {
+                                  isLoading = true;
+                                });
                                 String url = '';
+                                String recipeId = generateId();
                                 if (isImageSelected) {
+                                  Reference ref = firebaseStorage
+                                      .ref()
+                                      .child(globalGroupId)
+                                      .child('recipeImages')
+                                      .child(recipeId);
+
                                   url = await imageController.uploadToStorage(
-                                      imageController.profileImage!);
+                                      imageController.image!, ref);
                                 }
+                                int prepTime =
+                                    int.parse(_recipePrepTimeController.text);
+                                int cookTime =
+                                    int.parse(_recipeCookTimeController.text);
                                 Recipe recipe = Recipe(
                                   name: _recipeNameController.text,
                                   prepTime:
                                       int.parse(_recipePrepTimeController.text),
                                   cookTime:
                                       int.parse(_recipeCookTimeController.text),
-                                  servings:
-                                      int.parse(_recipeServingsController.text),
-                                  id: generateId(),
+                                  totalTime: prepTime + cookTime,
+                                  servings: _recipeServingsController.text,
+                                  id: recipeId,
                                   imageUrl: url,
                                   ingredients: recipeIngredients,
                                   instructions: recipeInstructions,
                                   sourceUrl: '',
                                   isLink: false,
+                                  isImport: false,
                                 );
 
                                 // call upload function in recipe controller
                                 recipeController.uploadRecipe(recipe);
-                                Navigator.pop(context);
+
+                                setState(() {
+                                  isLoading = false;
+                                });
+
                                 Navigator.pop(context);
                               }
                             },
@@ -513,7 +573,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                                 ),
                         ],
                       ),
-                      const SizedBox(height: 50),
+                      const SizedBox(height: 30),
                     ],
                   ),
                 )
@@ -535,6 +595,9 @@ class HeaderAndTextField extends StatelessWidget {
   String placeHolderText;
   bool useTextKeyboard;
   void Function(String?) onChanged;
+  String subText;
+  bool showSubText;
+  bool centerText;
 
   HeaderAndTextField({
     Key? key,
@@ -545,13 +608,15 @@ class HeaderAndTextField extends StatelessWidget {
     required this.onChanged,
     this.leftAlign = false,
     this.useTextKeyboard = false,
+    this.subText = '',
+    this.showSubText = false,
+    this.centerText = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment:
-          leftAlign ? CrossAxisAlignment.start : CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           header,
@@ -574,7 +639,20 @@ class HeaderAndTextField extends StatelessWidget {
           showIcon: false,
           onSubmit: (_) {},
           onChanged: onChanged,
-        )
+          centerText: centerText,
+        ),
+        showSubText
+            ? Container(
+                margin: EdgeInsets.only(left: 5),
+                child: Text(
+                  subText,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              )
+            : Container(),
       ],
     );
   }
@@ -591,7 +669,10 @@ void _showActionSheet(BuildContext context, ImageController imageController,
           /// defualt behavior, turns the action's text to bold text.
           onPressed: () {
             //Open Library
-            imageController.pickImage(false, setImageStatus);
+            imageController.pickImage(
+              false,
+              setImageStatus,
+            );
             Navigator.pop(context);
           },
           child: const Text('Choose from library'),

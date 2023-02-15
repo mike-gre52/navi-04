@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'IBMPlexSansDevanagari',
       ),
       //home: const SignUp(),
-      initialRoute: RouteHelper.getSignInRoute(),
+      initialRoute: RouteHelper.loadingScreen,
       getPages: RouteHelper.routes,
       builder: (context, child) {
         return MediaQuery(

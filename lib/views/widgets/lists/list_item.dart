@@ -49,7 +49,10 @@ class ListItem extends StatelessWidget {
         GestureDetector(
           onTap: (() {
             if (showCheckBox) {
-              Get.toNamed(RouteHelper.editListItem, arguments: [item, listId]);
+              if (!recentlyDeleted) {
+                Get.toNamed(RouteHelper.editListItem,
+                    arguments: [item, listId]);
+              }
             } else {
               Get.toNamed(RouteHelper.singleList, arguments: list);
             }
@@ -72,25 +75,25 @@ class ListItem extends StatelessWidget {
                               listController.toggleListItemCheckedStatus(
                                   item.id, listId, item.isChecked);
                             },
-                            child: item.isChecked
-                                ? Container(
-                                    height: height40,
-                                    width: height40,
-                                    decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.circular(height10),
-                                      color: appGreen,
-                                    ),
-                                    child: const Center(
-                                      child: Icon(
-                                        Icons.check_rounded,
-                                        color: Colors.white,
-                                        size: 28,
-                                      ),
-                                    ),
-                                  )
-                                : recentlyDeleted
-                                    ? Container()
+                            child: recentlyDeleted
+                                ? Container()
+                                : item.isChecked
+                                    ? Container(
+                                        height: height40,
+                                        width: height40,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(height10),
+                                          color: appGreen,
+                                        ),
+                                        child: const Center(
+                                          child: Icon(
+                                            Icons.check_rounded,
+                                            color: Colors.white,
+                                            size: 28,
+                                          ),
+                                        ),
+                                      )
                                     : Container(
                                         height: height40,
                                         width: height40,
@@ -122,7 +125,11 @@ class ListItem extends StatelessWidget {
                         style: TextStyle(
                           fontSize: showCheckBox ? fontSize20 : fontSize16,
                           fontWeight: FontWeight.w400,
-                          color: item.isChecked ? Colors.black38 : black,
+                          color: recentlyDeleted
+                              ? black
+                              : item.isChecked
+                                  ? Colors.black38
+                                  : black,
                         ),
                         maxLines: showCheckBox ? null : 1,
                         overflow: showCheckBox ? null : TextOverflow.ellipsis,

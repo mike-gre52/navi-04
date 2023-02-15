@@ -39,17 +39,19 @@ class Item {
   String name;
   String id;
   bool isChecked;
+  String imageUrl;
 
-  Item({
-    required this.name,
-    required this.id,
-    required this.isChecked,
-  });
+  Item(
+      {required this.name,
+      required this.id,
+      required this.isChecked,
+      required this.imageUrl});
 
   Item.static({
     this.name = '',
     this.id = '',
     this.isChecked = false,
+    this.imageUrl = '',
   });
 
   Item fromJson(Map<String, dynamic> json) {
@@ -57,6 +59,7 @@ class Item {
       name: json['name'],
       id: json['id'],
       isChecked: json['isChecked'],
+      imageUrl: json['imageUrl'],
     );
     return item;
   }
@@ -66,6 +69,7 @@ class Item {
     data['name'] = this.name;
     data['id'] = this.id;
     data['isChecked'] = this.isChecked;
+    data['imageUrl'] = this.imageUrl;
     return data;
   }
 }

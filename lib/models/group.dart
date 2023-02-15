@@ -3,24 +3,27 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Group {
   String groupName;
   String groupId;
+  List members;
 
   Group({
     required this.groupName,
     required this.groupId,
+    required this.members,
   });
 
   Group.static({
     this.groupName = '',
     this.groupId = '',
+    this.members = const [],
   });
 
   Group fromJson(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
 
     final group = Group(
-      groupName: snapshot['groupName'],
-      groupId: snapshot['groupId'],
-    );
+        groupName: snapshot['groupName'],
+        groupId: snapshot['groupId'],
+        members: snapshot['members']);
 
     return group;
   }
@@ -29,6 +32,7 @@ class Group {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['groupName'] = this.groupName;
     data['groupId'] = this.groupId;
+    data['members'] = this.members;
     return data;
   }
 }

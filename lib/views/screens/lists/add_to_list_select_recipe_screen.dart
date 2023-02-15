@@ -15,8 +15,6 @@ import '../../../routes/routes.dart';
 class AddToListSelectRecipeScreen extends StatefulWidget {
   AddToListSelectRecipeScreen({Key? key}) : super(key: key);
 
-  final list = Get.arguments as ListData;
-
   @override
   State<AddToListSelectRecipeScreen> createState() =>
       _AddToListSelectRecipeScreenState();
@@ -24,11 +22,25 @@ class AddToListSelectRecipeScreen extends StatefulWidget {
 
 class _AddToListSelectRecipeScreenState
     extends State<AddToListSelectRecipeScreen> {
+  late ListData list;
+  late Color color;
+  final data = Get.arguments as List;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    list = data[0] as ListData;
+    color = data[1] as Color;
+  }
+
   Widget buildRecipeCell(Recipe recipe) => !recipe.isLink
       ? GestureDetector(
           onTap: (() {
+            Navigator.pop(context);
             Get.toNamed(RouteHelper.getSelectIngredients(),
-                arguments: [recipe, widget.list]);
+                arguments: [recipe, list, color]);
           }),
           child: SelectRecipeCell(
             recipe: recipe,
@@ -48,7 +60,7 @@ class _AddToListSelectRecipeScreenState
               children: [
                 AppHeader(
                   headerText: 'Select Recipe',
-                  headerColor: appGreen,
+                  headerColor: color,
                   borderColor: royalYellow,
                   textColor: Colors.white,
                   dividerColor: Colors.white,

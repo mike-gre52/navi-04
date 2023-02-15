@@ -1,7 +1,11 @@
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
+import 'package:whats_for_dinner/controllers/image_controller.dart';
+import 'package:whats_for_dinner/main.dart';
 import 'package:whats_for_dinner/models/list.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
@@ -18,6 +22,19 @@ class EditListItemScreen extends StatefulWidget {
 class _EditListItemScreenState extends State<EditListItemScreen> {
   final TextEditingController _listItemController = TextEditingController();
 
+  late ImageController imageController;
+
+  bool imageJustUploaded = false;
+
+  bool isImageUploaded = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    imageController = ImageController();
+  }
+
   final data = Get.arguments as List;
 
   @override
@@ -25,6 +42,78 @@ class _EditListItemScreenState extends State<EditListItemScreen> {
     final item = data[0] as Item;
     final listId = data[1] as String;
     _listItemController.text = item.name;
+
+    if (item.imageUrl != '') {
+      setState(() {
+        isImageUploaded = true;
+      });
+    }
+
+    Reference ref = firebaseStorage
+        .ref()
+        .child(globalGroupId)
+        .child('listImages')
+        .child('list-$listId')
+        .child(item.id);
+
+    void _showActionSheet(
+      BuildContext context,
+      ImageController imageController,
+      Function onSubmit,
+    ) {
+      showCupertinoModalPopup<void>(
+        context: context,
+        builder: (BuildContext context) => CupertinoActionSheet(
+          actions: <CupertinoActionSheetAction>[
+            CupertinoActionSheetAction(
+              /// This parameter indicates the action would be a default
+              /// defualt behavior, turns the action's text to bold text.
+              onPressed: () {
+                //Open Library
+                imageController.pickImage(
+                  false,
+                  onSubmit,
+                );
+
+                Navigator.pop(context);
+              },
+              child: const Text('Choose from library'),
+            ),
+            CupertinoActionSheetAction(
+              onPressed: () {
+                //Open Camera
+                imageController.pickImage(
+                  true,
+                  onSubmit,
+                );
+
+                Navigator.pop(context);
+              },
+              child: const Text('Take photo'),
+            ),
+            CupertinoActionSheetAction(
+              isDestructiveAction: true,
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Cancel'),
+            ),
+          ],
+        ),
+      );
+    }
+
+    void onSubmit() async {
+      if (imageController.image != null) {
+        setState(() {
+          imageJustUploaded = true;
+        });
+        String imageUrl =
+            await imageController.uploadToStorage(imageController.image!, ref);
+        listController.updateListImageUrl(item, listId, imageUrl);
+      }
+    }
+
     return Scaffold(
         body: SafeArea(
       child: Container(
@@ -88,6 +177,51 @@ class _EditListItemScreenState extends State<EditListItemScreen> {
                 buttonText: 'Submit',
               ),
             ),
+            const SizedBox(height: 25),
+            isImageUploaded
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: Image.network(
+                      item.imageUrl,
+                      height: 350.0,
+                      width: 350.0,
+                      fit: BoxFit.cover,
+                    ),
+                  )
+                : imageJustUploaded
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(8.0),
+                        child: Image.file(
+                          imageController.image!,
+                          height: 350.0,
+                          width: 350.0,
+                          fit: BoxFit.cover,
+                        ),
+                      )
+                    : GestureDetector(
+                        onTap: () {
+                          _showActionSheet(
+                            context,
+                            imageController,
+                            onSubmit,
+                          );
+                        },
+                        child: Container(
+                          height: 350,
+                          width: 350,
+                          decoration: BoxDecoration(
+                            color: lightGrey,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              Icon(Icons.photo),
+                              Text('Add Image'),
+                            ],
+                          ),
+                        ),
+                      )
           ],
         ),
       ),

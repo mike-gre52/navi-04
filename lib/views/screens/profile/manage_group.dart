@@ -41,12 +41,12 @@ class _ManageGroupScreenState extends State<ManageGroupScreen> {
         stream: groupController.getGroupData(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            final data = snapshot.data!;
-            _groupNameController.text = data.groupName;
+            final Group group = snapshot.data!;
+            _groupNameController.text = group.groupName;
             return Column(
               children: [
                 AppHeader(
-                  headerText: data.groupName,
+                  headerText: group.groupName,
                   headerColor: Colors.white,
                   borderColor: royalYellow,
                   textColor: black,
@@ -149,7 +149,7 @@ class _ManageGroupScreenState extends State<ManageGroupScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              data.groupId,
+                              group.groupId,
                               style: TextStyle(
                                 color: black,
                                 fontSize: 20,
@@ -159,7 +159,7 @@ class _ManageGroupScreenState extends State<ManageGroupScreen> {
                             GestureDetector(
                               onTap: (() {
                                 Clipboard.setData(
-                                    ClipboardData(text: data.groupId));
+                                    ClipboardData(text: group.groupId));
                               }),
                               child: const Icon(
                                 Icons.content_copy_rounded,
@@ -192,7 +192,8 @@ class _ManageGroupScreenState extends State<ManageGroupScreen> {
                       GestureDetector(
                         onTap: () {
                           //Leave Group
-                          groupController.leaveGroup();
+
+                          groupController.leaveGroup(group);
                           Navigator.pop(context);
                         },
                         child: BorderButton(

@@ -3,9 +3,13 @@ import 'package:whats_for_dinner/models/recipe.dart';
 
 class RecipeInstructionList extends StatelessWidget {
   List<Instruction> instructions;
+  bool showDelete;
+  Function deleteInstruction;
   RecipeInstructionList({
     Key? key,
     required this.instructions,
+    required this.showDelete,
+    required this.deleteInstruction,
   }) : super(key: key);
 
   int counter = 0;
@@ -14,18 +18,19 @@ class RecipeInstructionList extends StatelessWidget {
     return RecipeInstruction(
       stepNumber: counter,
       instruction: instruction.instruction,
+      showDelete: showDelete,
+      deleteInstruction: deleteInstruction,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: instructions.map(buildRecipeInstruction).toList(),
-        ),
+    counter = 0;
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: instructions.map(buildRecipeInstruction).toList(),
       ),
     );
   }
@@ -34,10 +39,14 @@ class RecipeInstructionList extends StatelessWidget {
 class RecipeInstruction extends StatelessWidget {
   int stepNumber;
   String instruction;
+  bool showDelete;
+  Function deleteInstruction;
   RecipeInstruction({
     Key? key,
     required this.instruction,
     required this.stepNumber,
+    required this.showDelete,
+    required this.deleteInstruction,
   }) : super(key: key);
 
   @override
@@ -45,6 +54,8 @@ class RecipeInstruction extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(top: 10),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Flexible(
             child: Text(
@@ -52,6 +63,16 @@ class RecipeInstruction extends StatelessWidget {
               style: TextStyle(fontSize: 16),
             ),
           ),
+          showDelete
+              ? GestureDetector(
+                  onTap: () {
+                    deleteInstruction(stepNumber - 1);
+                  },
+                  child: const Icon(
+                    Icons.close,
+                  ),
+                )
+              : Container(),
         ],
       ),
     );

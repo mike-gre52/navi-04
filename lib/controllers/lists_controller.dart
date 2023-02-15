@@ -77,38 +77,44 @@ class ListsController extends GetxController {
     return data;
   }
 
-  void addListItem(String newItem, String listId) {
+  void addListItem(String newItem, String listId) async {
     var itemId = DateTime.now().toString();
-    final item = Item(
-      name: newItem,
-      id: itemId,
-      isChecked: false,
-    );
+    final item =
+        Item(name: newItem, id: itemId, isChecked: false, imageUrl: '');
 
     // add item to list collection
-
-    firestore
-        .collection('groups')
-        .doc(globalGroupId)
-        .collection('lists')
-        .doc(listId) //specific list
-        .collection('items')
-        .doc(itemId) //need to generate unquie id
-        .set(item.toJson()); //will need to build Item
-
-    //update itemCount
-    firestore
-        .collection('groups')
-        .doc(globalGroupId)
-        .collection('lists')
-        .doc(listId) //specific list
-        .update({'itemCount': FieldValue.increment(1)});
+    bool shouldIncrement = false;
+    try {
+      await firestore
+          .collection('groups')
+          .doc(globalGroupId)
+          .collection('lists')
+          .doc(listId) //specific list
+          .collection('items')
+          .doc(itemId) //need to generate unquie id
+          .set(item.toJson()); //will need to build Item
+      shouldIncrement = true;
+    } catch (e) {
+      print(e);
+      shouldIncrement = false;
+    }
+    //update itemCount if item succesfully added
+    if (shouldIncrement) {
+      firestore
+          .collection('groups')
+          .doc(globalGroupId)
+          .collection('lists')
+          .doc(listId) //specific list
+          .update({'itemCount': FieldValue.increment(1)});
+    }
   }
 
   void deleteListItem(
       Item item, String listId, bool showSnackBar, bool addToRecentlyDeleted) {
     if (addToRecentlyDeleted) {
       //add to recently deleted
+
+      item.imageUrl = '';
       firestore
           .collection('groups')
           .doc(globalGroupId)
@@ -127,6 +133,11 @@ class ListsController extends GetxController {
         .collection('items')
         .doc(item.id)
         .delete(); //will need to build Item
+
+    //delete image if it exists
+    if (item.imageUrl != '') {
+      deleteListItemImage(item, listId);
+    }
 
     //update itemCount
 
@@ -171,6 +182,27 @@ class ListsController extends GetxController {
     */
   }
 
+  void deleteListItemImage(Item item, String listId) {
+    firebaseStorage
+        .ref()
+        .child(globalGroupId)
+        .child('listImages')
+        .child('list-$listId')
+        .child(item.id)
+        .delete();
+  }
+
+  void updateListImageUrl(Item item, String listId, String imageUrl) {
+    firestore
+        .collection('groups')
+        .doc(globalGroupId)
+        .collection('lists')
+        .doc(listId) //specific list
+        .collection('items')
+        .doc(item.id)
+        .update({'imageUrl': imageUrl});
+  }
+
   void restoreListItem(Item item, String listId) {
     var itemId = DateTime.now().toString();
     //create new item
@@ -178,6 +210,7 @@ class ListsController extends GetxController {
       name: item.name,
       id: itemId,
       isChecked: false,
+      imageUrl: '',
     );
 
     //add back to groceries
@@ -235,7 +268,6 @@ class ListsController extends GetxController {
   }
 
   void clearRecentlyDeleted(String listId, List<Item> items) {
-    print(items.length);
     for (var i = 0; i < items.length; i++) {
       deleteRecentlyDeletedItem(items[i].id, listId);
     }
@@ -269,8 +301,10 @@ class ListsController extends GetxController {
         .set(list.toJson());
   }
 
-  void deleteList(String listId, List<Item> listItems) {
+  void deleteList(String listId, List<Item> listItems,
+      List<Item> recentlyDeletedListItems) {
     deleteAllListItems(listId, listItems, false);
+    clearRecentlyDeleted(listId, recentlyDeletedListItems);
     firestore
         .collection('groups')
         .doc(globalGroupId)

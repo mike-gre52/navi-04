@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:whats_for_dinner/test.dart';
+import 'package:whats_for_dinner/views/app/textfield_And_Submit_Screen.dart';
 import 'package:whats_for_dinner/views/screens/lists/add_list.dart';
 import 'package:whats_for_dinner/views/screens/lists/edit_list_item.dart';
 import 'package:whats_for_dinner/views/screens/lists/list.dart';
 import 'package:whats_for_dinner/views/screens/lists/recently_deleted.dart';
 import 'package:whats_for_dinner/views/screens/lists/select_ingredients.dart';
+import 'package:whats_for_dinner/views/screens/loading_screen.dart';
 import 'package:whats_for_dinner/views/screens/profile/all_members.dart';
 import 'package:whats_for_dinner/views/screens/profile/select_color_screen.dart';
+import 'package:whats_for_dinner/views/screens/recipes/bookmark_link.dart';
+import 'package:whats_for_dinner/views/screens/recipes/confirm_import_recipe.dart';
 import 'package:whats_for_dinner/views/screens/recipes/create_recipe.dart';
 import 'package:whats_for_dinner/views/screens/recipes/edit_recipe.dart';
 import 'package:whats_for_dinner/views/screens/recipes/edit_recipe_item.dart';
+import 'package:whats_for_dinner/views/screens/recipes/imported_recipe.dart';
 import 'package:whats_for_dinner/views/screens/recipes/recipe.dart';
+import 'package:whats_for_dinner/views/screens/recipes/select_list_from_import.dart';
 import 'package:whats_for_dinner/views/screens/restaurants/add_restaurant.dart';
 import 'package:whats_for_dinner/views/screens/profile/create_group.dart';
 import 'package:whats_for_dinner/views/screens/profile/manage_group.dart';
@@ -20,6 +26,7 @@ import 'package:whats_for_dinner/views/screens/restaurants/filter_restaurants.da
 import 'package:whats_for_dinner/views/screens/restaurants/restaurants.dart';
 import 'package:whats_for_dinner/views/screens/restaurants/view_restaurant.dart';
 import 'package:whats_for_dinner/views/screens/recipes/add_recipe.dart';
+import 'package:whats_for_dinner/views/widgets/recipes/select_list.dart';
 
 import '../views/screens/auth/sign_in.dart';
 import '../views/screens/auth/sign_up.dart';
@@ -48,6 +55,14 @@ class RouteHelper {
   static String createRecipeScreen = '/createRecipeScreen';
   static String editRecipeScreen = '/editRecipeScreen';
   static String editRecipeItemScreen = '/editRecipeItemScreen';
+  static String singleTextfieldAndSubmitScreen =
+      '/singleTextfieldAndSubmitScreen';
+  static String confirmImportRecipe = '/confirmImportRecipe';
+  static String loadingScreen = '/loadingScreen';
+  static String bookmarkList = '/bookmarkList';
+  static String selectList = '/selectList';
+  static String importedRecipe = '/importedRecipe';
+  static String selectListFromImportRecipe = '/selectListFromImportRecipe';
   static String testScreen = '/testScreen';
 
   static String getHomeRoute() => home;
@@ -72,6 +87,14 @@ class RouteHelper {
   static String getCreateRecipeScreen() => createRecipeScreen;
   static String getEditRecipeScreen() => editRecipeScreen;
   static String getEditRecipeItemScreen() => editRecipeItemScreen;
+  static String getSingleTextfieldAndSubmitScreen() =>
+      singleTextfieldAndSubmitScreen;
+  static String getConfirmImportRecipe() => confirmImportRecipe;
+  static String getLoadingScreen() => loadingScreen;
+  static String getBookmarkList() => bookmarkList;
+  static String getSelectList() => selectList;
+  static String getImportedRecipe() => importedRecipe;
+  static String getSelectListFromImportRecipe() => selectListFromImportRecipe;
   static String getTestScreen() => testScreen;
 
   static List<GetPage> routes = [
@@ -204,6 +227,52 @@ class RouteHelper {
     GetPage(
       name: editRecipeItemScreen,
       page: () => const EditRecipeItemScreen(),
+      transition: Transition.cupertino,
+      transitionDuration: const Duration(milliseconds: 250),
+    ),
+    GetPage(
+      name: singleTextfieldAndSubmitScreen,
+      page: () => const TextfieldAndSubmitScreen(),
+      transition: Transition.cupertino,
+      transitionDuration: const Duration(milliseconds: 250),
+    ),
+    GetPage(
+      name: confirmImportRecipe,
+      page: () => const ConfirmImportRecipe(),
+      transition: Transition.cupertino,
+      transitionDuration: const Duration(milliseconds: 250),
+    ),
+    GetPage(
+      name: loadingScreen,
+      page: () => const LoadingScreen(),
+      transition: Transition.cupertino,
+      transitionDuration: const Duration(milliseconds: 250),
+    ),
+    GetPage(
+      name: bookmarkList,
+      page: () => const BookmarkLink(),
+      transition: Transition.cupertino,
+      transitionDuration: const Duration(milliseconds: 250),
+    ),
+    GetPage(
+      name: selectList,
+      page: () => SelectList(),
+      transition: Transition.cupertino,
+      transitionDuration: const Duration(milliseconds: 250),
+    ),
+    GetPage(
+      name: importedRecipe,
+      page: () => ImportedRecipe(),
+      transition: Transition.cupertino,
+      transitionDuration: const Duration(milliseconds: 250),
+    ),
+    //
+    //
+    //
+    //
+    GetPage(
+      name: selectListFromImportRecipe,
+      page: () => SelectListFromImportRecipe(),
       transition: Transition.cupertino,
       transitionDuration: const Duration(milliseconds: 250),
     ),

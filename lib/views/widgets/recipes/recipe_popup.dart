@@ -20,7 +20,7 @@ class RecipePopup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 125,
+      height: 160,
       child: Column(
         children: [
           Container(
@@ -30,6 +30,14 @@ class RecipePopup extends StatelessWidget {
               borderRadius: BorderRadius.circular(5),
               color: grey,
             ),
+          ),
+          PopupButton(
+            icon: CupertinoIcons.plus_rectangle,
+            buttonName: 'Add Ingredient to list',
+            onClick: () {
+              Navigator.pop(context);
+              Get.toNamed(RouteHelper.getSelectList(), arguments: recipe);
+            },
           ),
           PopupButton(
             icon: Icons.edit,

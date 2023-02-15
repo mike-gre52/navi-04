@@ -39,7 +39,7 @@ class GroupController extends GetxController {
     return data;
   }
 
-  void leaveGroup() {
+  void leaveGroup(Group group) {
     final username = globalUsername;
     final color = globalColor;
     /*
@@ -60,6 +60,7 @@ class GroupController extends GetxController {
         .doc(firebaseAuth.currentUser!.uid)
         .delete();
 
+    removeIdFromMembers(group.members);
     setUserGroupId(firebaseAuth.currentUser!.uid);
     setUserInGroupStatusFalse();
   }
@@ -86,6 +87,21 @@ class GroupController extends GetxController {
         .update({"inGroup": false});
   }
 
+  removeIdFromMembers(List members) {
+    members.remove(firebaseAuth.currentUser!.uid);
+    firestore
+        .collection('groups')
+        .doc(globalGroupId)
+        .update({'members': members});
+  }
+
+  addIdToMembers(String groupId) {
+    print('adding');
+    firestore.collection('groups').doc(groupId).update({
+      'members': FieldValue.arrayUnion([firebaseAuth.currentUser!.uid])
+    });
+  }
+
   String generateUniqueId() {
     String newGroupId = '';
     for (var i = 0; i < 4; i++) {
@@ -108,9 +124,9 @@ class GroupController extends GetxController {
 
     globalGroupId = newGroupId;
     final group = Group(
-      groupName: groupName,
-      groupId: newGroupId,
-    );
+        groupName: groupName,
+        groupId: newGroupId,
+        members: [firebaseAuth.currentUser!.uid]);
 
     final member = Member(
       name: username,
@@ -147,16 +163,21 @@ class GroupController extends GetxController {
       final snap = await firestore.collection('groups').doc(groupId).get();
       if (snap.exists) {
         //group id valid
+        print('1');
+        await addIdToMembers(groupId);
+        print('2');
         await firestore
             .collection('groups')
             .doc(groupId)
             .collection('members')
             .doc(firebaseAuth.currentUser!.uid)
             .set(member.toJson());
-
+        print('3');
         //updates users group id
         setUserGroupId(groupId);
+        print('4');
         setUserInGroupStatusTrue();
+        print('5');
 
         Get.snackbar(
           'Success',
@@ -173,6 +194,7 @@ class GroupController extends GetxController {
         );
       }
     } catch (e) {
+      print(e);
       Get.snackbar(
         'Invalid Group Id',
         'The group Id \'$groupId\' is not valid.',

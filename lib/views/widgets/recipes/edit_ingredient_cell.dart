@@ -1,9 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:whats_for_dinner/models/recipe.dart';
 import 'package:whats_for_dinner/routes/routes.dart';
+import 'package:whats_for_dinner/utils/colors.dart';
 
 class EditIngredientCell extends StatelessWidget {
   int counterValue;
@@ -23,10 +25,23 @@ class EditIngredientCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: const EdgeInsets.only(bottom: 5),
+      margin: const EdgeInsets.only(top: 5),
+      width: double.maxFinite,
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(width: 1, color: appBlue),
+        ),
+      ),
       child: Row(
         children: [
-          Text(counterValue.toString()),
-          Text(ingredient.name),
+          Container(
+            width: 330,
+            child: Text(
+              ingredient.name,
+              style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+            ),
+          ),
           Expanded(child: Container()),
           GestureDetector(
             onTap: () {
@@ -41,11 +56,12 @@ class EditIngredientCell extends StatelessWidget {
             },
             child: Icon(Icons.edit),
           ),
+          SizedBox(width: 10),
           GestureDetector(
             onTap: () {
               deleteIngredient(counterValue - 1);
             },
-            child: Icon(Icons.delete),
+            child: Icon(CupertinoIcons.delete),
           )
         ],
       ),

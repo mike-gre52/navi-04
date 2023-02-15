@@ -37,8 +37,7 @@ class RestaurantCell extends StatelessWidget {
           ],
         ),
         child: Container(
-          margin:
-              const EdgeInsets.only(left: 30, top: 10, bottom: 10, right: 5),
+          margin: const EdgeInsets.only(left: 30, top: 10, bottom: 0, right: 5),
           child: Row(
             children: [
               Container(

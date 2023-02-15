@@ -65,12 +65,15 @@ class _RecipesScreenState extends State<RecipesScreen> {
                 Expanded(
                   child: Container(
                     margin: const EdgeInsets.only(left: 20, right: 20, top: 5),
-                    child: ListView(
+                    child: ListView.builder(
                       padding: const EdgeInsets.all(0),
-                      children: recipes.map(buildRecipeCell).toList(),
+                      itemCount: recipes.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return buildRecipeCell(recipes[index]);
+                      },
                     ),
                   ),
-                )
+                ),
               ],
             );
           } else {

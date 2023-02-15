@@ -18,6 +18,7 @@ class CustomTextfield extends StatefulWidget {
   TextInputType keyboard;
   void Function(String?) onChanged;
   void Function(String) onSubmit;
+  bool centerText;
 
   CustomTextfield({
     Key? key,
@@ -33,6 +34,7 @@ class CustomTextfield extends StatefulWidget {
     required this.onSubmit,
     required this.onChanged,
     this.keyboard = TextInputType.text,
+    this.centerText = false,
   }) : super(key: key);
 
   @override
@@ -62,6 +64,7 @@ class _CustomTextfieldState extends State<CustomTextfield> {
       height: textfieldHeight,
       width: textfieldWidth,
       child: CupertinoTextField(
+        textAlign: widget.centerText ? TextAlign.center : TextAlign.start,
         onSubmitted: widget.onSubmit,
         cursorColor: black,
         cursorHeight: height25,

@@ -8,11 +8,13 @@ class ListIngredientCell extends StatefulWidget {
   String ingredient;
   Function addIngredientToList;
   Function removeIngredientFromList;
+  Color color;
   ListIngredientCell({
     Key? key,
     required this.ingredient,
     required this.addIngredientToList,
     required this.removeIngredientFromList,
+    required this.color,
   }) : super(key: key);
 
   @override
@@ -31,7 +33,7 @@ class _ListIngredientCellState extends State<ListIngredientCell> {
     double height30 = screenHeight / 29.86;
 
     return Container(
-      margin: EdgeInsets.only(left: 20, top: 10),
+      margin: EdgeInsets.only(top: 10, right: 10),
       child: Row(
         children: [
           GestureDetector(
@@ -50,7 +52,7 @@ class _ListIngredientCellState extends State<ListIngredientCell> {
                     width: height30,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(height10),
-                      color: appGreen,
+                      color: widget.color,
                     ),
                     child: const Center(
                       child: Icon(
@@ -66,14 +68,18 @@ class _ListIngredientCellState extends State<ListIngredientCell> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(height10),
                       border: Border.all(
-                        color: appGreen,
+                        color: widget.color,
                         width: 2,
                       ),
                     ),
                   ),
           ),
           SizedBox(width: 10),
-          Text(widget.ingredient),
+          Flexible(
+            child: Text(
+              widget.ingredient,
+            ),
+          ),
         ],
       ),
     );

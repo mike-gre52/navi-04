@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
+import 'package:whats_for_dinner/utils/helper.dart';
 import 'package:whats_for_dinner/views/widgets/recipes/recipe_ingredients.dart';
 import 'package:whats_for_dinner/views/widgets/recipes/recipe_instructions.dart';
 
@@ -19,30 +21,24 @@ class RecipeTabController extends StatefulWidget {
   State<RecipeTabController> createState() => _RecipeTabControllerState();
 }
 
-const List<Tab> tabs = <Tab>[
-  Tab(text: 'First'),
-  Tab(text: 'Second'),
-];
+int tabIndex = 0;
 
 class _RecipeTabControllerState extends State<RecipeTabController>
     with TickerProviderStateMixin {
   @override
+  @override
   Widget build(BuildContext context) {
-    TabController _tabController = TabController(length: 2, vsync: this);
+    TabController _tabController =
+        TabController(length: 2, vsync: this, initialIndex: tabIndex);
 
-    // listens for when the tab controller is changed
-    //_tabController.addListener(() {
-    //  print('');
-    //});
+    //listens for when the tab controller is changed
 
     return Container(
-      // margin: EdgeInsets.only(top: 300),
       width: double.maxFinite,
-      height: 1000,
       child: Column(
         children: [
           Container(
-            height: 100,
+            height: widget.recipe.isImport ? 125 : 100,
             width: double.maxFinite,
             decoration: BoxDecoration(
                 border: Border(
@@ -52,24 +48,47 @@ class _RecipeTabControllerState extends State<RecipeTabController>
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    RecipeInfo(
-                      header: 'Prep Time:',
-                      subheader: widget.recipe.prepTime.toString(),
-                    ),
-                    RecipeInfo(
-                      header: 'Cook Time:',
-                      subheader: widget.recipe.cookTime.toString(),
-                    ),
-                    RecipeInfo(
-                      header: 'Servings:',
-                      subheader: widget.recipe.servings.toString(),
-                    )
-                  ],
-                ),
+                widget.recipe.cookTime == -1 || widget.recipe.prepTime == -1
+                    ? TotalTime(recipe: widget.recipe)
+                    : SplitTime(recipe: widget.recipe),
+                widget.recipe.isImport
+                    ? Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 30),
+                        height: 30,
+                        child: Row(
+                          children: [
+                            const Text(
+                              'Source: ',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                searchUrl(widget.recipe.sourceUrl);
+                              },
+                              child: Text(
+                                trimSourceUrl(widget.recipe.sourceUrl),
+                                style:
+                                    TextStyle(color: royalYellow, fontSize: 16),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    : Container(),
                 TabBar(
+                  onTap: (value) {
+                    if (value == 0) {
+                      setState(() {
+                        tabIndex = 0;
+                      });
+                    } else {
+                      setState(() {
+                        tabIndex = 1;
+                      });
+                    }
+                  },
                   labelColor: appBlue,
                   unselectedLabelColor: black,
                   indicatorColor: royalYellow,
@@ -83,19 +102,29 @@ class _RecipeTabControllerState extends State<RecipeTabController>
               ],
             ),
           ),
-          Expanded(
+          ConstrainedBox(
+            constraints: const BoxConstraints(
+              minHeight: 600,
+            ),
             child: Container(
+              height: tabIndex == 0
+                  ? widget.recipe.ingredients.length.toDouble() * 50
+                  : widget.recipe.instructions.length.toDouble() * 200,
               color: paperBackground,
-              height: 500,
               width: double.maxFinite,
               child: TabBarView(
+                physics: const NeverScrollableScrollPhysics(),
                 controller: _tabController,
                 children: [
                   RecipeIngredientList(
                     ingredients: widget.recipe.ingredients,
+                    showDelete: false,
+                    deleteIngredient: () {},
                   ),
                   RecipeInstructionList(
                     instructions: widget.recipe.instructions,
+                    showDelete: false,
+                    deleteInstruction: () {},
                   ),
                 ],
               ),
@@ -103,6 +132,60 @@ class _RecipeTabControllerState extends State<RecipeTabController>
           ),
         ],
       ),
+    );
+  }
+}
+
+class SplitTime extends StatelessWidget {
+  Recipe recipe;
+  SplitTime({
+    Key? key,
+    required this.recipe,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        RecipeInfo(
+          header: 'Prep Time:',
+          subheader: recipe.prepTime.toString(),
+        ),
+        RecipeInfo(
+          header: 'Cook Time:',
+          subheader: recipe.cookTime.toString(),
+        ),
+        RecipeInfo(
+          header: 'Servings:',
+          subheader: recipe.servings.toString(),
+        )
+      ],
+    );
+  }
+}
+
+class TotalTime extends StatelessWidget {
+  Recipe recipe;
+  TotalTime({
+    Key? key,
+    required this.recipe,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        RecipeInfo(
+          header: 'Total Time:',
+          subheader: recipe.totalTime != -2 ? recipe.totalTime.toString() : '',
+        ),
+        RecipeInfo(
+          header: 'Servings:',
+          subheader: recipe.servings.toString(),
+        )
+      ],
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -16,7 +17,7 @@ class RecipeCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(top: 10),
+      margin: const EdgeInsets.only(top: 5, bottom: 5),
       height: 75,
       decoration: BoxDecoration(
         color: Colors.white,
@@ -37,6 +38,9 @@ class RecipeCell extends StatelessWidget {
             Container(
               height: 75,
               width: 75,
+              child: !recipe.imageUrl.isNotEmpty
+                  ? Icon(CupertinoIcons.photo)
+                  : null,
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(15),
@@ -55,16 +59,24 @@ class RecipeCell extends StatelessWidget {
             const SizedBox(width: 10),
             Expanded(
               child: Container(
-                margin: const EdgeInsets.only(top: 5),
+                margin: const EdgeInsets.only(right: 5),
                 child: Align(
                   alignment: Alignment.topLeft,
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        recipe.name,
-                        style: const TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.w600),
+                      Container(
+                        margin: const EdgeInsets.only(top: 5),
+                        child: Text(
+                          recipe.name,
+                          style: const TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.w600,
+                              height: 1.1,
+                              overflow: TextOverflow.ellipsis),
+                          maxLines: 2,
+                        ),
                       ),
                       Row(
                         children: [
@@ -74,14 +86,20 @@ class RecipeCell extends StatelessWidget {
                               fontWeight: FontWeight.w700,
                             ),
                           ),
-                          Text('${recipe.prepTime + recipe.cookTime} mins'),
+                          recipe.totalTime != -2
+                              ? Text('${recipe.totalTime} mins')
+                              : Container(
+                                  width: 30,
+                                ),
                           //Icon(Icons.),
-                          const SizedBox(width: 20),
+                          const SizedBox(width: 10),
                           const Text(
-                            'Servings: ',
+                            'Yield: ',
                             style: TextStyle(fontWeight: FontWeight.w700),
                           ),
-                          Text('${recipe.servings}'),
+                          Text(
+                            '${recipe.servings}',
+                          ),
                         ],
                       )
                     ],

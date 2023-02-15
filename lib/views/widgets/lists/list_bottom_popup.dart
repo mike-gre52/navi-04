@@ -47,7 +47,8 @@ class ListBottomPopup extends StatelessWidget {
                   });
                   */
               Navigator.pop(context);
-              listController.deleteList(list.id, listItems);
+              listController.deleteList(
+                  list.id, listItems, recentlyDeletedItems);
               Navigator.pop(context);
               Navigator.pop(context);
             },
@@ -59,6 +60,7 @@ class ListBottomPopup extends StatelessWidget {
   }
 
   List<Item> listItems = [];
+  List<Item> recentlyDeletedItems = [];
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<Item>>(
@@ -66,64 +68,76 @@ class ListBottomPopup extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             listItems = snapshot.data!;
-
-            return Container(
-              height: 250,
-              child: Column(
-                children: [
-                  Container(
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 100, vertical: 5),
-                    height: 5,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      color: grey,
-                    ),
-                  ),
-                  PopupButton(
-                    icon: CupertinoIcons.clear_circled,
-                    buttonName: 'Clear Selected',
-                    onClick: () {
-                      listController.deleteSelectedItems(list.id, listItems);
-                      Navigator.pop(context);
-                    },
-                  ),
-                  PopupButton(
-                    icon: Icons.clear_all_rounded,
-                    buttonName: 'Clear All',
-                    onClick: () {
-                      listController.deleteAllListItems(
-                          list.id, listItems, true);
-                      Navigator.pop(context);
-                    },
-                  ),
-                  PopupButton(
-                    icon: CupertinoIcons.arrowshape_turn_up_left,
-                    buttonName: 'Recently Deleted',
-                    onClick: () {
-                      Get.toNamed(RouteHelper.recentlyDeleted, arguments: list);
-                    },
-                  ),
-                  PopupButton(
-                    icon: CupertinoIcons.plus_rectangle,
-                    buttonName: 'Add Recipe Items (Coming Soon)',
-                    onClick: () {
-                      Get.toNamed(RouteHelper.addToListSelectRecipeScreen,
-                          arguments: list);
-                    },
-                  ),
-                  PopupButton(
-                    icon: CupertinoIcons.delete,
-                    buttonName: 'Delete List',
-                    isRed: true,
-                    onClick: () {
-                      _showDialog(context);
-                      //Navigator.pop(context);
-                    },
-                  ),
-                ],
-              ),
-            );
+            return StreamBuilder<List<Item>>(
+                stream: listController.getRecentlyDeletedListItems(list.id),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    recentlyDeletedItems = snapshot.data!;
+                    return Container(
+                      height: 250,
+                      child: Column(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 100, vertical: 5),
+                            height: 5,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: grey,
+                            ),
+                          ),
+                          PopupButton(
+                            icon: CupertinoIcons.clear_circled,
+                            buttonName: 'Clear Selected',
+                            onClick: () {
+                              listController.deleteSelectedItems(
+                                  list.id, listItems);
+                              Navigator.pop(context);
+                            },
+                          ),
+                          PopupButton(
+                            icon: Icons.clear_all_rounded,
+                            buttonName: 'Clear All',
+                            onClick: () {
+                              listController.deleteAllListItems(
+                                  list.id, listItems, true);
+                              Navigator.pop(context);
+                            },
+                          ),
+                          PopupButton(
+                            icon: CupertinoIcons.arrowshape_turn_up_left,
+                            buttonName: 'Recently Deleted',
+                            onClick: () {
+                              Get.toNamed(RouteHelper.recentlyDeleted,
+                                  arguments: list);
+                            },
+                          ),
+                          PopupButton(
+                            icon: CupertinoIcons.plus_rectangle,
+                            buttonName: 'Add Recipe Items',
+                            onClick: () {
+                              Navigator.pop(context);
+                              Get.toNamed(
+                                  RouteHelper.addToListSelectRecipeScreen,
+                                  arguments: [list, appGreen]);
+                            },
+                          ),
+                          PopupButton(
+                            icon: CupertinoIcons.delete,
+                            buttonName: 'Delete List',
+                            isRed: true,
+                            onClick: () {
+                              _showDialog(context);
+                              //Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  } else {
+                    return Container();
+                  }
+                });
           } else {
             return Container();
           }

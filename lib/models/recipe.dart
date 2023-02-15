@@ -6,17 +6,20 @@ class Recipe {
   String name;
   int prepTime;
   int cookTime;
-  int servings;
+  int totalTime;
+  String servings;
   String id;
   String imageUrl;
   List<Ingredient> ingredients;
   List<Instruction> instructions;
   String sourceUrl;
   bool isLink;
+  bool isImport;
   Recipe({
     required this.name,
     required this.prepTime,
     required this.cookTime,
+    required this.totalTime,
     required this.servings,
     required this.id,
     required this.imageUrl,
@@ -24,19 +27,22 @@ class Recipe {
     required this.instructions,
     required this.sourceUrl,
     required this.isLink,
+    required this.isImport,
   });
 
   Recipe.static({
     this.name = '',
     this.prepTime = 0,
     this.cookTime = 0,
-    this.servings = 0,
+    this.totalTime = 0,
+    this.servings = '',
     this.id = '',
     this.imageUrl = '',
     this.ingredients = const [],
     this.instructions = const [],
     this.sourceUrl = '',
     this.isLink = false,
+    this.isImport = false,
   });
 
   List<Ingredient> ingredientJsonToString(Map<String, dynamic> json) {
@@ -112,16 +118,19 @@ class Recipe {
     //print(json);
 
     return Recipe(
-        name: json["name"],
-        prepTime: json["prepTime"],
-        cookTime: json["cookTime"],
-        servings: json["servings"],
-        id: json["id"],
-        imageUrl: json["imageUrl"],
-        ingredients: ingredientJsonToString(json),
-        instructions: instructionJsonToString(json),
-        sourceUrl: json['sourceUrl'],
-        isLink: json['isLink']);
+      name: json["name"],
+      prepTime: json["prepTime"],
+      cookTime: json["cookTime"],
+      totalTime: json["totalTime"],
+      servings: json["servings"],
+      id: json["id"],
+      imageUrl: json["imageUrl"],
+      ingredients: ingredientJsonToString(json),
+      instructions: instructionJsonToString(json),
+      sourceUrl: json['sourceUrl'],
+      isLink: json['isLink'],
+      isImport: json['isImport'],
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -129,6 +138,7 @@ class Recipe {
     data['name'] = this.name;
     data['prepTime'] = this.prepTime;
     data['cookTime'] = this.cookTime;
+    data['totalTime'] = this.totalTime;
     data['servings'] = this.servings;
     data['id'] = this.id;
     data['ingredients'] = ingredientToJson(this.ingredients);
@@ -136,6 +146,7 @@ class Recipe {
     data['imageUrl'] = this.imageUrl;
     data['sourceUrl'] = this.sourceUrl;
     data['isLink'] = this.isLink;
+    data['isImport'] = this.isImport;
 
     return data;
   }

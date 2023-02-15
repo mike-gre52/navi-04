@@ -23,9 +23,25 @@ class FilterRestaurantScreens extends StatefulWidget {
 class _FilterRestaurantScreensState extends State<FilterRestaurantScreens> {
   TextEditingController _timeController = TextEditingController();
 
-  bool onlyDelivery = false;
-  bool onlyFavorite = false;
-  int rating = 1;
+  List data = Get.arguments as List;
+
+  late bool onlyDelivery;
+  late bool onlyFavorite;
+  late int rating;
+  late Filter filter;
+  late Function setFilterState;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    filter = data[0] as Filter;
+    setFilterState = data[1] as Function;
+    onlyDelivery = filter.onlyDelivery;
+    onlyFavorite = filter.onlyFavorite;
+    rating = filter.minRating;
+  }
+
+  //int rating = 1;
   int price = 3;
 
   Object _selectedSegment = 0;
@@ -87,96 +103,10 @@ class _FilterRestaurantScreensState extends State<FilterRestaurantScreens> {
                 useFilter: true,
                 useTime: useTime,
               );
-              print(filter.maxTime);
-              print(filter.minRating);
-              print(filter.maxPrice);
-              print(filter.onlyDelivery);
-              print(filter.onlyFavorite);
-              print(filter.useFilter);
-              print(filter.useTime);
               restaurantController.setfilter(filter);
-
-              Get.toNamed(RouteHelper.home);
+              Navigator.pop(context);
+              setFilterState(filter);
             },
-          ),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 30),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(left: 5, top: 30),
-                      child: Text(
-                        'Max Time',
-                        style: TextStyle(
-                            fontSize: 18,
-                            color: black,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                    Container(
-                      child: CustomTextfield(
-                        icon: Icons.timer,
-                        placeholderText: '',
-                        controller: _timeController,
-                        borderColor: appRed,
-                        textfieldWidth: 100,
-                        showIcon: false,
-                        textfieldHeight: 50,
-                        borderRadius: 10,
-                        onSubmit: (_) {},
-                        onChanged: (_) {},
-                      ),
-                    )
-                  ],
-                ),
-                Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        //width: double.infinity,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              margin: EdgeInsets.only(left: 5, top: 30),
-                              child: Text(
-                                'Min Rating',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  color: black,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SelectRating(
-                        rating: rating,
-                        onTap: newRatingSelected,
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(left: 5, top: 5),
-                        child: Text(
-                          'Clear',
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: black,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
           ),
           Container(
             margin: EdgeInsets.symmetric(horizontal: 30),
@@ -199,7 +129,7 @@ class _FilterRestaurantScreensState extends State<FilterRestaurantScreens> {
                     ),
                     PriceSegmentedControll(
                       setPriceStatus: setPriceStatus,
-                      initialValue: 3,
+                      initialValue: filter.maxPrice,
                     )
                   ],
                 ),
@@ -218,46 +148,90 @@ class _FilterRestaurantScreensState extends State<FilterRestaurantScreens> {
                     ),
                     DeliverySegmentedControll(
                       setDeliveryStatus: setDeliveryStatus,
-                      initialValue: 1,
+                      initialValue: onlyDelivery ? 0 : 1,
                     ),
                   ],
                 ),
               ],
             ),
           ),
-          Container(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(left: 30, top: 20),
-                  child: Text(
-                    'Favorite',
-                    style: TextStyle(
-                        fontSize: 18,
-                        color: black,
-                        fontWeight: FontWeight.w500),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      onlyFavorite = !onlyFavorite;
-                    });
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.only(left: 15, top: 20),
-                    child: Icon(
-                      onlyFavorite
-                          ? Icons.star_rounded
-                          : Icons.star_outline_rounded,
-                      size: 40,
-                      color: appRed,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 30),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            //width: double.infinity,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(left: 5, top: 30),
+                                  child: Text(
+                                    'Min Rating',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: black,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SelectRating(
+                            rating: rating,
+                            onTap: newRatingSelected,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              Container(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(left: 30, top: 20),
+                      child: Text(
+                        'Favorite',
+                        style: TextStyle(
+                            fontSize: 18,
+                            color: black,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          onlyFavorite = !onlyFavorite;
+                        });
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.only(left: 15, top: 20),
+                        child: Icon(
+                          onlyFavorite
+                              ? Icons.star_rounded
+                              : Icons.star_outline_rounded,
+                          size: 40,
+                          color: appRed,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ],
       ),

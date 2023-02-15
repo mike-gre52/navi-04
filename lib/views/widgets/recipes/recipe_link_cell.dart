@@ -17,7 +17,6 @@ class RecipeLinkCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String recipeName = recipe.sourceUrl;
     return Container(
       margin: const EdgeInsets.only(top: 10),
       height: 50,
@@ -58,7 +57,7 @@ class RecipeLinkCell extends StatelessWidget {
                 width: double.maxFinite,
                 margin: const EdgeInsets.only(left: 5, top: 5),
                 child: Text(
-                  parseUrl(recipeName),
+                  recipe.name,
                   style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,

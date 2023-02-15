@@ -39,6 +39,8 @@ class ListColumn extends StatelessWidget {
                   margin: const EdgeInsets.only(top: 5, left: 30, right: 30),
                   width: double.infinity,
                   child: ListView(
+                      keyboardDismissBehavior:
+                          ScrollViewKeyboardDismissBehavior.onDrag,
                       padding: const EdgeInsets.only(top: 0),
                       children: listItems.reversed.map(buildListItem).toList()),
                 ),

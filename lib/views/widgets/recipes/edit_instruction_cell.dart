@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -28,7 +29,10 @@ class EditInstructionCell extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text(counterValue.toString()),
+              Text(
+                counterValue.toString() + ')',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              ),
               Expanded(child: Container()),
               GestureDetector(
                 onTap: () {
@@ -47,7 +51,7 @@ class EditInstructionCell extends StatelessWidget {
                 onTap: () {
                   deleteInstruction(counterValue - 1);
                 },
-                child: Icon(Icons.delete),
+                child: Icon(CupertinoIcons.delete),
               )
             ],
           ),

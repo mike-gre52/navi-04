@@ -4,8 +4,10 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:whats_for_dinner/models/list.dart';
 import 'package:whats_for_dinner/models/recipe.dart';
+import 'package:whats_for_dinner/routes/routes.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
+import 'package:whats_for_dinner/views/screens/recipes/recipe.dart';
 import 'package:whats_for_dinner/views/widgets/app/app_header.dart';
 import 'package:whats_for_dinner/views/widgets/app/gradient_button.dart';
 import 'package:whats_for_dinner/views/widgets/lists/list_ingredient_cell.dart';
@@ -35,25 +37,39 @@ class _SelectIngredientsState extends State<SelectIngredients> {
   }
 
   Widget buildRecipeIngredient(Ingredient ingredient) {
-    String recipeName = '${ingredient.amount} ${ingredient.name}';
     return ListIngredientCell(
-      ingredient: recipeName,
+      ingredient: ingredient.name,
       addIngredientToList: addIngredient,
       removeIngredientFromList: removeIngredient,
+      color: color,
     );
+  }
+
+  late Recipe recipe;
+  late ListData list;
+  late Color color;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    recipe = arguments[0] as Recipe;
+    list = arguments[1] as ListData;
+    color = arguments[2] as Color;
   }
 
   @override
   Widget build(BuildContext context) {
-    final recipe = arguments[0] as Recipe;
-    final list = arguments[1] as ListData;
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenHeight = mediaQuery.size.height;
+    double seventyPercentHeight = screenHeight * .70;
     return Scaffold(
       body: Column(
         children: [
           Container(
             child: AppHeader(
               headerText: 'Select Ingredients',
-              headerColor: appGreen,
+              headerColor: color,
               borderColor: royalYellow,
               textColor: Colors.white,
               dividerColor: Colors.white,
@@ -70,7 +86,9 @@ class _SelectIngredientsState extends State<SelectIngredients> {
               },
             ),
           ),
-          Expanded(
+          Container(
+            height: seventyPercentHeight,
+            margin: EdgeInsets.only(left: 20),
             child: SingleChildScrollView(
               child: Column(
                 children:
@@ -87,21 +105,21 @@ class _SelectIngredientsState extends State<SelectIngredients> {
                   children: [
                     Text(
                       '${ingredientsToAdd.length} Items selected',
-                      style: TextStyle(color: appGreen, fontSize: 16),
+                      style: TextStyle(color: color, fontSize: 16),
+                      maxLines: 2,
                     ),
                     GestureDetector(
                       onTap: () {
                         ingredientsToAdd.forEach((ingrediant) {
                           listController.addListItem(ingrediant, list.id);
                         });
-                        Navigator.pop(context);
-                        Navigator.pop(context);
+
                         Navigator.pop(context);
                       },
                       child: GradientButton(
                         buttonText: 'Add',
-                        firstColor: Color.fromRGBO(125, 227, 111, 1.0),
-                        secondColor: appGreen,
+                        firstColor: color,
+                        secondColor: color,
                       ),
                     )
                   ],

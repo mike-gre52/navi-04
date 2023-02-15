@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:whats_for_dinner/models/recipe.dart';
+import 'package:whats_for_dinner/utils/colors.dart';
 
 class RecipeIngredientList extends StatelessWidget {
   List<Ingredient> ingredients;
+  bool showDelete;
+  Function deleteIngredient;
   RecipeIngredientList({
     Key? key,
     required this.ingredients,
+    required this.showDelete,
+    required this.deleteIngredient,
   }) : super(key: key);
 
   int counter = 0;
@@ -15,21 +20,18 @@ class RecipeIngredientList extends StatelessWidget {
       amount: ingredient.amount,
       stepNumber: counter,
       ingredient: ingredient.name,
+      showDelete: showDelete,
+      deleteIngredient: deleteIngredient,
     );
   }
 
   @override
   Widget build(BuildContext context) {
     counter = 0;
-    return SingleChildScrollView(
-      //physics: NeverScrollableScrollPhysics(),
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        child: Column(
-          //physics: const NeverScrollableScrollPhysics(),
-          //padding: const EdgeInsets.only(top: 0),
-          children: ingredients.map(buildRecipeIngredient).toList(),
-        ),
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      child: Column(
+        children: ingredients.map(buildRecipeIngredient).toList(),
       ),
     );
   }
@@ -39,11 +41,15 @@ class RecipeIngredient extends StatelessWidget {
   double amount;
   int stepNumber;
   String ingredient;
+  bool showDelete;
+  Function deleteIngredient;
   RecipeIngredient({
     Key? key,
     required this.amount,
     required this.stepNumber,
     required this.ingredient,
+    required this.showDelete,
+    required this.deleteIngredient,
   }) : super(key: key);
 
   @override
@@ -56,17 +62,29 @@ class RecipeIngredient extends StatelessWidget {
             '$stepNumber)  ',
             style: TextStyle(fontSize: 24),
           ),
-          Text(
-            '$amount ',
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
-          ),
-          Flexible(
+          amount == 0
+              ? Container()
+              : Text(
+                  '${amount} ',
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+                ),
+          Expanded(
             child: Text(
               ingredient,
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.w300),
               maxLines: null,
             ),
           ),
+          showDelete
+              ? GestureDetector(
+                  onTap: () {
+                    deleteIngredient(stepNumber - 1);
+                  },
+                  child: const Icon(
+                    Icons.close,
+                  ),
+                )
+              : Container(),
         ],
       ),
     );

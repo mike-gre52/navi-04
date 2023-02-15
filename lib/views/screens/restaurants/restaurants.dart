@@ -38,6 +38,30 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
   bool isTopRatedSelected = false;
   int sortTime = 0;
   int sortCost = 0;
+  late Filter filter;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print('reset filter');
+    filter = Filter(
+      maxTime: 0,
+      minRating: isTopRatedSelected ? 4 : 1,
+      maxPrice: 1,
+      onlyDelivery: isDeliverySelected,
+      onlyFavorite: isFavoriteSelected,
+      useFilter: true,
+      useTime: false,
+    );
+  }
+
+  setFilterState(Filter updatedFilter) {
+    filter = updatedFilter;
+    setState(() {
+      restaurantController.setfilter(filter);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +98,8 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
                 chipText: '',
                 chipIcon: CupertinoIcons.slider_horizontal_3,
                 onClick: () {
-                  Get.toNamed(RouteHelper.restaurantFilter);
+                  Get.toNamed(RouteHelper.restaurantFilter,
+                      arguments: [filter, setFilterState]);
                 },
               ),
               CustomChip(
@@ -86,30 +111,28 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
                   setState(() {
                     if (isFavoriteSelected) {
                       isFavoriteSelected = false;
-                      restaurantController.setfilter(
-                        Filter(
-                          maxTime: 0,
-                          minRating: isTopRatedSelected ? 4 : 1,
-                          maxPrice: 3,
-                          onlyDelivery: isDeliverySelected,
-                          onlyFavorite: isFavoriteSelected,
-                          useFilter: true,
-                          useTime: false,
-                        ),
+                      filter = Filter(
+                        maxTime: 0,
+                        minRating: isTopRatedSelected ? 4 : 1,
+                        maxPrice: 3,
+                        onlyDelivery: isDeliverySelected,
+                        onlyFavorite: isFavoriteSelected,
+                        useFilter: true,
+                        useTime: false,
                       );
+                      restaurantController.setfilter(filter);
                     } else {
                       isFavoriteSelected = true;
-                      restaurantController.setfilter(
-                        Filter(
-                          maxTime: 0,
-                          minRating: isTopRatedSelected ? 4 : 1,
-                          maxPrice: 3,
-                          onlyDelivery: isDeliverySelected,
-                          onlyFavorite: isFavoriteSelected,
-                          useFilter: true,
-                          useTime: false,
-                        ),
+                      filter = Filter(
+                        maxTime: 0,
+                        minRating: isTopRatedSelected ? 4 : 1,
+                        maxPrice: 3,
+                        onlyDelivery: isDeliverySelected,
+                        onlyFavorite: isFavoriteSelected,
+                        useFilter: true,
+                        useTime: false,
                       );
+                      restaurantController.setfilter(filter);
                     }
                   });
                 },
@@ -124,30 +147,28 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
                     if (isDeliverySelected) {
                       print(isFavoriteSelected);
                       isDeliverySelected = false;
-                      restaurantController.setfilter(
-                        Filter(
-                          maxTime: 0,
-                          minRating: isTopRatedSelected ? 4 : 1,
-                          maxPrice: 3,
-                          onlyDelivery: isDeliverySelected,
-                          onlyFavorite: isFavoriteSelected,
-                          useFilter: true,
-                          useTime: false,
-                        ),
+                      filter = Filter(
+                        maxTime: 0,
+                        minRating: isTopRatedSelected ? 4 : 1,
+                        maxPrice: 3,
+                        onlyDelivery: isDeliverySelected,
+                        onlyFavorite: isFavoriteSelected,
+                        useFilter: true,
+                        useTime: false,
                       );
+                      restaurantController.setfilter(filter);
                     } else {
                       isDeliverySelected = true;
-                      restaurantController.setfilter(
-                        Filter(
-                          maxTime: 0,
-                          minRating: isTopRatedSelected ? 4 : 1,
-                          maxPrice: 3,
-                          onlyDelivery: isDeliverySelected,
-                          onlyFavorite: isFavoriteSelected,
-                          useFilter: true,
-                          useTime: false,
-                        ),
+                      filter = Filter(
+                        maxTime: 0,
+                        minRating: isTopRatedSelected ? 4 : 1,
+                        maxPrice: 3,
+                        onlyDelivery: isDeliverySelected,
+                        onlyFavorite: isFavoriteSelected,
+                        useFilter: true,
+                        useTime: false,
                       );
+                      restaurantController.setfilter(filter);
                     }
                   });
                 },
@@ -197,30 +218,28 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
                   setState(() {
                     if (isTopRatedSelected) {
                       isTopRatedSelected = false;
-                      restaurantController.setfilter(
-                        Filter(
-                          maxTime: 0,
-                          minRating: isTopRatedSelected ? 4 : 1,
-                          maxPrice: 3,
-                          onlyDelivery: isDeliverySelected,
-                          onlyFavorite: isFavoriteSelected,
-                          useFilter: true,
-                          useTime: false,
-                        ),
+                      filter = Filter(
+                        maxTime: 0,
+                        minRating: isTopRatedSelected ? 4 : 1,
+                        maxPrice: 3,
+                        onlyDelivery: isDeliverySelected,
+                        onlyFavorite: isFavoriteSelected,
+                        useFilter: true,
+                        useTime: false,
                       );
+                      restaurantController.setfilter(filter);
                     } else {
                       isTopRatedSelected = true;
-                      restaurantController.setfilter(
-                        Filter(
-                          maxTime: 0,
-                          minRating: isTopRatedSelected ? 4 : 1,
-                          maxPrice: 3,
-                          onlyDelivery: isDeliverySelected,
-                          onlyFavorite: isFavoriteSelected,
-                          useFilter: true,
-                          useTime: false,
-                        ),
+                      filter = Filter(
+                        maxTime: 0,
+                        minRating: isTopRatedSelected ? 4 : 1,
+                        maxPrice: 3,
+                        onlyDelivery: isDeliverySelected,
+                        onlyFavorite: isFavoriteSelected,
+                        useFilter: true,
+                        useTime: false,
                       );
+                      restaurantController.setfilter(filter);
                     }
                   });
                 },
@@ -233,18 +252,18 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
                     isDeliverySelected = false;
                     isFavoriteSelected = false;
                     isTopRatedSelected = false;
+                    sortTime = 0;
                     sortCost = 0;
-                    restaurantController.setfilter(
-                      Filter(
-                        maxTime: 0,
-                        minRating: 1,
-                        maxPrice: 3,
-                        onlyDelivery: false,
-                        onlyFavorite: false,
-                        useFilter: false,
-                        useTime: false,
-                      ),
+                    filter = Filter(
+                      maxTime: 0,
+                      minRating: 1,
+                      maxPrice: 3,
+                      onlyDelivery: false,
+                      onlyFavorite: false,
+                      useFilter: false,
+                      useTime: false,
                     );
+                    restaurantController.setfilter(filter);
                   });
                 },
               ),
