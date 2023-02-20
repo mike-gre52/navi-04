@@ -22,7 +22,6 @@ class AddRestaurant extends StatefulWidget {
 class _AddRestaurantState extends State<AddRestaurant> {
   TextEditingController _nameController = TextEditingController();
   TextEditingController _timeController = TextEditingController();
-  TextEditingController _notesController = TextEditingController();
 
   bool doesDelivery = false;
   int rating = 1;
@@ -35,7 +34,6 @@ class _AddRestaurantState extends State<AddRestaurant> {
     super.dispose();
     _nameController.dispose();
     _timeController.dispose();
-    _notesController.dispose();
   }
 
   void setDeliveryStatus(value) {
@@ -55,6 +53,29 @@ class _AddRestaurantState extends State<AddRestaurant> {
     setState(() {
       rating = newValue + 1;
     });
+  }
+
+  bool isValidNumber = true;
+
+  void validateInput(input) {
+    if (input != null) {
+      if (input == '') {
+        setState(() {
+          isValidNumber = false;
+        });
+      } else {
+        int? num = int.tryParse(input);
+        if (num != null) {
+          setState(() {
+            isValidNumber = false;
+          });
+        } else {
+          setState(() {
+            isValidNumber = true;
+          });
+        }
+      }
+    }
   }
 
   @override
@@ -145,9 +166,24 @@ class _AddRestaurantState extends State<AddRestaurant> {
                         textfieldHeight: 50,
                         borderRadius: 10,
                         onSubmit: (_) {},
-                        onChanged: (_) {},
+                        onChanged: validateInput,
                       ),
-                    )
+                    ),
+                    isValidNumber
+                        ? Container(
+                            height: 20,
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              'Must be a number',
+                              style: TextStyle(
+                                color: red,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          )
+                        : Container(
+                            height: 20,
+                          ),
                   ],
                 ),
                 Column(
@@ -167,6 +203,7 @@ class _AddRestaurantState extends State<AddRestaurant> {
                     SelectRating(
                       rating: rating,
                       onTap: newRatingSelected,
+                      isTapable: true,
                     ),
                   ],
                 ),
@@ -220,42 +257,19 @@ class _AddRestaurantState extends State<AddRestaurant> {
               ],
             ),
           ),
-          Container(
-            margin: EdgeInsets.only(left: 30, top: 15),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  margin: EdgeInsets.only(left: 5),
-                  child: Text(
-                    'Notes',
-                    style: TextStyle(
-                        fontSize: 18,
-                        color: black,
-                        fontWeight: FontWeight.w500),
-                  ),
-                ),
-                NotesTextfield(
-                  controller: _notesController,
-                  borderColor: appRed,
-                  height: 200,
-                ),
-              ],
-            ),
-          ),
+          const SizedBox(height: 15),
           Align(
             alignment: Alignment.center,
             child: GestureDetector(
               onTap: () {
                 restaurantController.addRestaurant(
-                  _nameController.text,
-                  int.parse(_timeController.text),
-                  rating,
-                  price,
-                  doesDelivery,
-                  _notesController.text,
-                  false,
-                );
+                    _nameController.text,
+                    int.parse(_timeController.text),
+                    rating,
+                    price,
+                    doesDelivery,
+                    false,
+                    "");
                 Navigator.pop(context);
               },
               child: Container(

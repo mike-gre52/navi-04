@@ -35,6 +35,12 @@ class _EditListItemScreenState extends State<EditListItemScreen> {
     imageController = ImageController();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    _listItemController.dispose();
+  }
+
   final data = Get.arguments as List;
 
   @override

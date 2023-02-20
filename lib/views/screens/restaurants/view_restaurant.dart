@@ -27,7 +27,9 @@ class _ViewRestaurantState extends State<ViewRestaurant> {
   TextEditingController _timeController = TextEditingController();
   TextEditingController _notesController = TextEditingController();
 
-  final restaurant = Get.arguments as Restaurant;
+  final data = Get.arguments as List;
+  late Restaurant restaurant;
+  late Function onSubmit;
 
   bool doesDelivery = false;
   int rating = 1;
@@ -64,20 +66,19 @@ class _ViewRestaurantState extends State<ViewRestaurant> {
 
   @override
   void initState() {
+    restaurant = data[0];
+    onSubmit = data[1];
     _nameController.text = restaurant.name;
     _timeController.text = restaurant.time.toString();
     rating = restaurant.rating;
     setDeliveryStatus(restaurant.doesDelivery);
     setPriceStatus(restaurant.price);
-    _notesController.text = restaurant.notes;
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    print(restaurant.doesDelivery);
-    //set data
-
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -145,7 +146,7 @@ class _ViewRestaurantState extends State<ViewRestaurant> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      margin: EdgeInsets.only(left: 5, top: 30),
+                      margin: const EdgeInsets.only(left: 5, top: 30),
                       child: Text(
                         'Time',
                         style: TextStyle(
@@ -187,6 +188,7 @@ class _ViewRestaurantState extends State<ViewRestaurant> {
                     SelectRating(
                       rating: rating,
                       onTap: newRatingSelected,
+                      isTapable: true,
                     ),
                   ],
                 ),
@@ -240,44 +242,26 @@ class _ViewRestaurantState extends State<ViewRestaurant> {
               ],
             ),
           ),
-          Container(
-            margin: EdgeInsets.only(left: 30, top: 15),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  margin: EdgeInsets.only(left: 5),
-                  child: Text(
-                    'Notes',
-                    style: TextStyle(
-                        fontSize: 18,
-                        color: black,
-                        fontWeight: FontWeight.w500),
-                  ),
-                ),
-                NotesTextfield(
-                  controller: _notesController,
-                  borderColor: appRed,
-                  height: 200,
-                ),
-              ],
-            ),
-          ),
+          const SizedBox(height: 30),
           Align(
             alignment: Alignment.center,
             child: GestureDetector(
-              onTap: () {
-                restaurantController.updateRestaurant(
-                  _nameController.text,
-                  int.parse(_timeController.text),
-                  rating,
-                  price,
-                  doesDelivery,
-                  _notesController.text,
-                  false,
-                  restaurant.id,
+              onTap: () async {
+                Restaurant updatedRestaurant = Restaurant(
+                  name: _nameController.text,
+                  time: int.parse(_timeController.text),
+                  rating: rating,
+                  price: price,
+                  doesDelivery: doesDelivery,
+                  isFavorite: restaurant.isFavorite,
+                  id: restaurant.id,
+                  restaurantUrl: restaurant.restaurantUrl,
+                  orders: restaurant.orders,
                 );
+
+                await restaurantController.updateRestaurant(updatedRestaurant);
                 Navigator.pop(context);
+                onSubmit(updatedRestaurant);
               },
               child: Container(
                 height: 60,

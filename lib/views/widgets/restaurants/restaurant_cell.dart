@@ -9,8 +9,12 @@ import 'package:whats_for_dinner/utils/constants.dart';
 
 class RestaurantCell extends StatelessWidget {
   Restaurant restaurant;
+  bool showTime;
+  bool showCost;
   RestaurantCell({
     required this.restaurant,
+    required this.showTime,
+    required this.showCost,
     Key? key,
   }) : super(key: key);
 
@@ -18,15 +22,15 @@ class RestaurantCell extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.toNamed(RouteHelper.viewRestaurant, arguments: restaurant);
+        Get.toNamed(RouteHelper.getRestaurant(), arguments: restaurant);
       },
       child: Container(
         margin: const EdgeInsets.only(top: 10, left: 10, right: 10),
-        height: 110,
+        height: 60,
         width: 380,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(20),
           boxShadow: const [
             BoxShadow(
               color: Color.fromARGB(255, 176, 176, 176),
@@ -39,6 +43,7 @@ class RestaurantCell extends StatelessWidget {
         child: Container(
           margin: const EdgeInsets.only(left: 30, top: 10, bottom: 0, right: 5),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
                 margin: const EdgeInsets.only(
@@ -48,19 +53,26 @@ class RestaurantCell extends StatelessWidget {
                 width: 150,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Text(
-                      restaurant.name,
-                      maxLines: 2,
-                      style: TextStyle(
-                        height: 0.95,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w800,
-                        color: black,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+                    Row(
+                      children: [
+                        Text(
+                          restaurant.name.substring(0, 1).toUpperCase() +
+                              restaurant.name.substring(1),
+                          maxLines: 2,
+                          style: TextStyle(
+                            height: 0.95,
+                            fontSize: 30,
+                            fontWeight: FontWeight.w700,
+                            color: black,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
                     ),
+
+                    /*
                     Wrap(
                       children: List.generate(
                         restaurant.rating,
@@ -71,6 +83,7 @@ class RestaurantCell extends StatelessWidget {
                         ),
                       ),
                     ),
+                    
                     Text(
                       restaurant.price == 1
                           ? '\$'
@@ -85,12 +98,15 @@ class RestaurantCell extends StatelessWidget {
                         color: appRed,
                       ),
                     ),
+                    */
                   ],
                 ),
               ),
               const SizedBox(
                 width: 5,
               ),
+
+              /*
               Container(
                 margin: EdgeInsets.symmetric(vertical: 5),
                 child: Column(
@@ -138,26 +154,70 @@ class RestaurantCell extends StatelessWidget {
                   ],
                 ),
               ),
+              */
               const SizedBox(width: 15),
-              GestureDetector(
-                onTap: () {
-                  //
-                  restaurantController.toggleRestaurantFavorite(
-                      restaurant.id, restaurant.isFavorite);
-                },
-                child: Container(
-                  child: restaurant.isFavorite
-                      ? Icon(
-                          Icons.star_rounded,
-                          size: 35,
-                          color: appRed,
+              Expanded(child: Container()),
+              Row(
+                children: [
+                  showCost
+                      ? Text(
+                          restaurant.price == 1
+                              ? '\$'
+                              : restaurant.price == 2
+                                  ? '\$\$'
+                                  : restaurant.price == 3
+                                      ? '\$\$\$'
+                                      : '\$\$\$',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w800,
+                            color: appRed,
+                          ),
                         )
-                      : Icon(
-                          Icons.star_outline_rounded,
-                          size: 35,
-                          color: appRed,
-                        ),
-                ),
+                      : Container(),
+                  showTime
+                      ? Container(
+                          margin: EdgeInsets.only(left: 0, top: 5),
+                          child: Row(
+                            children: [
+                              Text(
+                                restaurant.time.toString() + " min",
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    color: black,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                              const SizedBox(width: 10),
+                            ],
+                          ),
+                        )
+                      : Container(),
+                  const SizedBox(width: 15),
+                  Transform.translate(
+                    offset: Offset(0, -5),
+                    child: GestureDetector(
+                      onTap: () {
+                        //
+                        restaurantController.toggleRestaurantFavorite(
+                            restaurant.id, restaurant.isFavorite);
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(right: 10),
+                        child: restaurant.isFavorite
+                            ? Icon(
+                                Icons.star_rounded,
+                                size: 35,
+                                color: appRed,
+                              )
+                            : Icon(
+                                Icons.star_outline_rounded,
+                                size: 35,
+                                color: appRed,
+                              ),
+                      ),
+                    ),
+                  ),
+                ],
               )
             ],
           ),

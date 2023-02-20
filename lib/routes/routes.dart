@@ -18,11 +18,13 @@ import 'package:whats_for_dinner/views/screens/recipes/edit_recipe_item.dart';
 import 'package:whats_for_dinner/views/screens/recipes/imported_recipe.dart';
 import 'package:whats_for_dinner/views/screens/recipes/recipe.dart';
 import 'package:whats_for_dinner/views/screens/recipes/select_list_from_import.dart';
+import 'package:whats_for_dinner/views/screens/restaurants/add_order_screen.dart';
 import 'package:whats_for_dinner/views/screens/restaurants/add_restaurant.dart';
 import 'package:whats_for_dinner/views/screens/profile/create_group.dart';
 import 'package:whats_for_dinner/views/screens/profile/manage_group.dart';
 import 'package:whats_for_dinner/views/screens/navigation.dart';
 import 'package:whats_for_dinner/views/screens/restaurants/filter_restaurants.dart';
+import 'package:whats_for_dinner/views/screens/restaurants/restaurant.dart';
 import 'package:whats_for_dinner/views/screens/restaurants/restaurants.dart';
 import 'package:whats_for_dinner/views/screens/restaurants/view_restaurant.dart';
 import 'package:whats_for_dinner/views/screens/recipes/add_recipe.dart';
@@ -44,6 +46,7 @@ class RouteHelper {
   static String addList = '/add-list';
   static String restaurantFilter = '/restaurant-filter';
   static String restaurants = '/restaurants';
+  static String restaurant = '/restaurant';
   static String allMembers = '/all-members';
   static String viewRestaurant = '/view-restaurant';
   static String editListItem = '/editListItem';
@@ -63,6 +66,7 @@ class RouteHelper {
   static String selectList = '/selectList';
   static String importedRecipe = '/importedRecipe';
   static String selectListFromImportRecipe = '/selectListFromImportRecipe';
+  static String addOrderScreen = '/addOrderScreen';
   static String testScreen = '/testScreen';
 
   static String getHomeRoute() => home;
@@ -76,6 +80,7 @@ class RouteHelper {
   static String getAddList() => addList;
   static String getRestaurantFilter() => restaurantFilter;
   static String getRestaurants() => restaurants;
+  static String getRestaurant() => restaurant;
   static String getAllMembers() => allMembers;
   static String getViewRestaurants() => viewRestaurant;
   static String getEditListItem() => editListItem;
@@ -95,6 +100,7 @@ class RouteHelper {
   static String getSelectList() => selectList;
   static String getImportedRecipe() => importedRecipe;
   static String getSelectListFromImportRecipe() => selectListFromImportRecipe;
+  static String getAddOrderScreen() => addOrderScreen;
   static String getTestScreen() => testScreen;
 
   static List<GetPage> routes = [
@@ -162,6 +168,12 @@ class RouteHelper {
       name: restaurants,
       page: () => const ResturantsScreen(),
       transition: Transition.fade,
+      transitionDuration: const Duration(milliseconds: 250),
+    ),
+    GetPage(
+      name: restaurant,
+      page: () => const RestaurantScreen(),
+      transition: Transition.cupertino,
       transitionDuration: const Duration(milliseconds: 250),
     ),
     GetPage(
@@ -266,13 +278,15 @@ class RouteHelper {
       transition: Transition.cupertino,
       transitionDuration: const Duration(milliseconds: 250),
     ),
-    //
-    //
-    //
-    //
     GetPage(
       name: selectListFromImportRecipe,
       page: () => SelectListFromImportRecipe(),
+      transition: Transition.cupertino,
+      transitionDuration: const Duration(milliseconds: 250),
+    ),
+    GetPage(
+      name: addOrderScreen,
+      page: () => AddOrderScreen(),
       transition: Transition.cupertino,
       transitionDuration: const Duration(milliseconds: 250),
     ),

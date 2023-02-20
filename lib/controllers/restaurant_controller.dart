@@ -116,6 +116,7 @@ class RestaurantController extends GetxController {
               .map((doc) => Restaurant.fromJson(doc.data()))
               .toList(),
         );
+
     return data;
   }
 
@@ -125,8 +126,8 @@ class RestaurantController extends GetxController {
     int rating,
     int price,
     bool doesDelivery,
-    String notes,
     bool isFavorite,
+    String restaurantUrl,
   ) async {
     try {
       final restaurantId = DateTime.now().toString();
@@ -137,8 +138,9 @@ class RestaurantController extends GetxController {
         price: price,
         doesDelivery: doesDelivery,
         isFavorite: isFavorite,
-        notes: notes,
         id: restaurantId,
+        restaurantUrl: restaurantUrl,
+        orders: [],
       );
 
       firestore
@@ -155,37 +157,55 @@ class RestaurantController extends GetxController {
     }
   }
 
+  addOrder(Restaurant restaurant, Order order) {
+    print("in add order func");
+    List<Order> orders = restaurant.orders;
+    orders.add(order);
+    print(orders.length);
+    firestore
+        .collection('groups')
+        .doc(globalGroupId)
+        .collection('restaurants')
+        .doc(restaurant.id)
+        .update({"orders": Order.orderToJson(orders)});
+  }
+
+  editOrder(Restaurant restaurant, Order oldOrder, Order newOrder) {
+    deleteOrder(restaurant, oldOrder);
+    addOrder(restaurant, newOrder);
+  }
+
   updateRestaurant(
-    String name,
-    int time,
-    int rating,
-    int price,
-    bool doesDelivery,
-    String notes,
-    bool isFavorite,
-    String restaurantId,
+    Restaurant restaurant,
   ) {
     try {
-      Restaurant restaurant = Restaurant(
-        name: name,
-        time: time,
-        rating: rating,
-        price: price,
-        doesDelivery: doesDelivery,
-        isFavorite: isFavorite,
-        notes: notes,
-        id: restaurantId,
-      );
-
       firestore
           .collection('groups')
           .doc(globalGroupId)
           .collection('restaurants')
-          .doc(restaurantId)
+          .doc(restaurant.id)
           .update(restaurant.toJson());
     } catch (e) {
       Get.snackbar(
         'Error Adding Restaurant',
+        '$e',
+      );
+    }
+  }
+
+  deleteOrder(Restaurant restaurant, Order order) {
+    List<Order> orders = restaurant.orders;
+    orders.remove(order);
+    try {
+      firestore
+          .collection('groups')
+          .doc(globalGroupId)
+          .collection('restaurants')
+          .doc(restaurant.id)
+          .update({"orders": Order.orderToJson(orders)});
+    } catch (e) {
+      Get.snackbar(
+        'Error Deleting Order',
         '$e',
       );
     }

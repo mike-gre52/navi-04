@@ -18,6 +18,15 @@ class EditRecipeItemScreen extends StatefulWidget {
 class _EditRecipeItemScreenState extends State<EditRecipeItemScreen> {
   final TextEditingController _amountTextController = TextEditingController();
   final TextEditingController _contentTextController = TextEditingController();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _amountTextController.dispose();
+    _contentTextController.dispose();
+  }
+
   bool showAmountError = false;
 
   void validateDoubleInput(input) {

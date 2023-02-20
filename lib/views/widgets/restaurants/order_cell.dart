@@ -1,0 +1,110 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/src/foundation/key.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:get/get.dart';
+import 'package:whats_for_dinner/models/restaurant.dart';
+import 'package:whats_for_dinner/routes/routes.dart';
+import 'package:whats_for_dinner/utils/colors.dart';
+import 'package:whats_for_dinner/utils/constants.dart';
+import 'package:whats_for_dinner/utils/helper.dart';
+
+class OrderCell extends StatelessWidget {
+  Restaurant restaurant;
+  Order order;
+  Function onSubmit;
+
+  OrderCell({
+    Key? key,
+    required this.restaurant,
+    required this.order,
+    required this.onSubmit,
+  }) : super(key: key);
+
+  showPopup(
+    BuildContext context,
+    String header,
+    String subHeader,
+  ) {
+    showDialog(
+      context: context,
+      builder: (_) => CupertinoAlertDialog(
+        title: Text(header),
+        content: Text(subHeader),
+        actions: [
+          CupertinoDialogAction(
+            child: const Text('Cancel'),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          CupertinoDialogAction(
+            child: const Text('Yes'),
+            onPressed: () {
+              restaurantController.deleteOrder(restaurant, order);
+              Navigator.pop(context);
+              onSubmit();
+            },
+          ),
+        ],
+      ),
+      barrierDismissible: true,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(top: 15),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                order.name,
+                style: TextStyle(
+                  fontSize: 20,
+                  color: black,
+                  fontWeight: FontWeight.w600,
+                  height: 0.7,
+                ),
+              ),
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Get.toNamed(RouteHelper.getAddOrderScreen(),
+                          arguments: [restaurant, onSubmit, order, true]);
+                    },
+                    child: const Icon(Icons.edit_rounded),
+                  ),
+                  const SizedBox(width: 10),
+                  GestureDetector(
+                      onTap: () {
+                        showPopup(
+                          context,
+                          "Are you sure you want to delete this Order",
+                          "",
+                        );
+                      },
+                      child: Icon(Icons.close_rounded)),
+                ],
+              )
+            ],
+          ),
+          Text(
+            order.item,
+            style: TextStyle(
+              fontSize: 16,
+              color: darkGrey,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

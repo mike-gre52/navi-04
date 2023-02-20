@@ -12,6 +12,7 @@ Color red = const Color.fromRGBO(188, 40, 40, 1.0);
 Color paperBackground = const Color.fromRGBO(245, 242, 233, 1.0);
 Color backgroundGrey = const Color.fromRGBO(230, 230, 230, 1.0);
 
+Color darkGrey = const Color.fromRGBO(115, 115, 115, 1.0);
 Color lightYellow = const Color.fromRGBO(237, 207, 71, 1.0);
 Color lightGreen = const Color.fromRGBO(124, 227, 111, 1.0);
 Color lightBlue = const Color.fromRGBO(86, 170, 209, 1.0);

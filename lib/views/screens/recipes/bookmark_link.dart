@@ -19,6 +19,13 @@ class BookmarkLink extends StatefulWidget {
 class _BookmarkLinkState extends State<BookmarkLink> {
   final TextEditingController _linkController = TextEditingController();
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _linkController.dispose();
+  }
+
   final url = Get.arguments as String;
 
   @override

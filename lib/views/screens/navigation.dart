@@ -40,9 +40,9 @@ class _NavigationState extends State<Navigation> {
   Widget build(BuildContext context) {
     List pages = [
       //const HomeScreen(),
-      const ResturantsScreen(),
       const ListsScreen(),
       const RecipesScreen(),
+      const ResturantsScreen(),
       ProfileScreen(),
     ];
     return Scaffold(
@@ -57,11 +57,11 @@ class _NavigationState extends State<Navigation> {
             border: Border(
               top: BorderSide(
                 color: (_selectedIndex == 0)
-                    ? appRed
+                    ? appGreen
                     : (_selectedIndex == 1)
-                        ? appGreen
+                        ? appBlue
                         : (_selectedIndex == 2)
-                            ? appBlue
+                            ? appRed
                             : royalYellow,
                 width: 3,
               ),
@@ -86,11 +86,11 @@ class _NavigationState extends State<Navigation> {
             ),
             selectedIconTheme: IconThemeData(
               color: (_selectedIndex == 0)
-                  ? appRed
+                  ? appGreen
                   : (_selectedIndex == 1)
-                      ? appGreen
+                      ? appBlue
                       : (_selectedIndex == 2)
-                          ? appBlue
+                          ? appRed
                           : royalYellow,
             ),
             showSelectedLabels: true,
@@ -107,13 +107,7 @@ class _NavigationState extends State<Navigation> {
               //    ),
               //    label: 'Home',
               //  ),
-              BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.format_list_bulleted_rounded,
-                  size: 40,
-                ),
-                label: 'Resturants',
-              ),
+
               BottomNavigationBarItem(
                 icon: Icon(
                   Icons.shopping_bag_outlined,
@@ -127,6 +121,13 @@ class _NavigationState extends State<Navigation> {
                   size: 40,
                 ),
                 label: 'Recipes',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.format_list_bulleted_rounded,
+                  size: 40,
+                ),
+                label: 'Resturants',
               ),
               BottomNavigationBarItem(
                 icon: Icon(

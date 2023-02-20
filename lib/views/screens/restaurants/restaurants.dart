@@ -23,10 +23,16 @@ class ResturantsScreen extends StatefulWidget {
 }
 
 List<Restaurant> filteredRestaurants = [];
+bool shouldShuffle = true;
 
 class _ResturantsScreenState extends State<ResturantsScreen> {
-  Widget buildRestaurantTile(Restaurant restaurant) => RestaurantCell(
+  Widget buildRestaurantTile(
+    Restaurant restaurant,
+  ) =>
+      RestaurantCell(
         restaurant: restaurant,
+        showCost: sortCost > 0,
+        showTime: sortTime > 0,
       );
 
   void addRestaurantIconButton() {
@@ -71,9 +77,14 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final restaurants = snapshot.data!;
+
             filteredRestaurants = restaurantController.filterRestaurants(
                 restaurants, restaurantController.filter);
-            filteredRestaurants.shuffle();
+            if (shouldShuffle) {
+              filteredRestaurants.shuffle();
+              shouldShuffle = false;
+            }
+
             if (sortCost == 1) {
               filteredRestaurants =
                   restaurantController.sortByPrice(filteredRestaurants, true);

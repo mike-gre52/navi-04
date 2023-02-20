@@ -9,10 +9,21 @@ import '../../widgets/app/app_header.dart';
 import '../../widgets/app/custom_textfield.dart';
 import '../../widgets/app/gradient_button.dart';
 
-class AddListScreen extends StatelessWidget {
+class AddListScreen extends StatefulWidget {
   AddListScreen({Key? key}) : super(key: key);
 
+  @override
+  State<AddListScreen> createState() => _AddListScreenState();
+}
+
+class _AddListScreenState extends State<AddListScreen> {
   final TextEditingController _listNameController = TextEditingController();
+
+  @override
+  void dispose() {
+    super.dispose();
+    _listNameController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

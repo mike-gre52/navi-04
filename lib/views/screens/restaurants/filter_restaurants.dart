@@ -23,6 +23,13 @@ class FilterRestaurantScreens extends StatefulWidget {
 class _FilterRestaurantScreensState extends State<FilterRestaurantScreens> {
   TextEditingController _timeController = TextEditingController();
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _timeController.dispose();
+  }
+
   List data = Get.arguments as List;
 
   late bool onlyDelivery;
@@ -43,8 +50,6 @@ class _FilterRestaurantScreensState extends State<FilterRestaurantScreens> {
 
   //int rating = 1;
   int price = 3;
-
-  Object _selectedSegment = 0;
 
   void setDeliveryStatus(value) {
     if (value == 0) {
@@ -190,6 +195,7 @@ class _FilterRestaurantScreensState extends State<FilterRestaurantScreens> {
                           SelectRating(
                             rating: rating,
                             onTap: newRatingSelected,
+                            isTapable: true,
                           ),
                         ],
                       ),

@@ -137,6 +137,20 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _recipeNameController.dispose();
+    _amountController.dispose();
+    _ingredientController.dispose();
+    _instructionController.dispose();
+    _measurementController.dispose();
+    _recipeCookTimeController.dispose();
+    _recipePrepTimeController.dispose();
+    _recipeServingsController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: appBlue,

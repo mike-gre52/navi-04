@@ -25,6 +25,12 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
   final TextEditingController _linkController = TextEditingController();
 
   @override
+  void dispose() {
+    super.dispose();
+    _linkController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(
