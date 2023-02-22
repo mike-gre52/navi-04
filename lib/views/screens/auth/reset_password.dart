@@ -16,16 +16,15 @@ import 'package:whats_for_dinner/views/widgets/app/gradient_button.dart';
 import '../../../routes/routes.dart';
 import '../../../utils/constants.dart';
 
-class SignIn extends StatefulWidget {
-  const SignIn({Key? key}) : super(key: key);
+class ResetPassword extends StatefulWidget {
+  const ResetPassword({Key? key}) : super(key: key);
 
   @override
-  State<SignIn> createState() => _SignInState();
+  State<ResetPassword> createState() => _ResetPasswordState();
 }
 
-class _SignInState extends State<SignIn> {
+class _ResetPasswordState extends State<ResetPassword> {
   TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
 
   bool isLoading = false;
 
@@ -33,7 +32,6 @@ class _SignInState extends State<SignIn> {
   void dispose() {
     super.dispose();
     _emailController.dispose();
-    _passwordController.dispose();
   }
 
   @override
@@ -57,15 +55,49 @@ class _SignInState extends State<SignIn> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  height: height200,
+                const SizedBox(
+                  height: 75,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Icon(
+                    Icons.arrow_back,
+                    size: 40,
+                  ),
+                ),
+                isLoading
+                    ? Container(
+                        height: 50,
+                        child: Align(
+                          alignment: Alignment.topCenter,
+                          child: CupertinoActivityIndicator(
+                            color: royalYellow,
+                            radius: 20,
+                          ),
+                        ),
+                      )
+                    : Container(
+                        height: 50,
+                      ),
+                const SizedBox(
+                  height: 45,
                 ),
                 Text(
-                  'Login',
+                  'Reset Password',
                   style: TextStyle(
                     color: black,
                     fontSize: fontSize35,
                     fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Text(
+                  'Enter the email associated with the account and we will send you an email.',
+                  style: TextStyle(
+                    color: darkGrey,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
                 SizedBox(
@@ -85,58 +117,26 @@ class _SignInState extends State<SignIn> {
                 SizedBox(
                   height: height40,
                 ),
-                CustomTextfield(
-                  icon: Icons.lock_outline,
-                  placeholderText: 'Password',
-                  controller: _passwordController,
-                  borderColor: royalYellow,
-                  showVisibilityIcon: true,
-                  textfieldWidth: 350,
-                  textfieldHeight: 65,
-                  borderRadius: 10,
-                  onSubmit: (_) {},
-                  onChanged: (_) {},
-                ),
-                SizedBox(
-                  height: height10,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Get.toNamed(RouteHelper.getResetPassword());
-                  },
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: Text(
-                      "Forgot Password?",
-                      style: TextStyle(
-                        color: black,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: height5,
-                ),
                 GestureDetector(
                   onTap: () async {
                     setState(() {
                       isLoading = true;
                     });
-
-                    await authController.loginUser(
-                      _emailController.text,
-                      _passwordController.text,
-                    );
-
+                    bool emailSent = await authController
+                        .sendPasswordResetEmail(_emailController.text);
                     setState(() {
                       isLoading = false;
                     });
+                    if (emailSent) {
+                      Navigator.pop(context);
+                      Get.toNamed(RouteHelper.getConfirmResetPasswordSent(),
+                          arguments: _emailController.text);
+                    }
+
                     //get data from firebase
                   },
                   child: GradientButton(
-                    buttonText: 'Login',
+                    buttonText: 'Reset',
                     firstColor: lightYellow,
                     secondColor: royalYellow,
                   ),
@@ -144,26 +144,9 @@ class _SignInState extends State<SignIn> {
                 SizedBox(
                   height: height250,
                 ),
-                BottomText(
-                  firstText: 'Don\'t have an account? ',
-                  secondText: 'Sign Up',
-                  buttonRoute: RouteHelper.getSignUpRoute(),
-                ),
               ],
             ),
           ),
-          isLoading
-              ? Container(
-                  margin: EdgeInsets.only(top: height205),
-                  child: Align(
-                    alignment: Alignment.topCenter,
-                    child: CupertinoActivityIndicator(
-                      color: royalYellow,
-                      radius: 20,
-                    ),
-                  ),
-                )
-              : Container(),
         ],
       ),
     );

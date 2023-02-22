@@ -39,9 +39,20 @@ class AuthController extends GetxController {
         globalGroupId = data['groupId'];
         globalUsername = data['name'];
         globalColor = data['color'];
+        inGroup = data["inGroup"];
       },
       onError: (e) => print("Error getting document: $e"),
     );
+  }
+
+  Future<bool> sendPasswordResetEmail(String email) async {
+    try {
+      await firebaseAuth.sendPasswordResetEmail(email: email);
+      return true;
+    } catch (e) {
+      Get.snackbar('No account found with the email: $email', "");
+      return false;
+    }
   }
 
   _setInitialScreen(User? user) async {

@@ -78,6 +78,7 @@ class GroupController extends GetxController {
         .collection('users')
         .doc(firebaseAuth.currentUser!.uid)
         .update({"inGroup": true});
+    inGroup = true;
   }
 
   setUserInGroupStatusFalse() {
@@ -85,6 +86,7 @@ class GroupController extends GetxController {
         .collection('users')
         .doc(firebaseAuth.currentUser!.uid)
         .update({"inGroup": false});
+    inGroup = false;
   }
 
   removeIdFromMembers(List members) {
@@ -161,6 +163,7 @@ class GroupController extends GetxController {
       */
 
       final snap = await firestore.collection('groups').doc(groupId).get();
+      print(snap);
       if (snap.exists) {
         //group id valid
         print('1');

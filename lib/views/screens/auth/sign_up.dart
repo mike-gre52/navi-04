@@ -72,7 +72,7 @@ class _SignUpState extends State<SignUp> {
               children: [
                 //AddProfileImage(),
                 SizedBox(
-                  height: height100,
+                  height: height200,
                 ),
                 Text(
                   'Sign Up',

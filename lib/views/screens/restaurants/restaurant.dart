@@ -98,6 +98,9 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenWidth = mediaQuery.size.width;
+    double screenWidth75 = screenWidth * .75;
     print("build");
     //set data
     print(restaurant.rating);
@@ -130,29 +133,35 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Container(
+                    ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: screenWidth75),
                       child: Text(
                         restaurant.name.substring(0, 1).toUpperCase() +
                             restaurant.name.substring(1),
+                        maxLines: 2,
                         style: TextStyle(
-                          fontSize: 50,
                           color: black,
+                          fontSize: 45,
                           height: 1,
+                          overflow: TextOverflow.clip,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
                     const SizedBox(width: 10),
-                    GestureDetector(
-                      onTap: () {
-                        Get.toNamed(RouteHelper.getViewRestaurants(),
-                            arguments: [restaurant, onUpdateRestaurant]);
-                      },
-                      child: Icon(
-                        Icons.edit_note_rounded,
-                        size: 26,
-                        color: darkGrey,
+                    Align(
+                      child: GestureDetector(
+                        onTap: () {
+                          Get.toNamed(RouteHelper.getViewRestaurants(),
+                              arguments: [restaurant, onUpdateRestaurant]);
+                        },
+                        child: Icon(
+                          Icons.edit_note_rounded,
+                          size: 26,
+                          color: darkGrey,
+                        ),
                       ),
                     )
                   ],

@@ -53,55 +53,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const SizedBox(
                   height: 20,
                 ),
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 30),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          CustomTextfield(
-                            icon: Icons.person,
-                            placeholderText: '',
-                            controller: _nameController,
-                            borderColor: royalYellow,
-                            textfieldWidth: 280,
-                            textfieldHeight: 60,
-                            borderRadius: 25,
-                            onSubmit: (_) {},
-                            onChanged: (_) {},
-                          ),
-                          GestureDetector(
-                            onTap: () async {
-                              print(await Database().getColor());
-                            },
-                            child: CircleCheckButton(),
-                          )
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      JoinGroup(
-                        inGroup: data.inGroup,
-                        username: data.name,
-                        userColor: data.color,
-                      ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          authController.signOut();
-                        },
-                        child: BorderButton(
-                          buttonColor: red,
-                          buttonText: 'Sign Out',
-                          borderRadius: 30,
+                Expanded(
+                  child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 30, vertical: 5),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        JoinGroup(
+                          inGroup: data.inGroup,
+                          username: data.name,
+                          userColor: data.color,
                         ),
-                      )
-                    ],
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        Expanded(child: Container()),
+                        GestureDetector(
+                          onTap: () {
+                            authController.signOut();
+                          },
+                          child: Text(
+                            "Sign Out",
+                            style: TextStyle(color: darkRed, fontSize: 22),
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            "v1.0.18",
+                            style: TextStyle(color: darkGrey, fontSize: 12),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 )
               ],

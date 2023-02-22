@@ -10,13 +10,18 @@ import 'package:whats_for_dinner/utils/constants.dart';
 
 import '../../../routes/routes.dart';
 
-class ListBottomPopup extends StatelessWidget {
+class ListBottomPopup extends StatefulWidget {
   ListData list;
   ListBottomPopup({
     Key? key,
     required this.list,
   }) : super(key: key);
 
+  @override
+  State<ListBottomPopup> createState() => _ListBottomPopupState();
+}
+
+class _ListBottomPopupState extends State<ListBottomPopup> {
   _showDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -48,7 +53,7 @@ class ListBottomPopup extends StatelessWidget {
                   */
               Navigator.pop(context);
               listController.deleteList(
-                  list.id, listItems, recentlyDeletedItems);
+                  widget.list.id, listItems, deletedItems);
               Navigator.pop(context);
               Navigator.pop(context);
             },
@@ -59,86 +64,94 @@ class ListBottomPopup extends StatelessWidget {
     );
   }
 
+  Future<List<Item>> getDeletedItems(String listId) async {
+    deletedItems = await listController.getRecentlyDeletedTest(widget.list.id);
+    return deletedItems;
+  }
+
+  List<Item> deletedItems = [];
+
   List<Item> listItems = [];
-  List<Item> recentlyDeletedItems = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      getDeletedItems(widget.list.id);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<Item>>(
-        stream: listController.getListItems(list.id),
+        stream: listController.getListItems(widget.list.id),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             listItems = snapshot.data!;
-            return StreamBuilder<List<Item>>(
-                stream: listController.getRecentlyDeletedListItems(list.id),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    recentlyDeletedItems = snapshot.data!;
-                    return Container(
-                      height: 250,
-                      child: Column(
-                        children: [
-                          Container(
-                            margin: const EdgeInsets.symmetric(
-                                horizontal: 100, vertical: 5),
-                            height: 5,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: grey,
-                            ),
-                          ),
-                          PopupButton(
-                            icon: CupertinoIcons.clear_circled,
-                            buttonName: 'Clear Selected',
-                            onClick: () {
-                              listController.deleteSelectedItems(
-                                  list.id, listItems);
-                              Navigator.pop(context);
-                            },
-                          ),
-                          PopupButton(
-                            icon: Icons.clear_all_rounded,
-                            buttonName: 'Clear All',
-                            onClick: () {
-                              listController.deleteAllListItems(
-                                  list.id, listItems, true);
-                              Navigator.pop(context);
-                            },
-                          ),
-                          PopupButton(
-                            icon: CupertinoIcons.arrowshape_turn_up_left,
-                            buttonName: 'Recently Deleted',
-                            onClick: () {
-                              Get.toNamed(RouteHelper.recentlyDeleted,
-                                  arguments: list);
-                            },
-                          ),
-                          PopupButton(
-                            icon: CupertinoIcons.plus_rectangle,
-                            buttonName: 'Add Recipe Items',
-                            onClick: () {
-                              Navigator.pop(context);
-                              Get.toNamed(
-                                  RouteHelper.addToListSelectRecipeScreen,
-                                  arguments: [list, appGreen]);
-                            },
-                          ),
-                          PopupButton(
-                            icon: CupertinoIcons.delete,
-                            buttonName: 'Delete List',
-                            isRed: true,
-                            onClick: () {
-                              _showDialog(context);
-                              //Navigator.pop(context);
-                            },
-                          ),
-                        ],
-                      ),
-                    );
-                  } else {
-                    return Container();
-                  }
-                });
+
+            return Container(
+              height: 250,
+              child: Column(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 100, vertical: 5),
+                    height: 5,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: grey,
+                    ),
+                  ),
+                  PopupButton(
+                    icon: CupertinoIcons.clear_circled,
+                    buttonName: 'Clear Selected',
+                    onClick: () {
+                      listController.deleteSelectedItems(
+                          widget.list.id, listItems);
+                      Navigator.pop(context);
+                    },
+                  ),
+                  PopupButton(
+                    icon: Icons.clear_all_rounded,
+                    buttonName: 'Clear All',
+                    onClick: () {
+                      listController.deleteAllListItems(
+                          widget.list.id, listItems, true);
+                      Navigator.pop(context);
+                    },
+                  ),
+                  PopupButton(
+                    icon: CupertinoIcons.arrowshape_turn_up_left,
+                    buttonName: 'Recently Deleted',
+                    onClick: () {
+                      Get.toNamed(RouteHelper.recentlyDeleted,
+                          arguments: widget.list);
+                    },
+                  ),
+                  PopupButton(
+                    icon: CupertinoIcons.plus_rectangle,
+                    buttonName: 'Add Recipe Items',
+                    onClick: () {
+                      Navigator.pop(context);
+                      Get.toNamed(RouteHelper.addToListSelectRecipeScreen,
+                          arguments: [widget.list, appGreen]);
+                    },
+                  ),
+                  PopupButton(
+                    icon: CupertinoIcons.delete,
+                    buttonName: 'Delete List',
+                    isRed: true,
+                    onClick: () {
+                      _showDialog(context);
+                      //Navigator.pop(context);
+                    },
+                  ),
+                ],
+              ),
+            );
           } else {
+            print("error loading");
             return Container();
           }
         });

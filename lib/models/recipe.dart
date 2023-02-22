@@ -50,13 +50,8 @@ class Recipe {
     //print(json['ingredients']);
     if (json['ingredients'] != null) {
       json['ingredients'].forEach((_, ingredient) {
-        //print(ingredient.toString());
-        final ingredientString = ingredient.toString();
-        final itemList = ingredientString.split(',');
-        //print(itemList);
         final newIngredient = Ingredient(
-          name: itemList[1],
-          amount: double.parse(itemList[0]),
+          name: ingredient,
           id: id,
         );
         newIngredients.add(newIngredient);
@@ -71,7 +66,7 @@ class Recipe {
     ingredients.forEach(
       (i) {
         count++;
-        String ingredient = '${i.amount},${i.name}';
+        String ingredient = i.name;
         jsonData[count.toString()] = ingredient;
       },
     );
@@ -154,26 +149,21 @@ class Recipe {
 
 class Ingredient {
   String name;
-  double amount;
-
   String id;
 
   Ingredient({
     required this.name,
-    required this.amount,
     required this.id,
   });
 
   Ingredient.static({
     this.name = '',
-    this.amount = 0,
     this.id = '',
   });
 
   Ingredient fromJson(Map<String, dynamic> json) {
     final item = Ingredient(
       name: json['name'],
-      amount: json['amount'],
       id: json['id'],
     );
 
@@ -183,7 +173,6 @@ class Ingredient {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['name'] = this.name;
-    data['amount'] = this.amount;
     data['id'] = this.id;
 
     return data;

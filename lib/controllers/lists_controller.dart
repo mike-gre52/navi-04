@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart';
 import 'package:whats_for_dinner/data/local_data.dart';
 import 'package:whats_for_dinner/main.dart';
 import 'package:whats_for_dinner/models/list.dart';
@@ -46,7 +47,7 @@ class ListsController extends GetxController {
         .map(
           (snapshot) => snapshot.docs
               .map(
-                (doc) => Item.static().fromJson(
+                (doc) => Item.fromJson(
                   doc.data(),
                 ),
               )
@@ -54,6 +55,25 @@ class ListsController extends GetxController {
         );
 
     return data;
+  }
+
+  Future<List<Item>> getRecentlyDeletedTest(listId) async {
+    print("running test");
+    CollectionReference _collectionRef = firestore
+        .collection('groups')
+        .doc(globalGroupId)
+        .collection('lists')
+        .doc(listId) //specific list
+        .collection('recently-deleted');
+
+    QuerySnapshot<Object?> data = await _collectionRef.get();
+
+    List<Item> deletedItems = [];
+
+    data.docs.forEach((element) {
+      deletedItems.add(Item.fromJsonQuery(element));
+    });
+    return deletedItems;
   }
 
   Stream<List<Item>> getRecentlyDeletedListItems(listId) {
@@ -67,7 +87,7 @@ class ListsController extends GetxController {
         .map(
           (snapshot) => snapshot.docs
               .map(
-                (doc) => Item.static().fromJson(
+                (doc) => Item.fromJson(
                   doc.data(),
                 ),
               )

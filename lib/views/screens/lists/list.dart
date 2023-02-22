@@ -33,6 +33,16 @@ class _ListScreenState extends State<ListScreen> {
     _itemController.dispose();
   }
 
+  addItem() {
+    if (_itemController.text.trim() != "") {
+      listController.addListItem(
+        _itemController.text,
+        list.id,
+      );
+      _itemController.clear();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,22 +110,12 @@ class _ListScreenState extends State<ListScreen> {
                     borderRadius: 20,
                     onChanged: (_) {},
                     onSubmit: (_) {
-                      listController.addListItem(
-                        _itemController.text,
-                        list.id,
-                      );
-                      _itemController.clear();
+                      addItem();
                     },
                   ),
                   GestureDetector(
                     onTap: () {
-                      if (_itemController.text.trim() != "") {
-                        listController.addListItem(
-                          _itemController.text,
-                          list.id,
-                        );
-                        _itemController.clear();
-                      }
+                      addItem();
                     },
                     child: Container(
                       height: 50,

@@ -157,7 +157,6 @@ class _EditRecipeState extends State<EditRecipe> {
           if (dataType == 'Ingredients') {
             Ingredient ingredient = Ingredient(
               name: '',
-              amount: 0,
               id: generateId(),
             );
             Get.toNamed(RouteHelper.editRecipeItemScreen, arguments: [

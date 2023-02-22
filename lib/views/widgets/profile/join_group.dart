@@ -66,7 +66,7 @@ class _JoinGroupState extends State<JoinGroup> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Join a group!  ',
+                  'Join a group or create a group',
                   style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.w300,
@@ -81,7 +81,7 @@ class _JoinGroupState extends State<JoinGroup> {
                   children: [
                     CustomTextfield(
                       icon: Icons.group_add_outlined,
-                      placeholderText: 'Group Id',
+                      placeholderText: 'Enter group code here',
                       controller: _groupIdController,
                       borderColor: royalYellow,
                       textfieldWidth: 280,

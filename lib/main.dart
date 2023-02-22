@@ -35,6 +35,7 @@ getData() async {
 late String globalUsername;
 late String globalGroupId;
 late String globalColor;
+late bool inGroup;
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);

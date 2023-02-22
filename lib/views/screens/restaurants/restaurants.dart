@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:whats_for_dinner/main.dart';
 import 'package:whats_for_dinner/models/filter.dart';
 import 'package:whats_for_dinner/models/restaurant.dart';
 import 'package:whats_for_dinner/routes/routes.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
 import 'package:whats_for_dinner/views/widgets/app/app_header.dart';
+import 'package:whats_for_dinner/views/widgets/app/create_or_join_banner.dart';
 import 'package:whats_for_dinner/views/widgets/restaurants/restaurant_cell.dart';
 import '../../../controllers/restaurant_controller.dart';
 
@@ -72,214 +74,265 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StreamBuilder<List<Restaurant>>(
-        stream: restaurantController.getRestuarants(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            final restaurants = snapshot.data!;
+      body: inGroup
+          ? StreamBuilder<List<Restaurant>>(
+              stream: restaurantController.getRestuarants(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  final restaurants = snapshot.data!;
 
-            filteredRestaurants = restaurantController.filterRestaurants(
-                restaurants, restaurantController.filter);
-            if (shouldShuffle) {
-              filteredRestaurants.shuffle();
-              shouldShuffle = false;
-            }
-
-            if (sortCost == 1) {
-              filteredRestaurants =
-                  restaurantController.sortByPrice(filteredRestaurants, true);
-            }
-            if (sortCost == 2) {
-              filteredRestaurants =
-                  restaurantController.sortByPrice(filteredRestaurants, false);
-            }
-            if (sortTime == 1) {
-              filteredRestaurants = restaurantController
-                  .sortRestaurantFromSlowestToFastest(filteredRestaurants);
-            }
-            if (sortTime == 2) {
-              filteredRestaurants = restaurantController
-                  .sortRestaurantFromSlowestToFastest(filteredRestaurants)
-                  .reversed
-                  .toList();
-            }
-
-            List<CustomChip> chips = [
-              CustomChip(
-                chipText: '',
-                chipIcon: CupertinoIcons.slider_horizontal_3,
-                onClick: () {
-                  Get.toNamed(RouteHelper.restaurantFilter,
-                      arguments: [filter, setFilterState]);
-                },
-              ),
-              CustomChip(
-                chipText: 'Favorite',
-                chipIcon: Icons.star_rounded,
-                isSelected: isFavoriteSelected,
-                onClick: () {
-                  //Get.toNamed(RouteHelper.restaurantFilter);
-                  setState(() {
-                    if (isFavoriteSelected) {
-                      isFavoriteSelected = false;
-                      filter = Filter(
-                        maxTime: 0,
-                        minRating: isTopRatedSelected ? 4 : 1,
-                        maxPrice: 3,
-                        onlyDelivery: isDeliverySelected,
-                        onlyFavorite: isFavoriteSelected,
-                        useFilter: true,
-                        useTime: false,
-                      );
-                      restaurantController.setfilter(filter);
-                    } else {
-                      isFavoriteSelected = true;
-                      filter = Filter(
-                        maxTime: 0,
-                        minRating: isTopRatedSelected ? 4 : 1,
-                        maxPrice: 3,
-                        onlyDelivery: isDeliverySelected,
-                        onlyFavorite: isFavoriteSelected,
-                        useFilter: true,
-                        useTime: false,
-                      );
-                      restaurantController.setfilter(filter);
-                    }
-                  });
-                },
-              ),
-              CustomChip(
-                chipText: 'Delivery',
-                chipIcon: Icons.delivery_dining,
-                isSelected: isDeliverySelected,
-                onClick: () {
-                  //Get.toNamed(RouteHelper.restaurantFilter);
-                  setState(() {
-                    if (isDeliverySelected) {
-                      print(isFavoriteSelected);
-                      isDeliverySelected = false;
-                      filter = Filter(
-                        maxTime: 0,
-                        minRating: isTopRatedSelected ? 4 : 1,
-                        maxPrice: 3,
-                        onlyDelivery: isDeliverySelected,
-                        onlyFavorite: isFavoriteSelected,
-                        useFilter: true,
-                        useTime: false,
-                      );
-                      restaurantController.setfilter(filter);
-                    } else {
-                      isDeliverySelected = true;
-                      filter = Filter(
-                        maxTime: 0,
-                        minRating: isTopRatedSelected ? 4 : 1,
-                        maxPrice: 3,
-                        onlyDelivery: isDeliverySelected,
-                        onlyFavorite: isFavoriteSelected,
-                        useFilter: true,
-                        useTime: false,
-                      );
-                      restaurantController.setfilter(filter);
-                    }
-                  });
-                },
-              ),
-              CustomChip(
-                chipText: 'Cost',
-                chipIcon: Icons.price_change,
-                isSelected: sortCost == 1 || sortCost == 2,
-                onClick: () {
-                  sortCost += 1;
-                  sortTime = 0;
-                  if (sortCost > 2) {
-                    setState(() {
-                      sortCost = 0;
-                    });
-                  } else {
-                    setState(() {
-                      sortCost = sortCost;
-                    });
+                  filteredRestaurants = restaurantController.filterRestaurants(
+                      restaurants, restaurantController.filter);
+                  if (shouldShuffle) {
+                    filteredRestaurants.shuffle();
+                    shouldShuffle = false;
                   }
-                },
-              ),
-              CustomChip(
-                chipText: 'Time',
-                chipIcon: Icons.timer,
-                isSelected: sortTime == 1 || sortTime == 2,
-                onClick: () {
-                  //filter from longest to shortest and vice versa
-                  sortTime += 1;
-                  sortCost = 0;
-                  if (sortTime > 2) {
-                    setState(() {
-                      sortTime = 0;
-                    });
-                  } else {
-                    setState(() {
-                      sortTime = sortTime;
-                    });
+
+                  if (sortCost == 1) {
+                    filteredRestaurants = restaurantController.sortByPrice(
+                        filteredRestaurants, true);
                   }
-                },
-              ),
-              CustomChip(
-                chipText: 'Top Rated',
-                chipIcon: Icons.star_rounded,
-                isSelected: isTopRatedSelected,
-                onClick: () {
-                  setState(() {
-                    if (isTopRatedSelected) {
-                      isTopRatedSelected = false;
-                      filter = Filter(
-                        maxTime: 0,
-                        minRating: isTopRatedSelected ? 4 : 1,
-                        maxPrice: 3,
-                        onlyDelivery: isDeliverySelected,
-                        onlyFavorite: isFavoriteSelected,
-                        useFilter: true,
-                        useTime: false,
-                      );
-                      restaurantController.setfilter(filter);
-                    } else {
-                      isTopRatedSelected = true;
-                      filter = Filter(
-                        maxTime: 0,
-                        minRating: isTopRatedSelected ? 4 : 1,
-                        maxPrice: 3,
-                        onlyDelivery: isDeliverySelected,
-                        onlyFavorite: isFavoriteSelected,
-                        useFilter: true,
-                        useTime: false,
-                      );
-                      restaurantController.setfilter(filter);
-                    }
-                  });
-                },
-              ),
-              CustomChip(
-                chipText: 'Clear',
-                chipIcon: Icons.clear,
-                onClick: () {
-                  setState(() {
-                    isDeliverySelected = false;
-                    isFavoriteSelected = false;
-                    isTopRatedSelected = false;
-                    sortTime = 0;
-                    sortCost = 0;
-                    filter = Filter(
-                      maxTime: 0,
-                      minRating: 1,
-                      maxPrice: 3,
-                      onlyDelivery: false,
-                      onlyFavorite: false,
-                      useFilter: false,
-                      useTime: false,
-                    );
-                    restaurantController.setfilter(filter);
-                  });
-                },
-              ),
-            ];
-            return Column(
+                  if (sortCost == 2) {
+                    filteredRestaurants = restaurantController.sortByPrice(
+                        filteredRestaurants, false);
+                  }
+                  if (sortTime == 1) {
+                    filteredRestaurants =
+                        restaurantController.sortRestaurantFromSlowestToFastest(
+                            filteredRestaurants);
+                  }
+                  if (sortTime == 2) {
+                    filteredRestaurants = restaurantController
+                        .sortRestaurantFromSlowestToFastest(filteredRestaurants)
+                        .reversed
+                        .toList();
+                  }
+
+                  List<CustomChip> chips = [
+                    CustomChip(
+                      chipText: '',
+                      chipIcon: CupertinoIcons.slider_horizontal_3,
+                      onClick: () {
+                        Get.toNamed(RouteHelper.restaurantFilter,
+                            arguments: [filter, setFilterState]);
+                      },
+                    ),
+                    CustomChip(
+                      chipText: 'Favorite',
+                      chipIcon: Icons.star_rounded,
+                      isSelected: isFavoriteSelected,
+                      onClick: () {
+                        //Get.toNamed(RouteHelper.restaurantFilter);
+                        setState(() {
+                          if (isFavoriteSelected) {
+                            isFavoriteSelected = false;
+                            filter = Filter(
+                              maxTime: 0,
+                              minRating: isTopRatedSelected ? 4 : 1,
+                              maxPrice: 3,
+                              onlyDelivery: isDeliverySelected,
+                              onlyFavorite: isFavoriteSelected,
+                              useFilter: true,
+                              useTime: false,
+                            );
+                            restaurantController.setfilter(filter);
+                          } else {
+                            isFavoriteSelected = true;
+                            filter = Filter(
+                              maxTime: 0,
+                              minRating: isTopRatedSelected ? 4 : 1,
+                              maxPrice: 3,
+                              onlyDelivery: isDeliverySelected,
+                              onlyFavorite: isFavoriteSelected,
+                              useFilter: true,
+                              useTime: false,
+                            );
+                            restaurantController.setfilter(filter);
+                          }
+                        });
+                      },
+                    ),
+                    CustomChip(
+                      chipText: 'Delivery',
+                      chipIcon: Icons.delivery_dining,
+                      isSelected: isDeliverySelected,
+                      onClick: () {
+                        //Get.toNamed(RouteHelper.restaurantFilter);
+                        setState(() {
+                          if (isDeliverySelected) {
+                            print(isFavoriteSelected);
+                            isDeliverySelected = false;
+                            filter = Filter(
+                              maxTime: 0,
+                              minRating: isTopRatedSelected ? 4 : 1,
+                              maxPrice: 3,
+                              onlyDelivery: isDeliverySelected,
+                              onlyFavorite: isFavoriteSelected,
+                              useFilter: true,
+                              useTime: false,
+                            );
+                            restaurantController.setfilter(filter);
+                          } else {
+                            isDeliverySelected = true;
+                            filter = Filter(
+                              maxTime: 0,
+                              minRating: isTopRatedSelected ? 4 : 1,
+                              maxPrice: 3,
+                              onlyDelivery: isDeliverySelected,
+                              onlyFavorite: isFavoriteSelected,
+                              useFilter: true,
+                              useTime: false,
+                            );
+                            restaurantController.setfilter(filter);
+                          }
+                        });
+                      },
+                    ),
+                    CustomChip(
+                      chipText: 'Cost',
+                      chipIcon: Icons.price_change,
+                      isSelected: sortCost == 1 || sortCost == 2,
+                      onClick: () {
+                        sortCost += 1;
+                        sortTime = 0;
+                        if (sortCost > 2) {
+                          setState(() {
+                            sortCost = 0;
+                          });
+                        } else {
+                          setState(() {
+                            sortCost = sortCost;
+                          });
+                        }
+                      },
+                    ),
+                    CustomChip(
+                      chipText: 'Time',
+                      chipIcon: Icons.timer,
+                      isSelected: sortTime == 1 || sortTime == 2,
+                      onClick: () {
+                        //filter from longest to shortest and vice versa
+                        sortTime += 1;
+                        sortCost = 0;
+                        if (sortTime > 2) {
+                          setState(() {
+                            sortTime = 0;
+                          });
+                        } else {
+                          setState(() {
+                            sortTime = sortTime;
+                          });
+                        }
+                      },
+                    ),
+                    CustomChip(
+                      chipText: 'Top Rated',
+                      chipIcon: Icons.star_rounded,
+                      isSelected: isTopRatedSelected,
+                      onClick: () {
+                        setState(() {
+                          if (isTopRatedSelected) {
+                            isTopRatedSelected = false;
+                            filter = Filter(
+                              maxTime: 0,
+                              minRating: isTopRatedSelected ? 4 : 1,
+                              maxPrice: 3,
+                              onlyDelivery: isDeliverySelected,
+                              onlyFavorite: isFavoriteSelected,
+                              useFilter: true,
+                              useTime: false,
+                            );
+                            restaurantController.setfilter(filter);
+                          } else {
+                            isTopRatedSelected = true;
+                            filter = Filter(
+                              maxTime: 0,
+                              minRating: isTopRatedSelected ? 4 : 1,
+                              maxPrice: 3,
+                              onlyDelivery: isDeliverySelected,
+                              onlyFavorite: isFavoriteSelected,
+                              useFilter: true,
+                              useTime: false,
+                            );
+                            restaurantController.setfilter(filter);
+                          }
+                        });
+                      },
+                    ),
+                    CustomChip(
+                      chipText: 'Clear',
+                      chipIcon: Icons.clear,
+                      onClick: () {
+                        setState(() {
+                          isDeliverySelected = false;
+                          isFavoriteSelected = false;
+                          isTopRatedSelected = false;
+                          sortTime = 0;
+                          sortCost = 0;
+                          filter = Filter(
+                            maxTime: 0,
+                            minRating: 1,
+                            maxPrice: 3,
+                            onlyDelivery: false,
+                            onlyFavorite: false,
+                            useFilter: false,
+                            useTime: false,
+                          );
+                          restaurantController.setfilter(filter);
+                        });
+                      },
+                    ),
+                  ];
+                  return Column(
+                    children: [
+                      AppHeader(
+                        headerText: 'Restaurants',
+                        headerColor: appRed,
+                        borderColor: royalYellow,
+                        textColor: Colors.white,
+                        dividerColor: Colors.white,
+                        rightAction: const Icon(
+                          Icons.add_rounded,
+                          size: 40,
+                          color: Colors.white,
+                        ),
+                        onIconClick: addRestaurantIconButton,
+                      ),
+                      Container(
+                        height: 50,
+                        width: double.maxFinite,
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(
+                              color: lightGrey,
+                              width: 2.0,
+                            ),
+                          ),
+                        ),
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: chips,
+                        ),
+                      ),
+                      Expanded(
+                        child: Container(
+                          margin: EdgeInsets.symmetric(),
+                          child: ListView(
+                            padding: EdgeInsets.all(0),
+                            children: filteredRestaurants
+                                .map(buildRestaurantTile)
+                                .toList(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                } else {
+                  return Container();
+                }
+              },
+            )
+          : Column(
               children: [
                 AppHeader(
                   headerText: 'Restaurants',
@@ -287,46 +340,18 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
                   borderColor: royalYellow,
                   textColor: Colors.white,
                   dividerColor: Colors.white,
-                  rightAction: const Icon(
-                    Icons.add_rounded,
-                    size: 40,
-                    color: Colors.white,
-                  ),
-                  onIconClick: addRestaurantIconButton,
-                ),
-                Container(
-                  height: 50,
-                  width: double.maxFinite,
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        color: lightGrey,
-                        width: 2.0,
-                      ),
-                    ),
-                  ),
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: chips,
-                  ),
+                  rightAction: Container(),
+                  onIconClick: () {},
                 ),
                 Expanded(
-                  child: Container(
-                    margin: EdgeInsets.symmetric(),
-                    child: ListView(
-                      padding: EdgeInsets.all(0),
-                      children:
-                          filteredRestaurants.map(buildRestaurantTile).toList(),
+                  child: Center(
+                    child: CreateOrJoinBanner(
+                      color: appRed,
                     ),
                   ),
                 ),
               ],
-            );
-          } else {
-            return Container();
-          }
-        },
-      ),
+            ),
     );
   }
 }

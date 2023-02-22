@@ -54,7 +54,17 @@ class Item {
     this.imageUrl = '',
   });
 
-  Item fromJson(Map<String, dynamic> json) {
+  static Item fromJson(Map<String, dynamic> json) {
+    final item = Item(
+      name: json['name'],
+      id: json['id'],
+      isChecked: json['isChecked'],
+      imageUrl: json['imageUrl'],
+    );
+    return item;
+  }
+
+  static Item fromJsonQuery(QueryDocumentSnapshot<Object?> json) {
     final item = Item(
       name: json['name'],
       id: json['id'],

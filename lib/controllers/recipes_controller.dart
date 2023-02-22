@@ -51,7 +51,7 @@ class RecipeController extends GetxController {
   }
 
   void deleteRecipe(Recipe recipe) {
-    if (!recipe.isImport) {
+    if (!recipe.isImport && recipe.imageUrl != "") {
       deleteRecipeImageFromStorage(recipe.id);
     }
     firestore

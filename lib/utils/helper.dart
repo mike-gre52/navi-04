@@ -409,7 +409,6 @@ List<Ingredient> getRecipeIngredients(dynamic jsonData, int index) {
   data.forEach((ingredient) {
     Ingredient ing = Ingredient(
       name: ingredient,
-      amount: 0,
       id: generateId(),
     );
     ingredients.add(ing);

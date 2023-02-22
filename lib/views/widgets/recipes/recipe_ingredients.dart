@@ -17,7 +17,6 @@ class RecipeIngredientList extends StatelessWidget {
   Widget buildRecipeIngredient(Ingredient ingredient) {
     counter++;
     return RecipeIngredient(
-      amount: ingredient.amount,
       stepNumber: counter,
       ingredient: ingredient.name,
       showDelete: showDelete,
@@ -38,14 +37,12 @@ class RecipeIngredientList extends StatelessWidget {
 }
 
 class RecipeIngredient extends StatelessWidget {
-  double amount;
   int stepNumber;
   String ingredient;
   bool showDelete;
   Function deleteIngredient;
   RecipeIngredient({
     Key? key,
-    required this.amount,
     required this.stepNumber,
     required this.ingredient,
     required this.showDelete,
@@ -62,12 +59,6 @@ class RecipeIngredient extends StatelessWidget {
             '$stepNumber)  ',
             style: TextStyle(fontSize: 24),
           ),
-          amount == 0
-              ? Container()
-              : Text(
-                  '${amount} ',
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
-                ),
           Expanded(
             child: Text(
               ingredient,

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:whats_for_dinner/test.dart';
 import 'package:whats_for_dinner/views/app/textfield_And_Submit_Screen.dart';
+import 'package:whats_for_dinner/views/screens/auth/confirm_reset_email_sent.dart';
+import 'package:whats_for_dinner/views/screens/auth/reset_password.dart';
 import 'package:whats_for_dinner/views/screens/lists/add_list.dart';
 import 'package:whats_for_dinner/views/screens/lists/edit_list_item.dart';
 import 'package:whats_for_dinner/views/screens/lists/list.dart';
@@ -67,6 +69,8 @@ class RouteHelper {
   static String importedRecipe = '/importedRecipe';
   static String selectListFromImportRecipe = '/selectListFromImportRecipe';
   static String addOrderScreen = '/addOrderScreen';
+  static String resetPassword = '/resetPassword';
+  static String confirmResetPasswordSent = '/confirmResetPasswordSent';
   static String testScreen = '/testScreen';
 
   static String getHomeRoute() => home;
@@ -101,6 +105,8 @@ class RouteHelper {
   static String getImportedRecipe() => importedRecipe;
   static String getSelectListFromImportRecipe() => selectListFromImportRecipe;
   static String getAddOrderScreen() => addOrderScreen;
+  static String getResetPassword() => resetPassword;
+  static String getConfirmResetPasswordSent() => confirmResetPasswordSent;
   static String getTestScreen() => testScreen;
 
   static List<GetPage> routes = [
@@ -287,6 +293,18 @@ class RouteHelper {
     GetPage(
       name: addOrderScreen,
       page: () => AddOrderScreen(),
+      transition: Transition.cupertino,
+      transitionDuration: const Duration(milliseconds: 250),
+    ),
+    GetPage(
+      name: resetPassword,
+      page: () => const ResetPassword(),
+      transition: Transition.cupertino,
+      transitionDuration: const Duration(milliseconds: 250),
+    ),
+    GetPage(
+      name: confirmResetPasswordSent,
+      page: () => ConfirmResetEmailSent(),
       transition: Transition.cupertino,
       transitionDuration: const Duration(milliseconds: 250),
     ),

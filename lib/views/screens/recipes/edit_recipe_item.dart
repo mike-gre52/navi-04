@@ -16,14 +16,13 @@ class EditRecipeItemScreen extends StatefulWidget {
 }
 
 class _EditRecipeItemScreenState extends State<EditRecipeItemScreen> {
-  final TextEditingController _amountTextController = TextEditingController();
   final TextEditingController _contentTextController = TextEditingController();
 
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    _amountTextController.dispose();
+
     _contentTextController.dispose();
   }
 
@@ -68,7 +67,7 @@ class _EditRecipeItemScreenState extends State<EditRecipeItemScreen> {
     dataType = data[0] as String;
     if (dataType == 'Ingredient') {
       ingredient = data[1] as Ingredient;
-      _amountTextController.text = ingredient.amount.toString();
+
       _contentTextController.text = ingredient.name;
       editIngredient = data[3] as Function;
       addIngredient = data[4] as Function;
@@ -88,7 +87,6 @@ class _EditRecipeItemScreenState extends State<EditRecipeItemScreen> {
       if (dataType == 'Ingredient') {
         Ingredient newIngredient = Ingredient(
           name: _contentTextController.text,
-          amount: double.parse(_amountTextController.text),
           id: ingredient.id,
         );
         newItem
@@ -157,22 +155,6 @@ class _EditRecipeItemScreenState extends State<EditRecipeItemScreen> {
                 ? Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(
-                        width: 80,
-                        child: CustomTextfield(
-                          icon: Icons.bookmark_outline,
-                          placeholderText: 'Amount',
-                          controller: _amountTextController,
-                          borderColor: appBlue,
-                          textfieldWidth: double.maxFinite,
-                          textfieldHeight: 60,
-                          borderRadius: 10,
-                          showIcon: false,
-                          onSubmit: (_) {},
-                          onChanged: validateDoubleInput,
-                        ),
-                      ),
-                      const SizedBox(width: 25),
                       Container(
                         width: 150,
                         child: CustomTextfield(

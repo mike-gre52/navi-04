@@ -339,52 +339,35 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                       ),
                       //Ingredient Name
                       Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 15),
+                        margin: const EdgeInsets.symmetric(horizontal: 25),
                         child: Column(
                           children: [
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              crossAxisAlignment: CrossAxisAlignment.end,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 HeaderAndTextField(
-                                  header: 'Amount',
-                                  controller: _amountController,
-                                  width: 75,
-                                  placeHolderText: '',
-                                  onChanged: checkAmountInput,
-                                  subText: 'Ex: 2, 0.5',
-                                  showSubText: true,
-                                  centerText: true,
-                                ),
-                                HeaderAndTextField(
-                                  header: 'Name',
+                                  header: 'Add ingredientssdf',
                                   controller: _ingredientController,
                                   width: 200,
                                   leftAlign: true,
                                   placeHolderText: '',
                                   useTextKeyboard: true,
                                   onChanged: (_) {},
-                                  subText: 'Ex: cups flour, tbs salt',
                                   showSubText: true,
                                 ),
+                                Expanded(child: Container()),
                                 SizedBox(
                                   height: 50,
                                   child: GestureDetector(
                                     onTap: () {
                                       //
                                       setState(() {
-                                        if (_ingredientController.text != '' &&
-                                            _amountController.text != '') {
+                                        if (_ingredientController.text != '') {
                                           ingredientCounter++;
-                                          String instruction =
-                                              _amountController.text +
-                                                  _measurementController.text +
-                                                  _instructionController.text;
 
                                           Ingredient ingredient = Ingredient(
                                             name: _ingredientController.text,
-                                            amount: double.parse(
-                                                _amountController.text),
                                             id: generateId(),
                                           );
                                           recipeIngredients.add(ingredient);
