@@ -20,6 +20,14 @@ class _RecentlyDeletedState extends State<RecentlyDeleted> {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenHeight = mediaQuery.size.height;
+    double screenWidth = mediaQuery.size.width;
+    double height20 = screenHeight / 44.8;
+    double height35 = screenHeight / 25.6;
+    double width10 = screenWidth / 41.4;
+    double fontSize20 = screenHeight / 44.8;
+
     return Scaffold(
       body: Column(
         children: [
@@ -37,26 +45,26 @@ class _RecentlyDeletedState extends State<RecentlyDeleted> {
                     showModalBottomSheet(
                         context: context,
                         //isScrollControlled: true,
-                        shape: const RoundedRectangleBorder(
+                        shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(20),
+                            top: Radius.circular(height20),
                           ),
                         ),
                         builder: (context) =>
                             RecentlyDeletedBottomPopup(list: list));
                   },
-                  child: const Icon(
+                  child: Icon(
                     Icons.more_vert,
                     color: Colors.white,
-                    size: 34,
+                    size: height35,
                   ),
                 ),
-                const SizedBox(width: 10),
-                const Text(
+                SizedBox(width: width10),
+                Text(
                   'Back',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 20,
+                    fontSize: fontSize20,
                     fontWeight: FontWeight.w600,
                   ),
                 ),

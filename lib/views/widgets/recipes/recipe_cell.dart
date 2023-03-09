@@ -16,12 +16,25 @@ class RecipeCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenWidth = mediaQuery.size.width;
+    double screenHeight = mediaQuery.size.height;
+    double height5 = screenHeight / 179.2;
+    double height15 = screenHeight / 59.733;
+    double height32 = screenHeight / 28;
+    double height75 = screenHeight / 11.946;
+    double width10 = screenWidth / 41.4;
+    double width5 = screenWidth / 82.8;
+    double width20 = screenWidth / 20.7;
+    double width30 = screenWidth / 13.8;
+    double fontSize22 = screenHeight / 40.727;
+
     return Container(
-      margin: const EdgeInsets.only(top: 5, bottom: 5),
-      height: 75,
+      margin: EdgeInsets.only(top: height5, bottom: height5),
+      height: height75,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(height15),
         boxShadow: const [
           BoxShadow(
             color: Color.fromRGBO(210, 210, 210, 1.0),
@@ -36,15 +49,15 @@ class RecipeCell extends StatelessWidget {
         child: Row(
           children: [
             Container(
-              height: 75,
-              width: 75,
+              height: height75,
+              width: height75,
               child: !recipe.imageUrl.isNotEmpty
                   ? Icon(CupertinoIcons.photo)
                   : null,
               decoration: BoxDecoration(
-                borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(15),
-                    bottomLeft: Radius.circular(15)),
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(height15),
+                    bottomLeft: Radius.circular(height15)),
                 color: Colors.grey,
                 image: recipe.imageUrl.isNotEmpty
                     ? DecorationImage(
@@ -56,10 +69,10 @@ class RecipeCell extends StatelessWidget {
                     : null,
               ),
             ),
-            const SizedBox(width: 10),
+            SizedBox(width: width10),
             Expanded(
               child: Container(
-                margin: const EdgeInsets.only(right: 5),
+                margin: EdgeInsets.only(right: width5),
                 child: Align(
                   alignment: Alignment.topLeft,
                   child: Column(
@@ -67,11 +80,11 @@ class RecipeCell extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        margin: const EdgeInsets.only(top: 5),
+                        margin: EdgeInsets.only(top: height5),
                         child: Text(
                           recipe.name,
-                          style: const TextStyle(
-                              fontSize: 22,
+                          style: TextStyle(
+                              fontSize: fontSize22,
                               fontWeight: FontWeight.w600,
                               height: 1.1,
                               overflow: TextOverflow.ellipsis),
@@ -89,10 +102,10 @@ class RecipeCell extends StatelessWidget {
                           recipe.totalTime != -2
                               ? Text('${recipe.totalTime} mins')
                               : Container(
-                                  width: 30,
+                                  width: width30,
                                 ),
                           //Icon(Icons.),
-                          const SizedBox(width: 10),
+                          SizedBox(width: width10),
                           const Text(
                             'Yield: ',
                             style: TextStyle(fontWeight: FontWeight.w700),
@@ -112,27 +125,27 @@ class RecipeCell extends StatelessWidget {
                 showModalBottomSheet(
                   context: context,
                   //isScrollControlled: true,
-                  shape: const RoundedRectangleBorder(
+                  shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(20),
+                      top: Radius.circular(width20),
                     ),
                   ),
                   builder: (context) => RecipesPopup(recipe: recipe),
                 );
               },
               child: Container(
-                height: 75,
-                width: 30,
+                height: height75,
+                width: width30,
                 decoration: BoxDecoration(
                   color: appBlue,
-                  borderRadius: const BorderRadius.only(
-                    topRight: Radius.circular(15),
-                    bottomRight: Radius.circular(15),
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(height15),
+                    bottomRight: Radius.circular(height15),
                   ),
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.more_vert,
-                  size: 32,
+                  size: height32,
                   color: Colors.white,
                 ),
               ),

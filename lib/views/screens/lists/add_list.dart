@@ -27,6 +27,17 @@ class _AddListScreenState extends State<AddListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenHeight = mediaQuery.size.height;
+    double screenWidth = mediaQuery.size.width;
+    double height5 = screenHeight / 179.2;
+    double height10 = screenHeight / 89.6;
+    double height20 = screenHeight / 44.8;
+    double height40 = screenHeight / 22.4;
+    double height60 = screenHeight / 14.933;
+    double width30 = screenWidth / 13.8;
+    double fontSize18 = screenHeight / 49.777;
+
     return Scaffold(
       body: Column(
         children: [
@@ -36,11 +47,11 @@ class _AddListScreenState extends State<AddListScreen> {
             borderColor: royalYellow,
             textColor: Colors.white,
             dividerColor: Colors.white,
-            rightAction: const Text(
+            rightAction: Text(
               'Cancel',
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 20,
+                fontSize: height20,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -49,19 +60,19 @@ class _AddListScreenState extends State<AddListScreen> {
             },
           ),
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 30),
+            margin: EdgeInsets.symmetric(horizontal: width30),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(
-                  height: 10,
+                SizedBox(
+                  height: height10,
                 ),
                 Container(
-                  margin: EdgeInsets.only(left: 5),
+                  margin: EdgeInsets.only(left: height5),
                   child: Text(
                     'List Name',
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: fontSize18,
                       color: black,
                       fontWeight: FontWeight.w500,
                     ),
@@ -73,13 +84,13 @@ class _AddListScreenState extends State<AddListScreen> {
                   controller: _listNameController,
                   borderColor: appGreen,
                   textfieldWidth: double.maxFinite,
-                  textfieldHeight: 60,
-                  borderRadius: 10,
+                  textfieldHeight: height60,
+                  borderRadius: height10,
                   onSubmit: (_) {},
                   onChanged: (_) {},
                 ),
-                const SizedBox(
-                  height: 40,
+                SizedBox(
+                  height: height40,
                 ),
                 GestureDetector(
                   onTap: () {

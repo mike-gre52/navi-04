@@ -45,6 +45,20 @@ class _ListScreenState extends State<ListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenHeight = mediaQuery.size.height;
+    double screenWidth = mediaQuery.size.width;
+    double height5 = screenHeight / 179.2;
+    double height10 = screenHeight / 89.6;
+    double height20 = screenHeight / 44.8;
+    double height35 = screenHeight / 25.6;
+    double height50 = screenHeight / 17.92;
+    double height60 = screenHeight / 14.933;
+    double width75 = screenWidth / 5.52;
+    double width275 = screenWidth / 1.505;
+    double width15 = screenWidth / 27.6;
+    double fontSize18 = screenHeight / 49.777;
+    double fontSize20 = screenHeight / 44.8;
     return Scaffold(
       body: GestureDetector(
         onTap: (() {
@@ -66,26 +80,26 @@ class _ListScreenState extends State<ListScreen> {
                       showModalBottomSheet(
                         context: context,
                         //isScrollControlled: true,
-                        shape: const RoundedRectangleBorder(
+                        shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(20),
+                            top: Radius.circular(height20),
                           ),
                         ),
                         builder: (context) => ListBottomPopup(list: list),
                       );
                     },
-                    child: const Icon(
+                    child: Icon(
                       Icons.more_vert,
                       color: Colors.white,
-                      size: 34,
+                      size: height35,
                     ),
                   ),
-                  const SizedBox(width: 10),
-                  const Text(
+                  SizedBox(width: height10),
+                  Text(
                     'Back',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 20,
+                      fontSize: fontSize20,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -96,7 +110,8 @@ class _ListScreenState extends State<ListScreen> {
               },
             ),
             Container(
-              margin: EdgeInsets.only(left: 15, right: 15, top: 5),
+              margin:
+                  EdgeInsets.only(left: width15, right: width15, top: height5),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -105,9 +120,9 @@ class _ListScreenState extends State<ListScreen> {
                     placeholderText: 'Add item',
                     controller: _itemController,
                     borderColor: appGreen,
-                    textfieldWidth: 275,
-                    textfieldHeight: 60,
-                    borderRadius: 20,
+                    textfieldWidth: width275,
+                    textfieldHeight: height60,
+                    borderRadius: height20,
                     onChanged: (_) {},
                     onSubmit: (_) {
                       addItem();
@@ -118,17 +133,17 @@ class _ListScreenState extends State<ListScreen> {
                       addItem();
                     },
                     child: Container(
-                      height: 50,
-                      width: 75,
+                      height: height50,
+                      width: width75,
                       decoration: BoxDecoration(
                         color: appGreen,
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(height20),
                       ),
-                      child: const Center(
+                      child: Center(
                         child: Text(
                           'Add',
                           style: TextStyle(
-                            fontSize: 18,
+                            fontSize: fontSize18,
                             fontWeight: FontWeight.w700,
                             color: Colors.white,
                           ),

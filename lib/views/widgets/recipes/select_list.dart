@@ -16,6 +16,11 @@ class SelectList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenWidth = mediaQuery.size.width;
+    double screenHeight = mediaQuery.size.height;
+    double width30 = screenWidth / 13.8;
+    double fontSize20 = screenHeight / 44.8;
     Widget buildListCell(ListData list) => GestureDetector(
           onTap: () {
             Navigator.pop(context);
@@ -42,11 +47,11 @@ class SelectList extends StatelessWidget {
                   borderColor: royalYellow,
                   textColor: Colors.white,
                   dividerColor: Colors.white,
-                  rightAction: const Text(
+                  rightAction: Text(
                     'Cancel',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 20,
+                      fontSize: fontSize20,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -56,7 +61,7 @@ class SelectList extends StatelessWidget {
                 ),
                 Expanded(
                   child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 30),
+                    margin: EdgeInsets.symmetric(horizontal: width30),
                     child: ListView(
                       padding: const EdgeInsets.all(0),
                       children: lists.map(buildListCell).toList(),
@@ -83,12 +88,24 @@ class SmallListCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenWidth = mediaQuery.size.width;
+    double screenHeight = mediaQuery.size.height;
+    double height5 = screenHeight / 179.2;
+    double height10 = screenHeight / 89.6;
+    double height15 = screenHeight / 59.733;
+    double height32 = screenHeight / 28;
+    double height50 = screenHeight / 17.92;
+    double width10 = screenWidth / 41.4;
+    double width30 = screenWidth / 13.8;
+    double fontSize18 = screenHeight / 49.777;
+
     return Container(
-      margin: const EdgeInsets.only(top: 10),
-      height: 50,
+      margin: EdgeInsets.only(top: height10),
+      height: height50,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(height15),
         boxShadow: const [
           BoxShadow(
             color: Color.fromRGBO(210, 210, 210, 1.0),
@@ -99,37 +116,38 @@ class SmallListCell extends StatelessWidget {
         ],
       ),
       child: Container(
-        margin: const EdgeInsets.only(left: 10),
+        margin: EdgeInsets.only(left: width10),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Flexible(
               child: Container(
                 width: double.maxFinite,
-                margin: const EdgeInsets.only(top: 5),
+                margin: EdgeInsets.only(top: height5),
                 child: Text(
                   list.name,
-                  style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      overflow: TextOverflow.ellipsis,
-                      height: 1),
+                  style: TextStyle(
+                    fontSize: fontSize18,
+                    fontWeight: FontWeight.w600,
+                    overflow: TextOverflow.ellipsis,
+                    height: 1,
+                  ),
                 ),
               ),
             ),
             Container(
-              height: 50,
-              width: 30,
+              height: height50,
+              width: width30,
               decoration: BoxDecoration(
                 color: appGreen,
-                borderRadius: const BorderRadius.only(
-                  topRight: Radius.circular(15),
-                  bottomRight: Radius.circular(15),
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(height15),
+                  bottomRight: Radius.circular(height15),
                 ),
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.more_vert,
-                size: 32,
+                size: height32,
                 color: Colors.white,
               ),
             ),

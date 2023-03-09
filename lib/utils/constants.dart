@@ -22,3 +22,6 @@ var restaurantController = RestaurantController.instance;
 var groupController = GroupController.instance;
 var listController = ListsController.instance;
 var recipeController = RecipeController.instance;
+
+//App
+var appUrl = "https://apps.apple.com/us/app/us-states-visited/id1610597453";

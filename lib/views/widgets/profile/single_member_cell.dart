@@ -14,29 +14,41 @@ class SingleMemberCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenHeight = mediaQuery.size.height;
+    double screenWidth = mediaQuery.size.width;
+    double height3 = screenHeight / 298.66667;
+    double height15 = screenHeight / 59.733;
+    double height60 = screenHeight / 14.933;
+    double width10 = screenWidth / 41.4;
+    double width15 = screenWidth / 27.6;
+    double width30 = screenWidth / 13.8;
+    double fontSize20 = screenHeight / 44.8;
+    double fontSize24 = screenHeight / 37.333;
+
     Color memberColor = royalYellow;
     memberColor = Color(int.parse(color));
     return Container(
-      margin: const EdgeInsets.only(
-        top: 15,
-        bottom: 15,
+      margin: EdgeInsets.only(
+        top: height15,
+        bottom: height15,
       ),
       child: Column(
         children: [
           Row(
             children: [
               Container(
-                margin: const EdgeInsets.only(
-                  right: 15,
-                  left: 30,
+                margin: EdgeInsets.only(
+                  right: width15,
+                  left: width30,
                 ),
-                height: 60,
-                width: 60,
+                height: height60,
+                width: height60,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   shape: BoxShape.circle,
                   border: Border.all(
-                    width: 3,
+                    width: height3,
                     color: memberColor,
                   ),
                   boxShadow: const [
@@ -52,19 +64,20 @@ class SingleMemberCell extends StatelessWidget {
                   child: Text(
                     name.substring(0, 1).toUpperCase(),
                     style: TextStyle(
-                        fontSize: 25,
-                        color: memberColor,
-                        fontWeight: FontWeight.w500),
+                      fontSize: fontSize24,
+                      color: memberColor,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
               ),
               Expanded(
                 child: Container(
-                  margin: EdgeInsets.only(right: 10),
+                  margin: EdgeInsets.only(right: width10),
                   child: Text(
                     name.substring(0, 1).toUpperCase() + name.substring(1),
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: fontSize20,
                       color: black,
                     ),
                     maxLines: 2,

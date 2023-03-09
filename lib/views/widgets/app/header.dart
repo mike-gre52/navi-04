@@ -14,20 +14,27 @@ class Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenWidth = mediaQuery.size.width;
+    double screenHeight = mediaQuery.size.height;
+    double height5 = screenHeight / 179.2;
+    double width30 = screenWidth / 13.8;
+    double fontSize20 = screenHeight / 44.8;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           headerText,
           style: TextStyle(
-            fontSize: 20,
+            fontSize: fontSize20,
             color: black,
             fontWeight: FontWeight.w600,
           ),
         ),
         Container(
-          height: 4,
-          width: 30,
+          height: height5,
+          width: width30,
           color: dividerColor,
         )
       ],

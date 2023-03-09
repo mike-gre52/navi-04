@@ -29,11 +29,11 @@ class _ListIngredientCellState extends State<ListIngredientCell> {
     double screenHeight = mediaQuery.size.height; //896
     double screenWidth = mediaQuery.size.width; //414
     double height10 = screenHeight / 89.6;
-    double height40 = screenHeight / 22.4;
     double height30 = screenHeight / 29.86;
-
+    double width10 = screenWidth / 41.4;
+    double fontSize22 = screenHeight / 40.727;
     return Container(
-      margin: EdgeInsets.only(top: 10, right: 10),
+      margin: EdgeInsets.only(top: height10, right: height10),
       child: Row(
         children: [
           GestureDetector(
@@ -54,11 +54,11 @@ class _ListIngredientCellState extends State<ListIngredientCell> {
                       borderRadius: BorderRadius.circular(height10),
                       color: widget.color,
                     ),
-                    child: const Center(
+                    child: Center(
                       child: Icon(
                         Icons.check_rounded,
                         color: Colors.white,
-                        size: 22,
+                        size: fontSize22,
                       ),
                     ),
                   )
@@ -74,7 +74,7 @@ class _ListIngredientCellState extends State<ListIngredientCell> {
                     ),
                   ),
           ),
-          SizedBox(width: 10),
+          SizedBox(width: width10),
           Flexible(
             child: Text(
               widget.ingredient,

@@ -6,11 +6,12 @@ import 'package:whats_for_dinner/controllers/auth_controller.dart';
 import 'package:whats_for_dinner/main.dart';
 import 'package:whats_for_dinner/models/user.dart';
 import 'package:whats_for_dinner/routes/routes.dart';
+import 'package:whats_for_dinner/utils/ad_helper.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
 import 'package:whats_for_dinner/views/screens/home.dart';
 import 'package:whats_for_dinner/views/screens/lists/lists.dart';
-import 'package:whats_for_dinner/views/screens/profile/profile.dart';
+import 'package:whats_for_dinner/views/screens/profile/group.dart';
 import 'package:whats_for_dinner/views/screens/recipes/recipes.dart';
 import 'package:whats_for_dinner/views/screens/restaurants/restaurants.dart';
 
@@ -38,12 +39,18 @@ class _NavigationState extends State<Navigation> {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenHeight = mediaQuery.size.height;
+    double height20 = screenHeight / 44.8;
+    double height40 = screenHeight / 22.4;
+    double fontSize12 = screenHeight / 74.667;
+    double fontSize15 = screenHeight / 59.733;
     List pages = [
       //const HomeScreen(),
       const ListsScreen(),
       const RecipesScreen(),
       const ResturantsScreen(),
-      ProfileScreen(),
+      GroupScreen(),
     ];
     return Scaffold(
       body: pages[_selectedIndex],
@@ -95,11 +102,11 @@ class _NavigationState extends State<Navigation> {
             ),
             showSelectedLabels: true,
             showUnselectedLabels: true,
-            selectedFontSize: 15.0,
-            unselectedFontSize: 12.0,
+            selectedFontSize: fontSize15,
+            unselectedFontSize: fontSize12,
             currentIndex: _selectedIndex,
             onTap: onTapNav,
-            items: const [
+            items: [
               //  BottomNavigationBarItem(
               //    icon: Icon(
               //      Icons.home_rounded,
@@ -111,30 +118,30 @@ class _NavigationState extends State<Navigation> {
               BottomNavigationBarItem(
                 icon: Icon(
                   Icons.shopping_bag_outlined,
-                  size: 40,
+                  size: height40,
                 ),
                 label: 'Lists',
               ),
               BottomNavigationBarItem(
                 icon: Icon(
                   Icons.bookmark_outline_outlined,
-                  size: 40,
+                  size: height40,
                 ),
                 label: 'Recipes',
               ),
               BottomNavigationBarItem(
                 icon: Icon(
                   Icons.format_list_bulleted_rounded,
-                  size: 40,
+                  size: height40,
                 ),
                 label: 'Resturants',
               ),
               BottomNavigationBarItem(
                 icon: Icon(
-                  Icons.person_outline_rounded,
-                  size: 40,
+                  Icons.groups_rounded,
+                  size: height40,
                 ),
-                label: 'Profile',
+                label: 'Group',
               ),
             ],
           ),

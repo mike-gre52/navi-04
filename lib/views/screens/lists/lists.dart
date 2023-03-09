@@ -34,8 +34,17 @@ class _ListsScreenState extends State<ListsScreen> {
     Get.toNamed(RouteHelper.getAddList());
   }
 
+  updateUI() {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenHeight = mediaQuery.size.height;
+    double screenWidth = mediaQuery.size.width;
+    double height40 = screenHeight / 22.4;
+    double width30 = screenWidth / 13.8;
     return Scaffold(
       body: inGroup
           ? StreamBuilder<List<ListData>>(
@@ -51,9 +60,9 @@ class _ListsScreenState extends State<ListsScreen> {
                         borderColor: royalYellow,
                         textColor: Colors.white,
                         dividerColor: Colors.white,
-                        rightAction: const Icon(
+                        rightAction: Icon(
                           Icons.add_rounded,
-                          size: 40,
+                          size: height40,
                           color: Colors.white,
                         ),
                         onIconClick: () {
@@ -62,7 +71,7 @@ class _ListsScreenState extends State<ListsScreen> {
                       ),
                       Expanded(
                         child: Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 30),
+                          margin: EdgeInsets.symmetric(horizontal: width30),
                           child: ListView(
                             padding: const EdgeInsets.all(0),
                             children: lists.map(buildListCell).toList(),
@@ -90,7 +99,9 @@ class _ListsScreenState extends State<ListsScreen> {
                 Expanded(
                   child: Center(
                     child: CreateOrJoinBanner(
+                      onCreateGroup: updateUI,
                       color: appGreen,
+                      item: "list",
                     ),
                   ),
                 ),

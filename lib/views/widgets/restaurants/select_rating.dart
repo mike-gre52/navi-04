@@ -15,6 +15,11 @@ class SelectRating extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenWidth = mediaQuery.size.width;
+    double screenHeight = mediaQuery.size.height;
+    double height35 = screenHeight / 25.6;
+
     return Container(
       child: Wrap(
         children: List.generate(
@@ -28,16 +33,16 @@ class SelectRating extends StatelessWidget {
                     index < rating
                         ? Icons.star_rounded
                         : Icons.star_outline_rounded,
-                    size: 35,
-                    color: Color.fromRGBO(255, 193, 7, 1.0),
+                    size: height35,
+                    color: const Color.fromRGBO(255, 193, 7, 1.0),
                   ),
                 )
               : Icon(
                   index < rating
                       ? Icons.star_rounded
                       : Icons.star_outline_rounded,
-                  size: 35,
-                  color: Color.fromRGBO(255, 193, 7, 1.0),
+                  size: height35,
+                  color: const Color.fromRGBO(255, 193, 7, 1.0),
                 ),
         ),
       ),

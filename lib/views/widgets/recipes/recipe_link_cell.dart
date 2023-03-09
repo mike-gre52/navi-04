@@ -17,12 +17,25 @@ class RecipeLinkCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenWidth = mediaQuery.size.width;
+    double screenHeight = mediaQuery.size.height;
+    double height5 = screenHeight / 179.2;
+    double height10 = screenHeight / 89.6;
+    double height15 = screenHeight / 59.733;
+    double height20 = screenHeight / 44.8;
+    double height32 = screenHeight / 28;
+    double height50 = screenHeight / 17.92;
+    double width5 = screenWidth / 82.8;
+    double width30 = screenWidth / 13.8;
+    double fontSize18 = screenHeight / 49.777;
+
     return Container(
-      margin: const EdgeInsets.only(top: 10),
-      height: 50,
+      margin: EdgeInsets.only(top: height10),
+      height: height50,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(height15),
         boxShadow: const [
           BoxShadow(
             color: Color.fromRGBO(210, 210, 210, 1.0),
@@ -33,33 +46,33 @@ class RecipeLinkCell extends StatelessWidget {
         ],
       ),
       child: Container(
-        margin: EdgeInsets.only(left: 5),
+        margin: EdgeInsets.only(left: width5),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              height: 50,
-              width: 30,
-              decoration: const BoxDecoration(
+              height: height50,
+              width: width30,
+              decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(15),
-                  bottomLeft: Radius.circular(15),
+                  topLeft: Radius.circular(height15),
+                  bottomLeft: Radius.circular(height15),
                 ),
               ),
               child: Icon(
                 CupertinoIcons.link,
-                size: 22,
+                size: height20,
                 color: appBlue,
               ),
             ),
             Flexible(
               child: Container(
                 width: double.maxFinite,
-                margin: const EdgeInsets.only(left: 5, top: 5),
+                margin: EdgeInsets.only(left: width5, top: height5),
                 child: Text(
                   recipe.name,
-                  style: const TextStyle(
-                      fontSize: 18,
+                  style: TextStyle(
+                      fontSize: fontSize18,
                       fontWeight: FontWeight.w600,
                       overflow: TextOverflow.ellipsis,
                       height: 1),
@@ -72,27 +85,27 @@ class RecipeLinkCell extends StatelessWidget {
                 showModalBottomSheet(
                   context: context,
                   //isScrollControlled: true,
-                  shape: const RoundedRectangleBorder(
+                  shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(20),
+                      top: Radius.circular(height20),
                     ),
                   ),
                   builder: (context) => RecipesPopup(recipe: recipe),
                 );
               },
               child: Container(
-                height: 50,
-                width: 30,
+                height: height50,
+                width: width30,
                 decoration: BoxDecoration(
                   color: appBlue,
-                  borderRadius: const BorderRadius.only(
-                    topRight: Radius.circular(15),
-                    bottomRight: Radius.circular(15),
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(height15),
+                    bottomRight: Radius.circular(height15),
                   ),
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.more_vert,
-                  size: 32,
+                  size: height32,
                   color: Colors.white,
                 ),
               ),

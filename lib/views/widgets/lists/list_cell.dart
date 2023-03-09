@@ -30,6 +30,22 @@ class _ListCellState extends State<ListCell> {
   bool showList = false;
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenWidth = mediaQuery.size.width;
+    double screenHeight = mediaQuery.size.height;
+    double height3 = screenHeight / 298.66667;
+    double height5 = screenHeight / 179.2;
+    double height10 = screenHeight / 89.6;
+    double height15 = screenHeight / 59.733;
+    double height25 = screenHeight / 35.84;
+    double height30 = screenHeight / 29.86;
+    double height50 = screenHeight / 17.92;
+    double height100 = screenHeight / 8.96;
+    double width15 = screenWidth / 27.6;
+    double width30 = screenWidth / 13.8;
+    double width250 = screenWidth / 1.656;
+    double fontSize16 = screenHeight / 56;
+    double fontSize24 = screenHeight / 37.333;
     int animationDuration = 200;
     return StreamBuilder<List<Item>>(
         stream: listController.getListItems(widget.list.id),
@@ -37,14 +53,16 @@ class _ListCellState extends State<ListCell> {
           if (snapshot.hasData) {
             final listItems = snapshot.data!;
             return AnimatedContainer(
-              margin: const EdgeInsets.only(top: 10, bottom: 10),
+              margin: EdgeInsets.symmetric(vertical: height10),
               duration: Duration(milliseconds: animationDuration),
               curve: Curves.easeIn,
-              height: isOpened ? (widget.list.itemCount * 24) + 100 : 100,
+              height: isOpened
+                  ? (widget.list.itemCount * height25) + height100
+                  : height100,
               width: double.maxFinite,
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(30),
+                borderRadius: BorderRadius.circular(height30),
                 boxShadow: const [
                   BoxShadow(
                     color: Color.fromRGBO(210, 210, 210, 1.0),
@@ -59,19 +77,21 @@ class _ListCellState extends State<ListCell> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    margin: const EdgeInsets.only(left: 30, top: 15),
+                    margin: EdgeInsets.only(left: width30, top: height15),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           widget.list.name,
                           style: TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.w600,
-                              color: black,
-                              height: 1),
+                            fontSize: fontSize24,
+                            fontWeight: FontWeight.w600,
+                            color: black,
+                            height: 1,
+                          ),
                         ),
-                        Container(width: 50, height: 3, color: appGreen),
+                        Container(
+                            width: height50, height: height3, color: appGreen),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,8 +99,8 @@ class _ListCellState extends State<ListCell> {
                               showList
                                   ? Expanded(
                                       child: Container(
-                                        margin: const EdgeInsets.only(top: 5),
-                                        width: 250,
+                                        margin: EdgeInsets.only(top: height5),
+                                        width: width250,
                                         child: ListView(
                                           physics:
                                               const NeverScrollableScrollPhysics(),
@@ -103,36 +123,39 @@ class _ListCellState extends State<ListCell> {
                                       Text(
                                         '${widget.list.itemCount} items',
                                         style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w400,
-                                            color: black),
+                                          fontSize: fontSize16,
+                                          fontWeight: FontWeight.w400,
+                                          color: black,
+                                        ),
                                       ),
                                       GestureDetector(
                                         onTap: (() {
-                                          setState(() {
-                                            isOpened = !isOpened;
-                                            //showList = !showList;
+                                          if (listItems.isNotEmpty) {
+                                            setState(() {
+                                              isOpened = !isOpened;
+                                              //showList = !showList;
 
-                                            if (showList) {
-                                              Future.delayed(
-                                                  Duration(
-                                                    milliseconds:
-                                                        animationDuration,
-                                                  ), () {
-                                                setState(() {
-                                                  showList = !showList;
+                                              if (showList) {
+                                                Future.delayed(
+                                                    Duration(
+                                                      milliseconds:
+                                                          animationDuration,
+                                                    ), () {
+                                                  setState(() {
+                                                    showList = !showList;
+                                                  });
                                                 });
-                                              });
-                                            } else {
-                                              showList = !showList;
-                                            }
-                                          });
+                                              } else {
+                                                showList = !showList;
+                                              }
+                                            });
+                                          }
                                         }),
                                         child: Icon(
                                           isOpened
                                               ? Icons.arrow_drop_up_rounded
                                               : Icons.arrow_drop_down_rounded,
-                                          size: 50,
+                                          size: height50,
                                           color: appGreen,
                                         ),
                                       )
@@ -147,13 +170,13 @@ class _ListCellState extends State<ListCell> {
                     ),
                   ),
                   Container(
-                    margin: const EdgeInsets.only(
-                      top: 10,
-                      right: 15,
+                    margin: EdgeInsets.only(
+                      top: height10,
+                      right: width15,
                     ),
                     child: Icon(
                       Icons.edit,
-                      size: 30,
+                      size: height30,
                       color: appGreen,
                     ),
                   ),

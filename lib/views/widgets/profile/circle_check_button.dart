@@ -8,17 +8,21 @@ class CircleCheckButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenHeight = mediaQuery.size.height;
+    double height30 = screenHeight / 29.86;
+    double height50 = screenHeight / 17.92;
     return Container(
-      height: 50,
-      width: 50,
+      height: height50,
+      width: height50,
       decoration: BoxDecoration(
         color: royalYellow,
         shape: BoxShape.circle,
       ),
-      child: const Icon(
+      child: Icon(
         Icons.check,
         color: Colors.white,
-        size: 30,
+        size: height30,
       ),
     );
   }

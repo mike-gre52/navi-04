@@ -24,15 +24,27 @@ class _TextfieldAndSubmitScreenState extends State<TextfieldAndSubmitScreen> {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenHeight = mediaQuery.size.height;
+    double screenWidth = mediaQuery.size.width;
+    double height10 = screenHeight / 89.6;
+    double height15 = screenHeight / 59.733;
+    double height25 = screenHeight / 35.84;
+    double height30 = screenHeight / 29.86;
+    double height60 = screenHeight / 14.933;
+    double width10 = screenWidth / 41.4;
+    double width30 = screenWidth / 13.8;
+
+    double fontSize18 = screenHeight / 49.777;
     return Scaffold(
         body: SafeArea(
       child: Container(
-        margin: EdgeInsets.only(left: 30, right: 30, top: 30),
+        margin: EdgeInsets.only(left: width30, right: width30, top: height30),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              margin: EdgeInsets.only(left: 10, right: 10),
+              margin: EdgeInsets.only(left: width10, right: width10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -41,7 +53,7 @@ class _TextfieldAndSubmitScreenState extends State<TextfieldAndSubmitScreen> {
                     child: Text(
                       'Add a Recipe Name below',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: fontSize18,
                         color: black,
                         fontWeight: FontWeight.w500,
                       ),
@@ -54,7 +66,7 @@ class _TextfieldAndSubmitScreenState extends State<TextfieldAndSubmitScreen> {
                     child: Text(
                       'Cancel',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: fontSize18,
                         color: black,
                         fontWeight: FontWeight.w500,
                       ),
@@ -63,20 +75,19 @@ class _TextfieldAndSubmitScreenState extends State<TextfieldAndSubmitScreen> {
                 ],
               ),
             ),
-            const SizedBox(height: 15),
+            SizedBox(height: height15),
             CustomTextfield(
               icon: CupertinoIcons.link,
               placeholderText: 'recipe link',
               controller: _textController,
               borderColor: appBlue,
               textfieldWidth: double.maxFinite,
-              textfieldHeight: 60,
-              borderRadius: 10,
+              textfieldHeight: height60,
+              borderRadius: height10,
               onSubmit: (_) {},
               onChanged: (_) {},
             ),
-            const SizedBox(height: 5),
-            const SizedBox(height: 15),
+            SizedBox(height: height15),
             GestureDetector(
               onTap: () {
                 //recipeController.addLinkRecipe(_linkController.text);
@@ -87,7 +98,7 @@ class _TextfieldAndSubmitScreenState extends State<TextfieldAndSubmitScreen> {
                 buttonText: 'Submit',
               ),
             ),
-            const SizedBox(height: 25),
+            SizedBox(height: height25),
           ],
         ),
       ),

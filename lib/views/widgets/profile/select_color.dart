@@ -10,6 +10,14 @@ class SelectColor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenHeight = mediaQuery.size.height;
+    double screenWidth = mediaQuery.size.width;
+    double height20 = screenHeight / 44.8;
+    double fontSize14 = screenHeight / 64;
+
+    double fontSize24 = screenHeight / 37.333;
+    double fontSize22 = screenHeight / 40.727;
     return Container(
       width: double.maxFinite,
       child: Column(
@@ -18,20 +26,20 @@ class SelectColor extends StatelessWidget {
           Text(
             'Select Color',
             style: TextStyle(
-              fontSize: 22,
+              fontSize: fontSize22,
               fontWeight: FontWeight.w600,
               color: black,
             ),
           ),
-          const Text(
+          Text(
             'This color will be visibile to other group members',
             style: TextStyle(
-              fontSize: 14,
+              fontSize: fontSize14,
               fontWeight: FontWeight.w400,
               color: Colors.grey,
             ),
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: height20),
           Align(
             alignment: Alignment.centerLeft,
             child: Wrap(
@@ -57,7 +65,7 @@ class SelectColor extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: height20),
           GestureDetector(
             onTap: () {
               Navigator.pop(context);
@@ -65,7 +73,7 @@ class SelectColor extends StatelessWidget {
             child: Text(
               'Cancel',
               style: TextStyle(
-                fontSize: 22,
+                fontSize: fontSize22,
                 fontWeight: FontWeight.w600,
                 color: black,
               ),
@@ -86,6 +94,11 @@ class ColorSquare extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenHeight = mediaQuery.size.height;
+    double height7 = screenHeight / 128;
+    double height40 = screenHeight / 22.4;
+
     return GestureDetector(
       onTap: (() {
         //sets local color
@@ -97,9 +110,9 @@ class ColorSquare extends StatelessWidget {
         Navigator.pop(context);
       }),
       child: Container(
-        margin: EdgeInsets.all(7),
-        height: 40,
-        width: 40,
+        margin: EdgeInsets.all(height7),
+        height: height40,
+        width: height40,
         decoration: BoxDecoration(
           color: color,
           borderRadius: BorderRadius.circular(5),

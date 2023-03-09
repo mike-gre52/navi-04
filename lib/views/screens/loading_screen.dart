@@ -9,11 +9,14 @@ class LoadingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenHeight = mediaQuery.size.height;
+    double height20 = screenHeight / 44.8;
     return Scaffold(
       body: Center(
         child: CupertinoActivityIndicator(
           color: royalYellow,
-          radius: 20,
+          radius: height20,
         ),
       ),
     );

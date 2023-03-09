@@ -40,20 +40,22 @@ class _SignInState extends State<SignIn> {
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
     double screenHeight = mediaQuery.size.height;
+    double screenWidth = mediaQuery.size.width;
     double height5 = screenHeight / 179.2;
     double height10 = screenHeight / 89.6;
-    double height30 = screenHeight / 29.86;
     double height40 = screenHeight / 22.4;
+    double height65 = screenHeight / 13.784;
     double height200 = screenHeight / 4.48;
-    double height250 = screenHeight / 3.584;
-    double fontSize35 = screenHeight / 25.6;
     double height205 = screenHeight / 4.3707;
+    double height250 = screenHeight / 3.584;
+    double width30 = screenWidth / 13.8;
+    double fontSize35 = screenHeight / 25.6;
 
     return Scaffold(
       body: Stack(
         children: [
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 32),
+            margin: EdgeInsets.symmetric(horizontal: width30),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -76,9 +78,9 @@ class _SignInState extends State<SignIn> {
                   placeholderText: 'Email',
                   controller: _emailController,
                   borderColor: royalYellow,
-                  textfieldWidth: 350,
-                  textfieldHeight: 65,
-                  borderRadius: 10,
+                  textfieldWidth: double.maxFinite,
+                  textfieldHeight: height65,
+                  borderRadius: height10,
                   onSubmit: (_) {},
                   onChanged: (_) {},
                 ),
@@ -91,9 +93,9 @@ class _SignInState extends State<SignIn> {
                   controller: _passwordController,
                   borderColor: royalYellow,
                   showVisibilityIcon: true,
-                  textfieldWidth: 350,
-                  textfieldHeight: 65,
-                  borderRadius: 10,
+                  textfieldWidth: double.maxFinite,
+                  textfieldHeight: height65,
+                  borderRadius: height10,
                   onSubmit: (_) {},
                   onChanged: (_) {},
                 ),

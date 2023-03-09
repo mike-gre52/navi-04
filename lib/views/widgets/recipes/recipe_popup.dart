@@ -19,15 +19,23 @@ class RecipePopup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenWidth = mediaQuery.size.width;
+    double screenHeight = mediaQuery.size.height;
+    double height5 = screenHeight / 179.2;
+    double height160 = screenHeight / 5.6;
+    double width100 = screenWidth / 4.14;
+
     return Container(
-      height: 160,
+      height: height160,
       child: Column(
         children: [
           Container(
-            margin: const EdgeInsets.symmetric(horizontal: 100, vertical: 5),
-            height: 5,
+            margin:
+                EdgeInsets.symmetric(horizontal: width100, vertical: height5),
+            height: height5,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
+              borderRadius: BorderRadius.circular(height5),
               color: grey,
             ),
           ),
@@ -87,20 +95,28 @@ class PopupButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenWidth = mediaQuery.size.width;
+    double screenHeight = mediaQuery.size.height;
+    double height7 = screenHeight / 128;
+    double width15 = screenWidth / 27.6;
+    double width30 = screenWidth / 13.8;
+    double fontSize20 = screenHeight / 44.8;
+
     return GestureDetector(
       onTap: () {
         onClick();
       },
       child: Container(
-        margin: EdgeInsets.only(left: 30, top: 7),
+        margin: EdgeInsets.only(left: width30, top: height7),
         child: Row(
           children: [
             Icon(icon),
-            const SizedBox(width: 15),
+            SizedBox(width: width15),
             Text(
               buttonName,
               style: TextStyle(
-                fontSize: 20,
+                fontSize: fontSize20,
                 fontWeight: FontWeight.w700,
                 color: isRed ? red : black,
               ),

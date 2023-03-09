@@ -26,10 +26,16 @@ class _PriceSegmentedControllState extends State<PriceSegmentedControll> {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenWidth = mediaQuery.size.width;
+    double screenHeight = mediaQuery.size.height;
+    double height10 = screenHeight / 89.6;
+    double width10 = screenWidth / 41.4;
+
     return CupertinoSlidingSegmentedControl(
       children: <int, Widget>{
         0: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10),
+          padding: EdgeInsets.symmetric(horizontal: width10),
           child: Text(
             '\$',
             style: TextStyle(
@@ -38,9 +44,9 @@ class _PriceSegmentedControllState extends State<PriceSegmentedControll> {
           ),
         ),
         1: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10),
+          padding: EdgeInsets.symmetric(horizontal: width10),
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
+            padding: EdgeInsets.symmetric(vertical: height10),
             child: Text(
               '\$\$',
               style: TextStyle(

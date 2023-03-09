@@ -9,15 +9,26 @@ class AddProfileImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenHeight = mediaQuery.size.height;
+    double screenWidth = mediaQuery.size.width;
+    double height30 = screenHeight / 29.86;
+    double height40 = screenHeight / 22.4;
+    double height65 = screenHeight / 13.78;
+    double height100 = screenHeight / 8.96;
+    double height150 = screenHeight / 5.973;
+    double width165 = screenWidth / 2.509;
+    double fontSize22 = screenHeight / 40.727;
+
     return Stack(
       children: [
         Center(
           child: Container(
-            margin: const EdgeInsets.only(
-              top: 100,
+            margin: EdgeInsets.only(
+              top: height100,
             ),
-            height: 150,
-            width: 150,
+            height: height150,
+            width: height150,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(
@@ -25,10 +36,10 @@ class AddProfileImage extends StatelessWidget {
                 width: 3,
               ),
             ),
-            child: const Center(
+            child: Center(
               child: Icon(
                 Icons.person_outline,
-                size: 100,
+                size: height100,
                 color: Colors.grey,
               ),
             ),
@@ -42,8 +53,8 @@ class AddProfileImage extends StatelessWidget {
               _authController.pickImage();
             },
             child: Container(
-              height: 40,
-              width: 40,
+              height: height40,
+              width: height40,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: royalYellow,
@@ -53,7 +64,7 @@ class AddProfileImage extends StatelessWidget {
                     offset: Offset(0.0, 2.0),
                     blurRadius: 3.0,
                     spreadRadius: 1.0,
-                  ), //Bo
+                  ),
                 ],
               ),
               child: const Center(

@@ -29,6 +29,26 @@ class _RecipeScreenState extends State<RecipeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenHeight = mediaQuery.size.height;
+    double screenWidth = mediaQuery.size.width;
+
+    double height5 = screenHeight / 186.4;
+    double height20 = screenHeight / 48.6;
+    double height40 = screenHeight / 22.4;
+    double height55 = screenHeight / 16.945;
+    double height70 = screenHeight / 13.314;
+    double height200 = screenHeight / 4.48;
+    double height250 = screenHeight / 3.584;
+
+    double width10 = screenWidth / 41.4;
+    double width30 = screenWidth / 13.8;
+    double width100 = screenWidth / 4.3;
+
+    double fontSize28 = screenHeight / 33.285;
+    double fontSize16 = screenHeight / 58.25;
+    double fontSize18 = screenHeight / 51.777;
+    double fontSize20 = screenHeight / 44.8;
     updateUI() {
       setState(() {});
     }
@@ -64,19 +84,19 @@ class _RecipeScreenState extends State<RecipeScreen> {
             slivers: [
               SliverAppBar(
                 backgroundColor: appBlue,
-                expandedHeight: 200,
+                expandedHeight: height200,
                 pinned: true,
                 actions: [
                   Container(
-                    margin: EdgeInsets.only(right: 10),
+                    margin: EdgeInsets.only(right: width10),
                     child: GestureDetector(
                       onTap: () {
                         showModalBottomSheet(
                           context: context,
                           //isScrollControlled: true,
-                          shape: const RoundedRectangleBorder(
+                          shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(20),
+                              top: Radius.circular(height20),
                             ),
                           ),
                           builder: (context) => RecipePopup(
@@ -95,8 +115,8 @@ class _RecipeScreenState extends State<RecipeScreen> {
                 title: Text(recipe.name),
                 flexibleSpace: FlexibleSpaceBar(
                   background: ConstrainedBox(
-                    constraints: const BoxConstraints(
-                      maxHeight: 250,
+                    constraints: BoxConstraints(
+                      maxHeight: height250,
                       minWidth: double.infinity,
                     ),
                     child: Image.network(
@@ -112,10 +132,10 @@ class _RecipeScreenState extends State<RecipeScreen> {
                               onSubmit,
                             );
                           },
-                          child: const Center(
+                          child: Center(
                             child: Icon(
                               CupertinoIcons.photo,
-                              size: 40,
+                              size: height40,
                             ),
                           ),
                         );

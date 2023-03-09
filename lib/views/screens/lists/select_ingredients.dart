@@ -62,7 +62,12 @@ class _SelectIngredientsState extends State<SelectIngredients> {
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
     double screenHeight = mediaQuery.size.height;
+    double screenWidth = mediaQuery.size.width;
     double seventyPercentHeight = screenHeight * .70;
+    double height10 = screenHeight / 89.6;
+    double height125 = screenHeight / 7.168;
+    double width20 = screenWidth / 20.7;
+    double fontSize20 = screenHeight / 44.8;
     return Scaffold(
       body: Column(
         children: [
@@ -73,11 +78,11 @@ class _SelectIngredientsState extends State<SelectIngredients> {
               borderColor: royalYellow,
               textColor: Colors.white,
               dividerColor: Colors.white,
-              rightAction: const Text(
+              rightAction: Text(
                 'Back',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 20,
+                  fontSize: fontSize20,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -88,7 +93,7 @@ class _SelectIngredientsState extends State<SelectIngredients> {
           ),
           Container(
             height: seventyPercentHeight,
-            margin: EdgeInsets.only(left: 20),
+            margin: EdgeInsets.only(left: width20),
             child: SingleChildScrollView(
               child: Column(
                 children:
@@ -97,8 +102,8 @@ class _SelectIngredientsState extends State<SelectIngredients> {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(left: 20, top: 10),
-            height: 125,
+            margin: EdgeInsets.only(left: width20, top: height10),
+            height: height125,
             child: Row(
               children: [
                 Column(

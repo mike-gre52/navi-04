@@ -79,22 +79,40 @@ class _ViewRestaurantState extends State<ViewRestaurant> {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenWidth = mediaQuery.size.width;
+    double screenHeight = mediaQuery.size.height;
+    double height10 = screenHeight / 89.6;
+    double height15 = screenHeight / 59.733;
+    double height30 = screenHeight / 29.86;
+    double height50 = screenHeight / 17.92;
+    double height60 = screenHeight / 14.933;
+    double height65 = screenHeight / 13.784;
+    double width5 = screenWidth / 82.8;
+    double width30 = screenWidth / 13.8;
+    double width100 = screenWidth / 4.14;
+    double width350 = screenWidth / 1.182;
+    double fontSize18 = screenHeight / 49.777;
+    double fontSize20 = screenHeight / 44.8;
+
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AppHeader(
-            headerText:
-                restaurant.name[0].toUpperCase() + restaurant.name.substring(1),
+            headerText: restaurant.name.length <= 12
+                ? restaurant.name[0].toUpperCase() +
+                    restaurant.name.substring(1)
+                : "${restaurant.name[0].toUpperCase()}${restaurant.name.substring(1, 12)}...",
             headerColor: appRed,
             borderColor: royalYellow,
             textColor: Colors.white,
             dividerColor: Colors.white,
-            rightAction: const Text(
+            rightAction: Text(
               'Cancel',
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 20,
+                fontSize: fontSize20,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -104,16 +122,16 @@ class _ViewRestaurantState extends State<ViewRestaurant> {
           ),
           //NEED TO MAKE SURE TIME IS A NUMBER - WILL SET THE KEYBOARD TO NUMPAD BUT STILL NEED TO VERIFY
           Container(
-            margin: const EdgeInsets.only(left: 30, top: 30),
+            margin: EdgeInsets.only(left: width30, top: height30),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  margin: EdgeInsets.only(left: 5),
+                  margin: EdgeInsets.only(left: width5),
                   child: Text(
                     'Name',
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: fontSize18,
                       color: black,
                       fontWeight: FontWeight.w500,
                     ),
@@ -126,9 +144,9 @@ class _ViewRestaurantState extends State<ViewRestaurant> {
                     controller: _nameController,
                     borderColor: appRed,
                     showIcon: false,
-                    textfieldWidth: 350,
-                    textfieldHeight: 65,
-                    borderRadius: 10,
+                    textfieldWidth: width350,
+                    textfieldHeight: height65,
+                    borderRadius: height10,
                     onSubmit: (_) {},
                     onChanged: (_) {},
                   ),
@@ -137,7 +155,7 @@ class _ViewRestaurantState extends State<ViewRestaurant> {
             ),
           ),
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 30),
+            margin: EdgeInsets.symmetric(horizontal: width30),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -146,13 +164,14 @@ class _ViewRestaurantState extends State<ViewRestaurant> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      margin: const EdgeInsets.only(left: 5, top: 30),
+                      margin: EdgeInsets.only(left: width5, top: height30),
                       child: Text(
                         'Time',
                         style: TextStyle(
-                            fontSize: 18,
-                            color: black,
-                            fontWeight: FontWeight.w500),
+                          fontSize: fontSize18,
+                          color: black,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                     Container(
@@ -161,10 +180,10 @@ class _ViewRestaurantState extends State<ViewRestaurant> {
                         placeholderText: '',
                         controller: _timeController,
                         borderColor: appRed,
-                        textfieldWidth: 100,
+                        textfieldWidth: width100,
                         showIcon: false,
-                        textfieldHeight: 50,
-                        borderRadius: 10,
+                        textfieldHeight: height50,
+                        borderRadius: height10,
                         onSubmit: (_) {},
                         onChanged: (_) {},
                       ),
@@ -175,11 +194,11 @@ class _ViewRestaurantState extends State<ViewRestaurant> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      margin: EdgeInsets.only(left: 5, top: 30),
+                      margin: EdgeInsets.only(left: width5, top: height30),
                       child: Text(
                         'Rating',
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: fontSize18,
                           color: black,
                           fontWeight: FontWeight.w500,
                         ),
@@ -196,7 +215,7 @@ class _ViewRestaurantState extends State<ViewRestaurant> {
             ),
           ),
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 30),
+            margin: EdgeInsets.symmetric(horizontal: width30),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -205,13 +224,14 @@ class _ViewRestaurantState extends State<ViewRestaurant> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      margin: EdgeInsets.only(left: 5, top: 30),
+                      margin: EdgeInsets.only(left: width5, top: height30),
                       child: Text(
                         'Price',
                         style: TextStyle(
-                            fontSize: 18,
-                            color: black,
-                            fontWeight: FontWeight.w500),
+                          fontSize: fontSize18,
+                          color: black,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                     PriceSegmentedControll(
@@ -224,11 +244,11 @@ class _ViewRestaurantState extends State<ViewRestaurant> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      margin: EdgeInsets.only(left: 5, top: 30),
+                      margin: EdgeInsets.only(left: width5, top: height30),
                       child: Text(
                         'Delivery',
                         style: TextStyle(
-                            fontSize: 18,
+                            fontSize: fontSize18,
                             color: black,
                             fontWeight: FontWeight.w500),
                       ),
@@ -242,7 +262,7 @@ class _ViewRestaurantState extends State<ViewRestaurant> {
               ],
             ),
           ),
-          const SizedBox(height: 30),
+          SizedBox(height: height30),
           Align(
             alignment: Alignment.center,
             child: GestureDetector(
@@ -264,22 +284,23 @@ class _ViewRestaurantState extends State<ViewRestaurant> {
                 onSubmit(updatedRestaurant);
               },
               child: Container(
-                height: 60,
-                width: 100,
-                margin: const EdgeInsets.only(
-                  top: 30,
+                height: height60,
+                width: width100,
+                margin: EdgeInsets.only(
+                  top: height30,
                 ),
                 decoration: BoxDecoration(
                   color: appRed,
-                  borderRadius: BorderRadius.circular(15),
+                  borderRadius: BorderRadius.circular(height15),
                 ),
-                child: const Center(
+                child: Center(
                   child: Text(
                     'Update',
                     style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600),
+                      fontSize: fontSize18,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ),

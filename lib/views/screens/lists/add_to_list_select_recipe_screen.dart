@@ -50,6 +50,12 @@ class _AddToListSelectRecipeScreenState
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenHeight = mediaQuery.size.height;
+    double screenWidth = mediaQuery.size.width;
+    double height5 = screenHeight / 179.2;
+    double width20 = screenWidth / 20.7;
+    double fontSize20 = screenHeight / 44.8;
     return Scaffold(
       body: StreamBuilder<List<Recipe>>(
         stream: recipeController.getRecipes(),
@@ -64,11 +70,11 @@ class _AddToListSelectRecipeScreenState
                   borderColor: royalYellow,
                   textColor: Colors.white,
                   dividerColor: Colors.white,
-                  rightAction: const Text(
+                  rightAction: Text(
                     'Back',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 20,
+                      fontSize: fontSize20,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -78,7 +84,8 @@ class _AddToListSelectRecipeScreenState
                 ),
                 Expanded(
                   child: Container(
-                    margin: const EdgeInsets.only(left: 20, right: 20, top: 5),
+                    margin: EdgeInsets.only(
+                        left: width20, right: width20, top: height5),
                     child: ListView(
                       padding: const EdgeInsets.all(0),
                       children: recipes.map(buildRecipeCell).toList(),

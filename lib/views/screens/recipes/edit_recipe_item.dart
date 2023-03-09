@@ -111,15 +111,30 @@ class _EditRecipeItemScreenState extends State<EditRecipeItemScreen> {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenHeight = mediaQuery.size.height;
+    double screenWidth = mediaQuery.size.width;
+    double height5 = screenHeight / 179.2;
+    double height10 = screenHeight / 89.6;
+    double height15 = screenHeight / 59.733;
+    double height20 = screenHeight / 44.8;
+    double height25 = screenHeight / 35.84;
+    double height30 = screenHeight / 29.86;
+    double height60 = screenHeight / 14.933;
+    double height200 = screenHeight / 4.48;
+    double width10 = screenWidth / 41.4;
+    double width30 = screenWidth / 13.8;
+    double width150 = screenWidth / 2.76;
+    double fontSize18 = screenHeight / 49.777;
     return Scaffold(
         body: SafeArea(
       child: Container(
-        margin: EdgeInsets.only(left: 30, right: 30, top: 30),
+        margin: EdgeInsets.only(left: width30, right: width30, top: height30),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              margin: EdgeInsets.only(left: 10, right: 10),
+              margin: EdgeInsets.only(left: width10, right: width10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -128,7 +143,7 @@ class _EditRecipeItemScreenState extends State<EditRecipeItemScreen> {
                     child: Text(
                       'Edit $dataType:',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: fontSize18,
                         color: black,
                         fontWeight: FontWeight.w500,
                       ),
@@ -141,7 +156,7 @@ class _EditRecipeItemScreenState extends State<EditRecipeItemScreen> {
                     child: Text(
                       'Cancel',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: fontSize18,
                         color: black,
                         fontWeight: FontWeight.w500,
                       ),
@@ -150,21 +165,21 @@ class _EditRecipeItemScreenState extends State<EditRecipeItemScreen> {
                 ],
               ),
             ),
-            const SizedBox(height: 15),
+            SizedBox(height: height15),
             dataType == 'Ingredient'
                 ? Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        width: 150,
+                        width: width150,
                         child: CustomTextfield(
                           icon: Icons.bookmark_outline,
                           placeholderText: 'Item',
                           controller: _contentTextController,
                           borderColor: appBlue,
                           textfieldWidth: double.maxFinite,
-                          textfieldHeight: 60,
-                          borderRadius: 10,
+                          textfieldHeight: height60,
+                          borderRadius: height10,
                           showIcon: false,
                           onSubmit: (_) {},
                           onChanged: (_) {},
@@ -176,13 +191,13 @@ class _EditRecipeItemScreenState extends State<EditRecipeItemScreen> {
                     child: NotesTextfield(
                       controller: _contentTextController,
                       borderColor: appBlue,
-                      height: 200,
+                      height: height200,
                     ),
                   ),
             showAmountError
                 ? Container(
-                    margin: EdgeInsets.only(top: 5),
-                    height: 20,
+                    margin: EdgeInsets.only(top: height5),
+                    height: height20,
                     alignment: Alignment.center,
                     child: Text(
                       'Amount must be a valid number',
@@ -193,9 +208,9 @@ class _EditRecipeItemScreenState extends State<EditRecipeItemScreen> {
                     ),
                   )
                 : Container(
-                    height: 25,
+                    height: height25,
                   ),
-            const SizedBox(height: 10),
+            SizedBox(height: height10),
             GestureDetector(
               onTap: () {
                 onSubmit();

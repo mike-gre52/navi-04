@@ -24,6 +24,10 @@ class EditInstructionCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenHeight = mediaQuery.size.height;
+    double fontSize16 = screenHeight / 56;
+
     return Container(
       child: Column(
         children: [
@@ -31,7 +35,8 @@ class EditInstructionCell extends StatelessWidget {
             children: [
               Text(
                 counterValue.toString() + ')',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                style: TextStyle(
+                    fontSize: fontSize16, fontWeight: FontWeight.w500),
               ),
               Expanded(child: Container()),
               GestureDetector(
@@ -57,7 +62,7 @@ class EditInstructionCell extends StatelessWidget {
           ),
           Text(
             instruction.instruction,
-            style: const TextStyle(fontSize: 16),
+            style: TextStyle(fontSize: fontSize16),
           ),
         ],
       ),

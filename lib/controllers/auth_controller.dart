@@ -50,7 +50,7 @@ class AuthController extends GetxController {
       await firebaseAuth.sendPasswordResetEmail(email: email);
       return true;
     } catch (e) {
-      Get.snackbar('No account found with the email: $email', "");
+      Get.snackbar('No account found with the email: ', email);
       return false;
     }
   }

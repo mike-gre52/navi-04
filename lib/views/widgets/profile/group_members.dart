@@ -11,27 +11,41 @@ class GroupMembers extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  Widget buildMemberCell(String name, String color) => GroupMember(
+  Widget buildMemberCell(String name, String color, bool isExtra) =>
+      GroupMember(
         circleText: name,
         color: color,
+        isExtra: isExtra,
       );
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenHeight = mediaQuery.size.height;
+    double screenWidth = mediaQuery.size.width;
+    double height5 = screenHeight / 179.2;
+    double height50 = screenHeight / 17.92;
+    double height60 = screenHeight / 14.933;
+    double width40 = screenWidth / 10.35;
+
     return StreamBuilder<List<Member>>(
         stream: groupController.getGroupMembers(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final data = snapshot.data!;
             return Container(
-              height: 60,
+              height: height60,
               width: double.maxFinite,
               child: Stack(
                 children: List.generate(
-                  data.length,
+                  6,
                   (index) => Positioned(
-                    left: index * 40,
-                    child: buildMemberCell(data[index].name, data[index].color),
+                    left: index * width40,
+                    child: index == 5 && data.length > 6
+                        ? buildMemberCell(
+                            "+${data.length - index}", data[index].color, true)
+                        : buildMemberCell(
+                            data[index].name, data[index].color, false),
                   ),
                 ),
               ),

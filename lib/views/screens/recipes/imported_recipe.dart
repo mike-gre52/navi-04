@@ -54,16 +54,18 @@ class _ImportedRecipeState extends State<ImportedRecipe> {
     double height55 = screenHeight / 16.945;
     double height70 = screenHeight / 13.314;
 
+    double width30 = screenWidth / 13.8;
     double width100 = screenWidth / 4.3;
 
     double fontSize28 = screenHeight / 33.285;
     double fontSize16 = screenHeight / 58.25;
     double fontSize18 = screenHeight / 51.777;
+    double fontSize20 = screenHeight / 44.8;
 
     return Scaffold(
       body: SafeArea(
         child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 0),
+          margin: EdgeInsets.symmetric(horizontal: width30),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -116,10 +118,11 @@ class _ImportedRecipeState extends State<ImportedRecipe> {
                     borderRadius: BorderRadius.circular(20),
                     color: appBlue,
                   ),
-                  child: const Center(
+                  child: Center(
                     child: Text(
                       'Add',
-                      style: TextStyle(color: Colors.white, fontSize: 20),
+                      style:
+                          TextStyle(color: Colors.white, fontSize: fontSize20),
                     ),
                   ),
                 ),

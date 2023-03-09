@@ -30,10 +30,7 @@ class _NotesTextfieldState extends State<NotesTextfield> {
     double screenHeight = mediaQuery.size.height;
     double screenWidth = mediaQuery.size.width;
     double height5 = screenHeight / 179.2;
-    double height10 = screenHeight / 89.6;
-    double height15 = screenHeight / 59.73;
     double height25 = screenHeight / 35.84;
-    double height65 = screenHeight / 13.78;
     double width350 = screenWidth / 1.18;
 
     return Container(

@@ -26,6 +26,16 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenHeight = mediaQuery.size.height;
+    double screenWidth = mediaQuery.size.width;
+    double height10 = screenHeight / 89.6;
+    double height20 = screenHeight / 44.8;
+    double height40 = screenHeight / 22.4;
+    double height60 = screenHeight / 14.933;
+    double width5 = screenWidth / 82.8;
+    double width30 = screenWidth / 13.8;
+    double fontSize18 = screenHeight / 49.777;
     return Scaffold(
         body: Column(
       children: [
@@ -39,7 +49,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
             'Cancel',
             style: TextStyle(
               color: black,
-              fontSize: 20,
+              fontSize: height20,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -47,23 +57,23 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
             Navigator.pop(context);
           },
         ),
-        const SizedBox(
-          height: 20,
+        SizedBox(
+          height: height20,
         ),
         Container(
-          margin: EdgeInsets.symmetric(horizontal: 30),
+          margin: EdgeInsets.symmetric(horizontal: width30),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(
-                height: 10,
+              SizedBox(
+                height: height10,
               ),
               Container(
-                margin: EdgeInsets.only(left: 5),
+                margin: EdgeInsets.only(left: width5),
                 child: Text(
                   'Group Name',
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: fontSize18,
                     color: black,
                     fontWeight: FontWeight.w500,
                   ),
@@ -75,13 +85,13 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                 controller: _groupNameController,
                 borderColor: royalYellow,
                 textfieldWidth: double.maxFinite,
-                textfieldHeight: 60,
-                borderRadius: 10,
+                textfieldHeight: height60,
+                borderRadius: height10,
                 onSubmit: (_) {},
                 onChanged: (_) {},
               ),
-              const SizedBox(
-                height: 40,
+              SizedBox(
+                height: height40,
               ),
               GestureDetector(
                 onTap: () {

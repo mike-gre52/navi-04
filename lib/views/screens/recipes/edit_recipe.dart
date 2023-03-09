@@ -105,6 +105,29 @@ class _EditRecipeState extends State<EditRecipe> {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenHeight = mediaQuery.size.height;
+    double screenWidth = mediaQuery.size.width;
+    double height5 = screenHeight / 179.2;
+    double height10 = screenHeight / 89.6;
+    double height15 = screenHeight / 59.733;
+    double height20 = screenHeight / 44.8;
+    double height25 = screenHeight / 35.84;
+    double height30 = screenHeight / 29.86;
+    double height35 = screenHeight / 25.6;
+    double height40 = screenHeight / 22.4;
+    double height50 = screenHeight / 17.92;
+    double height75 = screenHeight / 11.946;
+    double height150 = screenHeight / 5.973;
+    double height200 = screenHeight / 4.48;
+    double width20 = screenWidth / 20.7;
+    double width25 = screenWidth / 16.56;
+    double width35 = screenWidth / 11.828;
+    double width75 = screenWidth / 5.52;
+    double width100 = screenWidth / 4.14;
+    double width200 = screenWidth / 2.07;
+    double fontSize20 = screenHeight / 44.8;
+
     return Scaffold(
       body: Column(
         children: [
@@ -116,11 +139,11 @@ class _EditRecipeState extends State<EditRecipe> {
             borderColor: royalYellow,
             textColor: Colors.white,
             dividerColor: Colors.white,
-            rightAction: const Text(
+            rightAction: Text(
               'Done',
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 20,
+                fontSize: fontSize20,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -141,7 +164,8 @@ class _EditRecipeState extends State<EditRecipe> {
           ),
           Expanded(
             child: Container(
-              margin: const EdgeInsets.only(left: 20, right: 20, top: 5),
+              margin:
+                  EdgeInsets.only(left: width20, right: width20, top: height5),
               child: ListView(
                 padding: const EdgeInsets.all(0),
                 children: dataType == 'Ingredients'
@@ -183,9 +207,9 @@ class _EditRecipeState extends State<EditRecipe> {
             ]);
           }
         },
-        child: const Icon(
+        child: Icon(
           Icons.add_rounded,
-          size: 32,
+          size: height30,
         ),
       ),
     );

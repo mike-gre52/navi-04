@@ -6,14 +6,24 @@ import 'package:whats_for_dinner/utils/colors.dart';
 class GroupMember extends StatelessWidget {
   String circleText;
   String color;
+  bool isExtra;
   GroupMember({
     required this.circleText,
     required this.color,
+    required this.isExtra,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenHeight = mediaQuery.size.height;
+    double screenWidth = mediaQuery.size.width;
+    double height5 = screenHeight / 179.2;
+    double height50 = screenHeight / 17.92;
+    double width3 = screenWidth / 138;
+    double fontSize24 = screenHeight / 37.333;
+
     Color memberColor = royalYellow;
     memberColor = Color(int.parse(color));
     return Column(
@@ -21,13 +31,13 @@ class GroupMember extends StatelessWidget {
         Column(
           children: [
             Container(
-              height: 50,
-              width: 50,
+              height: height50,
+              width: height50,
               decoration: BoxDecoration(
                 color: Colors.white,
                 shape: BoxShape.circle,
                 border: Border.all(
-                  width: 3,
+                  width: width3,
                   color: memberColor,
                 ),
                 boxShadow: const [
@@ -41,15 +51,17 @@ class GroupMember extends StatelessWidget {
               ),
               child: Center(
                 child: Text(
-                  circleText.substring(0, 1).toUpperCase(),
+                  isExtra
+                      ? circleText
+                      : circleText.substring(0, 1).toUpperCase(),
                   style: TextStyle(
-                      fontSize: 25,
+                      fontSize: fontSize24,
                       color: memberColor,
                       fontWeight: FontWeight.w500),
                 ),
               ),
             ),
-            SizedBox(height: 5),
+            SizedBox(height: height5),
             /*
             Text(
               circleText.substring(0, 1).toUpperCase() +

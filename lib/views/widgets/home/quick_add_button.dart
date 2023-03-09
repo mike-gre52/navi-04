@@ -14,21 +14,31 @@ class QuickAddButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenWidth = mediaQuery.size.width;
+    double screenHeight = mediaQuery.size.height;
+    double height20 = screenHeight / 44.8;
+    double height60 = screenHeight / 14.933;
+    double width115 = screenWidth / 3.6;
+    double fontSize16 = screenHeight / 56;
     return Container(
-      height: 60,
-      width: 115,
+      height: height60,
+      width: width115,
       decoration: BoxDecoration(
         border: Border.all(
           color: buttonColor,
           width: 2,
         ),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(height20),
       ),
       child: Center(
         child: Text(
           buttonText,
           style: TextStyle(
-              color: black, fontSize: 16, fontWeight: FontWeight.w800),
+            color: black,
+            fontSize: fontSize16,
+            fontWeight: FontWeight.w800,
+          ),
         ),
       ),
     );

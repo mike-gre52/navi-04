@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:whats_for_dinner/data/local_data.dart';
+import 'package:whats_for_dinner/main.dart';
 import 'package:whats_for_dinner/models/group.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
 
@@ -23,6 +24,21 @@ class UserController extends GetxController {
       },
     );
     return data;
+  }
+
+  Future<User> getUserDataSnapshot() async {
+    User user;
+    try {
+      DocumentReference documentReference =
+          firestore.collection('users').doc(firebaseAuth.currentUser!.uid);
+      DocumentSnapshot doc = await documentReference.get();
+      final data = doc;
+      user = User.fromJson(data);
+      return user;
+    } catch (e) {
+      throw ("Could not get user Data");
+      //Error getting user data
+    }
   }
 
   Future<String> getlocalColor() async {

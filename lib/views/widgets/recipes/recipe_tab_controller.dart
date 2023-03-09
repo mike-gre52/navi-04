@@ -28,6 +28,18 @@ class _RecipeTabControllerState extends State<RecipeTabController>
   @override
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenWidth = mediaQuery.size.width;
+    double screenHeight = mediaQuery.size.height;
+    double height30 = screenHeight / 29.86;
+    double height50 = screenHeight / 17.92;
+    double height100 = screenHeight / 8.96;
+    double height125 = screenHeight / 7.168;
+    double height200 = screenHeight / 4.48;
+    double height600 = screenHeight / 1.493;
+    double width30 = screenWidth / 13.8;
+    double fontSize16 = screenHeight / 56;
+    double fontSize18 = screenHeight / 49.777;
     TabController _tabController =
         TabController(length: 2, vsync: this, initialIndex: tabIndex);
 
@@ -38,7 +50,7 @@ class _RecipeTabControllerState extends State<RecipeTabController>
       child: Column(
         children: [
           Container(
-            height: widget.recipe.isImport ? 125 : 100,
+            height: widget.recipe.isImport ? height125 : height100,
             width: double.maxFinite,
             decoration: BoxDecoration(
                 border: Border(
@@ -53,13 +65,13 @@ class _RecipeTabControllerState extends State<RecipeTabController>
                     : SplitTime(recipe: widget.recipe),
                 widget.recipe.isImport
                     ? Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 30),
-                        height: 30,
+                        margin: EdgeInsets.symmetric(horizontal: width30),
+                        height: height30,
                         child: Row(
                           children: [
-                            const Text(
+                            Text(
                               'Source: ',
-                              style: TextStyle(fontSize: 18),
+                              style: TextStyle(fontSize: fontSize18),
                             ),
                             GestureDetector(
                               onTap: () {
@@ -67,8 +79,8 @@ class _RecipeTabControllerState extends State<RecipeTabController>
                               },
                               child: Text(
                                 trimSourceUrl(widget.recipe.sourceUrl),
-                                style:
-                                    TextStyle(color: royalYellow, fontSize: 16),
+                                style: TextStyle(
+                                    color: royalYellow, fontSize: fontSize16),
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -103,13 +115,13 @@ class _RecipeTabControllerState extends State<RecipeTabController>
             ),
           ),
           ConstrainedBox(
-            constraints: const BoxConstraints(
-              minHeight: 600,
+            constraints: BoxConstraints(
+              minHeight: height600,
             ),
             child: Container(
               height: tabIndex == 0
-                  ? widget.recipe.ingredients.length.toDouble() * 50
-                  : widget.recipe.instructions.length.toDouble() * 200,
+                  ? widget.recipe.ingredients.length.toDouble() * height50
+                  : widget.recipe.instructions.length.toDouble() * height200,
               color: paperBackground,
               width: double.maxFinite,
               child: TabBarView(
@@ -201,20 +213,24 @@ class RecipeInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenHeight = mediaQuery.size.height;
+    double fontSize14 = screenHeight / 64;
+    double fontSize16 = screenHeight / 56;
     return Column(
       children: [
         Text(
           header,
-          style: const TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.w800,
-            fontSize: 16,
+            fontSize: fontSize16,
           ),
         ),
         Text(
           subheader,
-          style: const TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.w400,
-            fontSize: 14,
+            fontSize: fontSize14,
           ),
         ),
       ],

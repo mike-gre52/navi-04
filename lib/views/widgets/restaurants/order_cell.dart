@@ -54,8 +54,16 @@ class OrderCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenWidth = mediaQuery.size.width;
+    double screenHeight = mediaQuery.size.height;
+    double height15 = screenHeight / 59.733;
+    double width10 = screenWidth / 41.4;
+    double fontSize16 = screenHeight / 56;
+    double fontSize20 = screenHeight / 44.8;
+
     return Container(
-      margin: const EdgeInsets.only(top: 15),
+      margin: EdgeInsets.only(top: height15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -66,7 +74,7 @@ class OrderCell extends StatelessWidget {
               Text(
                 order.name,
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: fontSize20,
                   color: black,
                   fontWeight: FontWeight.w600,
                   height: 0.7,
@@ -81,7 +89,7 @@ class OrderCell extends StatelessWidget {
                     },
                     child: const Icon(Icons.edit_rounded),
                   ),
-                  const SizedBox(width: 10),
+                  SizedBox(width: width10),
                   GestureDetector(
                       onTap: () {
                         showPopup(
@@ -90,7 +98,7 @@ class OrderCell extends StatelessWidget {
                           "",
                         );
                       },
-                      child: Icon(Icons.close_rounded)),
+                      child: const Icon(Icons.close_rounded)),
                 ],
               )
             ],
@@ -98,7 +106,7 @@ class OrderCell extends StatelessWidget {
           Text(
             order.item,
             style: TextStyle(
-              fontSize: 16,
+              fontSize: fontSize16,
               color: darkGrey,
               fontWeight: FontWeight.w400,
             ),

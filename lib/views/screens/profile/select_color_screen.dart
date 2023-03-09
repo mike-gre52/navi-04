@@ -6,9 +6,15 @@ class SelectColorScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenHeight = mediaQuery.size.height;
+    double screenWidth = mediaQuery.size.width;
+    double height80 = screenHeight / 11.2;
+    double width30 = screenWidth / 13.8;
+
     return Scaffold(
       body: Container(
-        margin: EdgeInsets.only(top: 80, left: 30, right: 30),
+        margin: EdgeInsets.only(top: height80, left: width30, right: width30),
         child: Column(
           children: const [
             SelectColor(),

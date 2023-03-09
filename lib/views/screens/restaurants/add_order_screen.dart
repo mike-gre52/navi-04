@@ -55,10 +55,21 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenHeight = mediaQuery.size.height;
+    double screenWidth = mediaQuery.size.width;
+    double height10 = screenHeight / 89.6;
+    double height15 = screenHeight / 59.733;
+    double height25 = screenHeight / 35.84;
+    double height30 = screenHeight / 29.86;
+    double height60 = screenHeight / 14.933;
+    double width30 = screenWidth / 13.8;
+    double width200 = screenWidth / 2.07;
+    double fontSize18 = screenHeight / 49.777;
     return Scaffold(
         body: SafeArea(
       child: Container(
-        margin: EdgeInsets.only(left: 30, right: 30, top: 30),
+        margin: EdgeInsets.only(left: width30, right: width30, top: height30),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -72,7 +83,7 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
                     child: Text(
                       'Name',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: fontSize18,
                         color: black,
                         fontWeight: FontWeight.w500,
                       ),
@@ -85,7 +96,7 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
                     child: Text(
                       'Cancel',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: fontSize18,
                         color: black,
                         fontWeight: FontWeight.w500,
                       ),
@@ -101,20 +112,20 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
                 placeholderText: 'Name',
                 controller: _nameTextController,
                 borderColor: appRed,
-                textfieldWidth: 200,
-                textfieldHeight: 60,
-                borderRadius: 10,
+                textfieldWidth: width200,
+                textfieldHeight: height60,
+                borderRadius: height10,
                 onSubmit: (_) {},
                 onChanged: (_) {},
               ),
             ),
-            const SizedBox(height: 15),
+            SizedBox(height: height15),
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
                 'Order',
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: fontSize18,
                   color: black,
                   fontWeight: FontWeight.w500,
                 ),
@@ -128,13 +139,13 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
                 controller: _orderTextController,
                 borderColor: appRed,
                 textfieldWidth: double.maxFinite,
-                textfieldHeight: 60,
-                borderRadius: 10,
+                textfieldHeight: height60,
+                borderRadius: height10,
                 onSubmit: (_) {},
                 onChanged: (_) {},
               ),
             ),
-            const SizedBox(height: 25),
+            SizedBox(height: height25),
             GestureDetector(
               onTap: () async {
                 if (isUpdate) {

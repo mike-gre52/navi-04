@@ -53,20 +53,21 @@ class _SignUpState extends State<SignUp> {
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
     double screenHeight = mediaQuery.size.height;
+    double screenWidth = mediaQuery.size.width;
+    double height10 = screenHeight / 89.6;
     double height20 = screenHeight / 44.8;
     double height30 = screenHeight / 29.86;
-    double height40 = screenHeight / 22.4;
+    double height65 = screenHeight / 13.784;
     double height100 = screenHeight / 8.96;
-    double height105 = screenHeight / 8.5333;
     double height200 = screenHeight / 4.48;
-    double height250 = screenHeight / 3.584;
+    double width30 = screenWidth / 13.8;
     double fontSize35 = screenHeight / 25.6;
 
     return Scaffold(
       body: Stack(
         children: [
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 32),
+            margin: EdgeInsets.symmetric(horizontal: width30),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -90,9 +91,9 @@ class _SignUpState extends State<SignUp> {
                   placeholderText: 'Username',
                   controller: _usernameController,
                   borderColor: royalYellow,
-                  textfieldWidth: 350,
-                  textfieldHeight: 65,
-                  borderRadius: 10,
+                  textfieldWidth: double.maxFinite,
+                  textfieldHeight: height65,
+                  borderRadius: height10,
                   onSubmit: (_) {},
                   onChanged: (_) {},
                 ),
@@ -104,9 +105,9 @@ class _SignUpState extends State<SignUp> {
                   placeholderText: 'Email',
                   controller: _emailController,
                   borderColor: royalYellow,
-                  textfieldWidth: 350,
-                  textfieldHeight: 65,
-                  borderRadius: 10,
+                  textfieldWidth: double.maxFinite,
+                  textfieldHeight: height65,
+                  borderRadius: height10,
                   onSubmit: (_) {},
                   onChanged: (_) {},
                 ),
@@ -119,9 +120,9 @@ class _SignUpState extends State<SignUp> {
                   controller: _passwordController,
                   borderColor: royalYellow,
                   showVisibilityIcon: true,
-                  textfieldWidth: 350,
-                  textfieldHeight: 65,
-                  borderRadius: 10,
+                  textfieldWidth: double.maxFinite,
+                  textfieldHeight: height65,
+                  borderRadius: height10,
                   onSubmit: (_) {},
                   onChanged: (_) {},
                 ),
@@ -165,12 +166,12 @@ class _SignUpState extends State<SignUp> {
           ),
           isLoading
               ? Container(
-                  margin: EdgeInsets.only(top: height105),
+                  margin: EdgeInsets.only(top: height100),
                   child: Align(
                     alignment: Alignment.topCenter,
                     child: CupertinoActivityIndicator(
                       color: royalYellow,
-                      radius: 20,
+                      radius: height20,
                     ),
                   ),
                 )

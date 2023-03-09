@@ -17,6 +17,10 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenHeight = mediaQuery.size.height;
+    double height50 = screenHeight / 17.92;
+    double height60 = screenHeight / 14.933;
     return Scaffold(
       body: StreamBuilder<User>(
         stream: userController.getUserData(),
@@ -32,7 +36,7 @@ class HomeScreen extends StatelessWidget {
                   borderColor: Colors.white,
                   profileImage: snapshot.data!.profileImage,
                 ),
-                const SizedBox(height: 50),
+                SizedBox(height: height50),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -53,11 +57,11 @@ class HomeScreen extends StatelessWidget {
                     )
                   ],
                 ),
-                const SizedBox(
-                  height: 60,
+                SizedBox(
+                  height: height60,
                 ),
-                const SizedBox(
-                  height: 60,
+                SizedBox(
+                  height: height60,
                 ),
                 const QuickAdd(),
               ],

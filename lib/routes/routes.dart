@@ -11,6 +11,7 @@ import 'package:whats_for_dinner/views/screens/lists/recently_deleted.dart';
 import 'package:whats_for_dinner/views/screens/lists/select_ingredients.dart';
 import 'package:whats_for_dinner/views/screens/loading_screen.dart';
 import 'package:whats_for_dinner/views/screens/profile/all_members.dart';
+import 'package:whats_for_dinner/views/screens/profile/join_group.dart';
 import 'package:whats_for_dinner/views/screens/profile/select_color_screen.dart';
 import 'package:whats_for_dinner/views/screens/recipes/bookmark_link.dart';
 import 'package:whats_for_dinner/views/screens/recipes/confirm_import_recipe.dart';
@@ -23,13 +24,14 @@ import 'package:whats_for_dinner/views/screens/recipes/select_list_from_import.d
 import 'package:whats_for_dinner/views/screens/restaurants/add_order_screen.dart';
 import 'package:whats_for_dinner/views/screens/restaurants/add_restaurant.dart';
 import 'package:whats_for_dinner/views/screens/profile/create_group.dart';
-import 'package:whats_for_dinner/views/screens/profile/manage_group.dart';
+import 'package:whats_for_dinner/views/screens/profile/profile.dart';
 import 'package:whats_for_dinner/views/screens/navigation.dart';
 import 'package:whats_for_dinner/views/screens/restaurants/filter_restaurants.dart';
 import 'package:whats_for_dinner/views/screens/restaurants/restaurant.dart';
 import 'package:whats_for_dinner/views/screens/restaurants/restaurants.dart';
 import 'package:whats_for_dinner/views/screens/restaurants/view_restaurant.dart';
 import 'package:whats_for_dinner/views/screens/recipes/add_recipe.dart';
+import 'package:whats_for_dinner/views/widgets/profile/join_group.dart';
 import 'package:whats_for_dinner/views/widgets/recipes/select_list.dart';
 
 import '../views/screens/auth/sign_in.dart';
@@ -42,7 +44,7 @@ class RouteHelper {
   static String signUp = '/sign-up';
   static String addRestaurant = '/add-restaurant';
   static String createGroup = '/create-group';
-  static String manageGroup = '/manage-group';
+  static String profile = '/profile';
   static String selectColor = '/select-color';
   static String singleList = '/single-list';
   static String addList = '/add-list';
@@ -71,6 +73,7 @@ class RouteHelper {
   static String addOrderScreen = '/addOrderScreen';
   static String resetPassword = '/resetPassword';
   static String confirmResetPasswordSent = '/confirmResetPasswordSent';
+  static String joinGroup = '/joinGroup';
   static String testScreen = '/testScreen';
 
   static String getHomeRoute() => home;
@@ -78,7 +81,7 @@ class RouteHelper {
   static String getSignUpRoute() => signUp;
   static String getAddRestaurantRoute() => addRestaurant;
   static String getCreateGroupRoute() => createGroup;
-  static String getManageGroupRoute() => manageGroup;
+  static String getProfileRoute() => profile;
   static String getSelectColorRoute() => selectColor;
   static String getSingleList() => singleList;
   static String getAddList() => addList;
@@ -107,6 +110,7 @@ class RouteHelper {
   static String getAddOrderScreen() => addOrderScreen;
   static String getResetPassword() => resetPassword;
   static String getConfirmResetPasswordSent() => confirmResetPasswordSent;
+  static String getJoinGroup() => joinGroup;
   static String getTestScreen() => testScreen;
 
   static List<GetPage> routes = [
@@ -141,8 +145,8 @@ class RouteHelper {
       transitionDuration: const Duration(milliseconds: 250),
     ),
     GetPage(
-      name: manageGroup,
-      page: () => const ManageGroupScreen(),
+      name: profile,
+      page: () => const ProfileScreen(),
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 250),
     ),
@@ -305,6 +309,15 @@ class RouteHelper {
     GetPage(
       name: confirmResetPasswordSent,
       page: () => ConfirmResetEmailSent(),
+      transition: Transition.cupertino,
+      transitionDuration: const Duration(milliseconds: 250),
+    ),
+    //
+    //
+    //
+    GetPage(
+      name: joinGroup,
+      page: () => const JoinGroupScreen(),
       transition: Transition.cupertino,
       transitionDuration: const Duration(milliseconds: 250),
     ),

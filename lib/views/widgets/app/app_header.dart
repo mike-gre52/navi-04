@@ -25,10 +25,22 @@ class AppHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenWidth = mediaQuery.size.width;
+    double screenHeight = mediaQuery.size.height;
+
+    double height5 = screenHeight / 179.2;
+    double height15 = screenHeight / 59.733;
+    double height90 = screenHeight / 9.955;
+    double width30 = screenWidth / 13.8;
+    double width50 = screenWidth / 8.28;
+    double height120 = screenHeight / 7.466;
+    double fontSize30 = screenHeight / 29.866;
+
     return Stack(
       children: [
         Container(
-          height: safeArea ? 90 : 120,
+          height: safeArea ? height90 : height120,
           width: double.maxFinite,
           decoration: BoxDecoration(
             color: headerColor,
@@ -49,31 +61,31 @@ class AppHeader extends StatelessWidget {
           ),
         ),
         Positioned(
-          left: 30,
-          bottom: 15,
+          left: width30,
+          bottom: height15,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 headerText,
                 style: TextStyle(
-                  fontSize: 30,
+                  fontSize: fontSize30,
                   color: textColor,
                   fontWeight: FontWeight.w600,
                   //overflow: TextOverflow.ellipsis,
                 ),
               ),
               Container(
-                height: 3,
-                width: 50,
+                height: height5,
+                width: width50,
                 color: dividerColor,
               ),
             ],
           ),
         ),
         Positioned(
-          right: 30,
-          bottom: 15,
+          right: width30,
+          bottom: height15,
           child: GestureDetector(
               onTap: () {
                 onIconClick();

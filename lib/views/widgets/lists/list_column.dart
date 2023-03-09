@@ -25,6 +25,12 @@ class ListColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenWidth = mediaQuery.size.width;
+    double screenHeight = mediaQuery.size.height;
+    double height5 = screenHeight / 179.2;
+    double height50 = screenHeight / 17.92;
+    double width30 = screenWidth / 13.8;
     return StreamBuilder<List<Item>>(
         stream: isRecentlyDeleted
             ? listController.getRecentlyDeletedListItems(list.id)
@@ -36,7 +42,11 @@ class ListColumn extends StatelessWidget {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Container(
-                  margin: const EdgeInsets.only(top: 5, left: 30, right: 30),
+                  margin: EdgeInsets.only(
+                    top: height5,
+                    left: width30,
+                    right: width30,
+                  ),
                   width: double.infinity,
                   child: ListView(
                       keyboardDismissBehavior:

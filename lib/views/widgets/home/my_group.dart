@@ -19,8 +19,17 @@ class _MyGroupState extends State<MyGroup> {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenWidth = mediaQuery.size.width;
+    double screenHeight = mediaQuery.size.height;
+    double height100 = screenHeight / 8.96;
+    double width10 = screenWidth / 41.4;
+    double width30 = screenWidth / 13.8;
+    double fontSize14 = screenHeight / 64;
+    double fontSize24 = screenHeight / 37.333;
+
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 30),
+      margin: EdgeInsets.symmetric(horizontal: width30),
       child: Column(
         children: [
           Row(
@@ -35,7 +44,7 @@ class _MyGroupState extends State<MyGroup> {
                   : Text(
                       'Manage Groups',
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: fontSize14,
                         color: royalYellow,
                         fontWeight: FontWeight.w600,
                       ),
@@ -43,7 +52,7 @@ class _MyGroupState extends State<MyGroup> {
             ],
           ),
           Container(
-            height: 100,
+            height: height100,
             width: double.maxFinite,
             child: inGroup
                 ? Row(
@@ -52,7 +61,7 @@ class _MyGroupState extends State<MyGroup> {
                       Text(
                         'Not in a Group?  ',
                         style: TextStyle(
-                          fontSize: 25,
+                          fontSize: fontSize24,
                           fontWeight: FontWeight.w300,
                           color: black,
                         ),
@@ -60,7 +69,7 @@ class _MyGroupState extends State<MyGroup> {
                       Text(
                         'Click Here',
                         style: TextStyle(
-                          fontSize: 25,
+                          fontSize: fontSize24,
                           fontWeight: FontWeight.w800,
                           color: royalYellow,
                         ),
@@ -74,20 +83,23 @@ class _MyGroupState extends State<MyGroup> {
                         GroupMember(
                           circleText: 'M',
                           color: '0xff478b3a',
+                          isExtra: false,
                         ),
-                        const SizedBox(
-                          width: 10,
+                        SizedBox(
+                          width: width10,
                         ),
                         GroupMember(
                           circleText: 'A',
                           color: '0xff478b3a',
+                          isExtra: false,
                         ),
-                        const SizedBox(
-                          width: 10,
+                        SizedBox(
+                          width: width10,
                         ),
                         GroupMember(
                           circleText: '+3',
                           color: '4286625219',
+                          isExtra: false,
                         ),
                       ],
                     ),

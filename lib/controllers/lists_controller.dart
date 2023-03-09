@@ -129,11 +129,10 @@ class ListsController extends GetxController {
     }
   }
 
-  void deleteListItem(
-      Item item, String listId, bool showSnackBar, bool addToRecentlyDeleted) {
+  void deleteListItem(Item item, String listId, bool showSnackBar,
+      bool addToRecentlyDeleted) async {
     if (addToRecentlyDeleted) {
       //add to recently deleted
-
       item.imageUrl = '';
       firestore
           .collection('groups')
@@ -143,6 +142,13 @@ class ListsController extends GetxController {
           .collection('recently-deleted')
           .doc(item.id)
           .set(item.toJson());
+    }
+
+    //delete last recently deleted if full
+
+    List<Item> recentlyDeleted = await getRecentlyDeletedTest(listId);
+    if (recentlyDeleted.length > 20) {
+      deleteRecentlyDeletedItem(recentlyDeleted.first.id, listId);
     }
 
     firestore

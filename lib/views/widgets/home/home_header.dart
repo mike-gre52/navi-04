@@ -17,10 +17,18 @@ class HomeHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenWidth = mediaQuery.size.width;
+    double screenHeight = mediaQuery.size.height;
+    double height60 = screenHeight / 14.933;
+    double height120 = screenHeight / 7.466;
+    double fontSize20 = screenHeight / 44.8;
+    double fontSize24 = screenHeight / 37.333;
+    double fontSize30 = screenHeight / 29.866;
     return Stack(
       children: [
         Container(
-          height: 120,
+          height: height120,
           width: double.maxFinite,
           decoration: BoxDecoration(
             color: headerColor,
@@ -47,8 +55,8 @@ class HomeHeader extends StatelessWidget {
             children: [
               Container(
                 margin: const EdgeInsets.only(left: 20, bottom: 10, right: 10),
-                height: 60,
-                width: 60,
+                height: height60,
+                width: height60,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
@@ -60,7 +68,7 @@ class HomeHeader extends StatelessWidget {
                     ? Center(
                         child: CircleAvatar(
                           backgroundColor: royalYellow,
-                          radius: 60,
+                          radius: height60,
                           backgroundImage: NetworkImage(profileImage),
                         ),
                       )
@@ -68,29 +76,31 @@ class HomeHeader extends StatelessWidget {
                         child: Text(
                           headerText.substring(0, 1),
                           style: TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.w500,
-                              color: black),
+                            fontSize: fontSize24,
+                            fontWeight: FontWeight.w500,
+                            color: black,
+                          ),
                         ),
                       ),
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'Welcome,',
                     style: TextStyle(
                       height: .5,
-                      fontSize: 20,
-                      color: Color.fromRGBO(213, 213, 213, 1.0),
+                      fontSize: fontSize20,
+                      color: const Color.fromRGBO(213, 213, 213, 1.0),
                     ),
                   ),
                   Text(
                     headerText,
                     style: TextStyle(
-                        fontSize: 30,
-                        color: black,
-                        fontWeight: FontWeight.w600),
+                      fontSize: fontSize30,
+                      color: black,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ],
               ),

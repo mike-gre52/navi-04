@@ -30,17 +30,14 @@ class ListItem extends StatelessWidget {
     MediaQueryData mediaQuery = MediaQuery.of(context);
     double screenHeight = mediaQuery.size.height; //896
     double screenWidth = mediaQuery.size.width; //414
+    double height2 = screenHeight / 448;
     double height10 = screenHeight / 89.6;
-    double height15 = screenHeight / 59.73;
+    double height25 = screenHeight / 35.84;
     double height30 = screenHeight / 29.86;
     double height40 = screenHeight / 22.4;
-    double height200 = screenHeight / 4.48;
-    double height250 = screenHeight / 3.584;
-
-    double fontSize35 = screenHeight / 25.6;
     double fontSize20 = screenHeight / 44.8;
     double fontSize16 = screenHeight / 56;
-
+    double fontSize28 = screenHeight / 32;
     double width10 = screenWidth / 41.4;
     double width275 = screenWidth / 1.533;
     double width200 = screenWidth / 2.07;
@@ -62,7 +59,7 @@ class ListItem extends StatelessWidget {
             margin: showCheckBox
                 ? EdgeInsets.only(top: height10, bottom: height10)
                 : const EdgeInsets.only(top: 0),
-            //height: showCheckBox ? 60 : 25,
+            height: showCheckBox ? null : height25,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -86,11 +83,11 @@ class ListItem extends StatelessWidget {
                                               BorderRadius.circular(height10),
                                           color: appGreen,
                                         ),
-                                        child: const Center(
+                                        child: Center(
                                           child: Icon(
                                             Icons.check_rounded,
                                             color: Colors.white,
-                                            size: 28,
+                                            size: height30,
                                           ),
                                         ),
                                       )
@@ -111,7 +108,7 @@ class ListItem extends StatelessWidget {
                             height: height10,
                             width: height10,
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(2),
+                              borderRadius: BorderRadius.circular(height2),
                               color: appGreen,
                             ),
                           ),
@@ -149,7 +146,7 @@ class ListItem extends StatelessWidget {
                           recentlyDeleted
                               ? CupertinoIcons.arrowshape_turn_up_left_circle
                               : Icons.close_rounded,
-                          size: 28,
+                          size: fontSize28,
                         ),
                       )
                     : Container()

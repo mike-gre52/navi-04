@@ -24,22 +24,34 @@ class EditIngredientCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenWidth = mediaQuery.size.width;
+    double screenHeight = mediaQuery.size.height;
+    double height5 = screenHeight / 179.2;
+    double width10 = screenWidth / 41.4;
+    double width330 = screenWidth / 1.254;
+    double fontSize18 = screenHeight / 49.777;
+
     return Container(
-      padding: const EdgeInsets.only(bottom: 5),
-      margin: const EdgeInsets.only(top: 5),
+      padding: EdgeInsets.only(bottom: height5),
+      margin: EdgeInsets.only(top: height5),
       width: double.maxFinite,
       decoration: BoxDecoration(
         border: Border(
-          bottom: BorderSide(width: 1, color: appBlue),
+          bottom: BorderSide(
+            width: 1,
+            color: appBlue,
+          ),
         ),
       ),
       child: Row(
         children: [
           Container(
-            width: 330,
+            width: width330,
             child: Text(
               ingredient.name,
-              style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+              style:
+                  TextStyle(fontWeight: FontWeight.w500, fontSize: fontSize18),
             ),
           ),
           Expanded(child: Container()),
@@ -54,9 +66,9 @@ class EditIngredientCell extends StatelessWidget {
                 false
               ]);
             },
-            child: Icon(Icons.edit),
+            child: const Icon(Icons.edit),
           ),
-          SizedBox(width: 10),
+          SizedBox(width: width10),
           GestureDetector(
             onTap: () {
               deleteIngredient(counterValue - 1);

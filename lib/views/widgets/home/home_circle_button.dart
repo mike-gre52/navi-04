@@ -14,11 +14,17 @@ class HomeCircleButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenHeight = mediaQuery.size.height;
+    double height5 = screenHeight / 179.2;
+    double height40 = screenHeight / 22.4;
+    double height75 = screenHeight / 11.946;
+    double fontSize14 = screenHeight / 64;
     return Column(
       children: [
         Container(
-          height: 75,
-          width: 75,
+          height: height75,
+          width: height75,
           decoration: BoxDecoration(
             color: buttonColor,
             shape: BoxShape.circle,
@@ -34,18 +40,18 @@ class HomeCircleButton extends StatelessWidget {
           child: Center(
             child: Icon(
               icon,
-              size: 40,
+              size: height40,
               color: Colors.white,
             ),
           ),
         ),
-        const SizedBox(
-          height: 5,
+        SizedBox(
+          height: height5,
         ),
         Text(
           buttonText,
-          style: const TextStyle(
-            fontSize: 14,
+          style: TextStyle(
+            fontSize: fontSize14,
             fontWeight: FontWeight.w700,
           ),
         )

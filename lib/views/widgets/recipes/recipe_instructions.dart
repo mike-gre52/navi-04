@@ -25,9 +25,15 @@ class RecipeInstructionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenWidth = mediaQuery.size.width;
+    double screenHeight = mediaQuery.size.height;
+    double height10 = screenHeight / 89.6;
+    double width20 = screenWidth / 20.7;
+
     counter = 0;
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      margin: EdgeInsets.symmetric(horizontal: width20, vertical: height10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: instructions.map(buildRecipeInstruction).toList(),
@@ -51,8 +57,14 @@ class RecipeInstruction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenWidth = mediaQuery.size.width;
+    double screenHeight = mediaQuery.size.height;
+    double height10 = screenHeight / 89.6;
+    double fontSize16 = screenHeight / 56;
+
     return Container(
-      margin: EdgeInsets.only(top: 10),
+      margin: EdgeInsets.only(top: height10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,7 +72,7 @@ class RecipeInstruction extends StatelessWidget {
           Flexible(
             child: Text(
               '$stepNumber) $instruction',
-              style: TextStyle(fontSize: 16),
+              style: TextStyle(fontSize: fontSize16),
             ),
           ),
           showDelete

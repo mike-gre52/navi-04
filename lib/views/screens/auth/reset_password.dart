@@ -38,51 +38,55 @@ class _ResetPasswordState extends State<ResetPassword> {
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
     double screenHeight = mediaQuery.size.height;
-    double height5 = screenHeight / 179.2;
+    double screenWidth = mediaQuery.size.width;
     double height10 = screenHeight / 89.6;
-    double height30 = screenHeight / 29.86;
+    double height20 = screenHeight / 44.4;
     double height40 = screenHeight / 22.4;
-    double height200 = screenHeight / 4.48;
+    double height50 = screenHeight / 17.92;
+    double height65 = screenHeight / 13.784;
+    double height75 = screenHeight / 11.946;
     double height250 = screenHeight / 3.584;
+    double height350 = screenHeight / 2.56;
+    double width30 = screenWidth / 13.8;
+    double fontSize16 = screenHeight / 56;
     double fontSize35 = screenHeight / 25.6;
-    double height205 = screenHeight / 4.3707;
 
     return Scaffold(
       body: Stack(
         children: [
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 32),
+            margin: EdgeInsets.symmetric(horizontal: width30),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(
-                  height: 75,
+                SizedBox(
+                  height: height75,
                 ),
                 GestureDetector(
                   onTap: () {
                     Navigator.pop(context);
                   },
-                  child: const Icon(
-                    Icons.arrow_back,
-                    size: 40,
+                  child: Icon(
+                    Icons.arrow_back_rounded,
+                    size: height40,
                   ),
                 ),
                 isLoading
                     ? Container(
-                        height: 50,
+                        height: height50,
                         child: Align(
                           alignment: Alignment.topCenter,
                           child: CupertinoActivityIndicator(
                             color: royalYellow,
-                            radius: 20,
+                            radius: height20,
                           ),
                         ),
                       )
                     : Container(
-                        height: 50,
+                        height: height50,
                       ),
-                const SizedBox(
-                  height: 45,
+                SizedBox(
+                  height: height50,
                 ),
                 Text(
                   'Reset Password',
@@ -96,7 +100,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                   'Enter the email associated with the account and we will send you an email.',
                   style: TextStyle(
                     color: darkGrey,
-                    fontSize: 16,
+                    fontSize: fontSize16,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
@@ -108,9 +112,9 @@ class _ResetPasswordState extends State<ResetPassword> {
                   placeholderText: 'Email',
                   controller: _emailController,
                   borderColor: royalYellow,
-                  textfieldWidth: 350,
-                  textfieldHeight: 65,
-                  borderRadius: 10,
+                  textfieldWidth: height350,
+                  textfieldHeight: height65,
+                  borderRadius: height10,
                   onSubmit: (_) {},
                   onChanged: (_) {},
                 ),
@@ -119,18 +123,20 @@ class _ResetPasswordState extends State<ResetPassword> {
                 ),
                 GestureDetector(
                   onTap: () async {
-                    setState(() {
-                      isLoading = true;
-                    });
-                    bool emailSent = await authController
-                        .sendPasswordResetEmail(_emailController.text);
-                    setState(() {
-                      isLoading = false;
-                    });
-                    if (emailSent) {
-                      Navigator.pop(context);
-                      Get.toNamed(RouteHelper.getConfirmResetPasswordSent(),
-                          arguments: _emailController.text);
+                    if (_emailController.text.trim() != "") {
+                      setState(() {
+                        isLoading = true;
+                      });
+                      bool emailSent = await authController
+                          .sendPasswordResetEmail(_emailController.text);
+                      setState(() {
+                        isLoading = false;
+                      });
+                      if (emailSent) {
+                        Navigator.pop(context);
+                        Get.toNamed(RouteHelper.getConfirmResetPasswordSent(),
+                            arguments: _emailController.text);
+                      }
                     }
 
                     //get data from firebase

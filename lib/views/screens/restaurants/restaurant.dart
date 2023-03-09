@@ -100,10 +100,41 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
     double screenWidth = mediaQuery.size.width;
+    double screenHeight = mediaQuery.size.height;
     double screenWidth75 = screenWidth * .75;
-    print("build");
-    //set data
-    print(restaurant.rating);
+    double height5 = screenHeight / 179.2;
+    double height10 = screenHeight / 89.6;
+    double height15 = screenHeight / 59.733;
+    double height20 = screenHeight / 44.8;
+    double height25 = screenHeight / 35.84;
+    double height30 = screenHeight / 29.86;
+    double height40 = screenHeight / 22.4;
+    double height50 = screenHeight / 17.92;
+    double height60 = screenHeight / 14.933;
+    double height65 = screenHeight / 13.784;
+    double height200 = screenHeight / 4.48;
+    double height250 = screenHeight / 3.584;
+    double fontSize35 = screenHeight / 25.6;
+    double height205 = screenHeight / 4.3707;
+    double height450 = screenHeight / 1.991;
+    double width5 = screenWidth / 82.8;
+    double width10 = screenWidth / 41.4;
+    double width15 = screenWidth / 27.6;
+    double width25 = screenWidth / 16.56;
+    double width30 = screenWidth / 13.8;
+    double width80 = screenWidth / 5.175;
+    double width100 = screenWidth / 4.14;
+    double width200 = screenWidth / 2.07;
+    double width350 = screenWidth / 1.182;
+    double fontSize14 = screenHeight / 64;
+    double fontSize16 = screenHeight / 56;
+    double fontSize18 = screenHeight / 49.777;
+    double fontSize20 = screenHeight / 44.8;
+    double fontSize22 = screenHeight / 40.727;
+    double fontSize24 = screenHeight / 37.333;
+    double fontSize28 = screenHeight / 32;
+    double fontSize40 = screenHeight / 22.4;
+
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,11 +145,11 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
             borderColor: royalYellow,
             textColor: Colors.white,
             dividerColor: Colors.white,
-            rightAction: const Text(
+            rightAction: Text(
               'Back',
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 20,
+                fontSize: fontSize20,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -128,7 +159,8 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
           ),
           //NEED TO MAKE SURE TIME IS A NUMBER - WILL SET THE KEYBOARD TO NUMPAD BUT STILL NEED TO VERIFY
           Container(
-            margin: const EdgeInsets.only(left: 25, top: 30, right: 25),
+            margin:
+                EdgeInsets.only(left: width25, top: height30, right: width25),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -143,14 +175,14 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                         maxLines: 2,
                         style: TextStyle(
                           color: black,
-                          fontSize: 45,
-                          height: 1,
-                          overflow: TextOverflow.clip,
+                          fontSize: fontSize40,
+                          height: 1.1,
+                          overflow: TextOverflow.ellipsis,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
-                    const SizedBox(width: 10),
+                    SizedBox(width: width10),
                     Align(
                       child: GestureDetector(
                         onTap: () {
@@ -159,7 +191,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                         },
                         child: Icon(
                           Icons.edit_note_rounded,
-                          size: 26,
+                          size: height25,
                           color: darkGrey,
                         ),
                       ),
@@ -172,11 +204,11 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                           searchUrl(restaurant.restaurantUrl);
                         },
                         child: Container(
-                          margin: const EdgeInsets.only(left: 5),
+                          margin: EdgeInsets.only(left: width5),
                           child: Text(
                             trimSourceUrl(restaurant.restaurantUrl),
                             style: TextStyle(
-                                fontSize: 18,
+                                fontSize: fontSize18,
                                 color: darkGrey,
                                 fontWeight: FontWeight.w400),
                           ),
@@ -189,29 +221,29 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                   isTapable: false,
                 ),
                 Container(
-                  margin: EdgeInsets.only(left: 0, top: 5),
+                  margin: EdgeInsets.only(top: height5),
                   child: Row(
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.timer_outlined,
-                        size: 30,
+                        size: height30,
                       ),
-                      SizedBox(width: 10),
+                      SizedBox(width: width10),
                       Text(
                         restaurant.time.toString() + " min",
                         style: TextStyle(
-                            fontSize: 18,
+                            fontSize: fontSize18,
                             color: black,
                             fontWeight: FontWeight.w500),
                       ),
-                      const SizedBox(width: 10),
+                      SizedBox(width: width10),
                     ],
                   ),
                 ),
                 Row(
                   children: [
                     Container(
-                      margin: EdgeInsets.only(left: 5, top: 0),
+                      margin: EdgeInsets.only(left: width5),
                       child: Text(
                         restaurant.price == 1
                             ? '\$'
@@ -221,23 +253,23 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                                     ? '\$\$\$'
                                     : '\$\$\$',
                         style: TextStyle(
-                          fontSize: 24,
+                          fontSize: fontSize24,
                           fontWeight: FontWeight.w800,
                           color: appRed,
                         ),
                       ),
                     ),
-                    SizedBox(width: 30),
+                    SizedBox(width: width30),
                     restaurant.doesDelivery
                         ? Icon(
                             Icons.delivery_dining_outlined,
-                            size: 30,
+                            size: height30,
                             color: green,
                           )
                         : Container(),
                   ],
                 ),
-                SizedBox(height: 30),
+                SizedBox(height: height30),
                 //Orders
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -245,7 +277,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                     Text(
                       "Orders",
                       style: TextStyle(
-                        fontSize: 28,
+                        fontSize: fontSize28,
                         color: black,
                         height: 1,
                         fontWeight: FontWeight.w800,
@@ -261,18 +293,18 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                               false,
                             ]);
                       },
-                      child: const Icon(
+                      child: Icon(
                         Icons.add_circle_outline_rounded,
-                        size: 26,
+                        size: height25,
                       ),
                     )
                   ],
                 ),
-                SizedBox(height: 5),
+                SizedBox(height: height5),
                 SingleChildScrollView(
                   child: Container(
                     width: double.maxFinite,
-                    height: 450,
+                    height: height450,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: restaurant.orders.map(buildOrderCell).toList(),

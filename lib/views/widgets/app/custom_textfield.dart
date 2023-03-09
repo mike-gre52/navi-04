@@ -13,8 +13,8 @@ class CustomTextfield extends StatefulWidget {
   Color borderColor;
   bool showIcon;
   double textfieldWidth;
-  int textfieldHeight;
-  int borderRadius;
+  double textfieldHeight;
+  double borderRadius;
   TextInputType keyboard;
   void Function(String?) onChanged;
   void Function(String) onSubmit;
@@ -50,12 +50,8 @@ class _CustomTextfieldState extends State<CustomTextfield> {
     double screenHeight = mediaQuery.size.height;
     double screenWidth = mediaQuery.size.width;
     double height5 = screenHeight / 179.2;
-    double height10 = screenHeight / 89.6;
     double height15 = screenHeight / 59.73;
     double height25 = screenHeight / 35.84;
-    double height65 = screenHeight / 13.78;
-    double width350 = screenWidth / 1.18;
-
     double textfieldWidth = screenWidth / (414 / widget.textfieldWidth);
     double textfieldHeight = screenHeight / (896 / widget.textfieldHeight);
     double textfieldBorderRadius = screenHeight / (896 / widget.borderRadius);

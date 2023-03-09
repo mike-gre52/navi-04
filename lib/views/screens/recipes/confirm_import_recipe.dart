@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:whats_for_dinner/models/recipe.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
 import 'package:whats_for_dinner/utils/helper.dart';
+import 'package:whats_for_dinner/utils/scrapper.dart';
 
 class ConfirmImportRecipe extends StatefulWidget {
   const ConfirmImportRecipe({Key? key}) : super(key: key);

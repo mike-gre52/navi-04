@@ -41,6 +41,10 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
     Get.toNamed(RouteHelper.getAddRestaurantRoute());
   }
 
+  updateUI() {
+    setState(() {});
+  }
+
   bool isFavoriteSelected = false;
   bool isDeliverySelected = false;
   bool isTopRatedSelected = false;
@@ -73,6 +77,11 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenHeight = mediaQuery.size.height;
+    double height40 = screenHeight / 22.4;
+    double height50 = screenHeight / 17.92;
+
     return Scaffold(
       body: inGroup
           ? StreamBuilder<List<Restaurant>>(
@@ -160,7 +169,6 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
                         //Get.toNamed(RouteHelper.restaurantFilter);
                         setState(() {
                           if (isDeliverySelected) {
-                            print(isFavoriteSelected);
                             isDeliverySelected = false;
                             filter = Filter(
                               maxTime: 0,
@@ -291,15 +299,15 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
                         borderColor: royalYellow,
                         textColor: Colors.white,
                         dividerColor: Colors.white,
-                        rightAction: const Icon(
+                        rightAction: Icon(
                           Icons.add_rounded,
-                          size: 40,
+                          size: height40,
                           color: Colors.white,
                         ),
                         onIconClick: addRestaurantIconButton,
                       ),
                       Container(
-                        height: 50,
+                        height: height50,
                         width: double.maxFinite,
                         decoration: BoxDecoration(
                           border: Border(
@@ -346,7 +354,9 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
                 Expanded(
                   child: Center(
                     child: CreateOrJoinBanner(
+                      onCreateGroup: updateUI,
                       color: appRed,
+                      item: "restaurant",
                     ),
                   ),
                 ),
@@ -371,12 +381,16 @@ class CustomChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenWidth = mediaQuery.size.width;
+    double width10 = screenWidth / 41.4;
+
     return GestureDetector(
       onTap: () {
         onClick();
       },
       child: Container(
-        margin: const EdgeInsets.only(left: 10),
+        margin: EdgeInsets.only(left: width10),
         child: Chip(
           elevation: 3,
           backgroundColor: isSelected

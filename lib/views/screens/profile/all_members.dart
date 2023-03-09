@@ -29,6 +29,10 @@ class AllMembersScreen extends StatefulWidget {
 class _AllMembersScreenState extends State<AllMembersScreen> {
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenHeight = mediaQuery.size.height;
+    double screenWidth = mediaQuery.size.width;
+    double height20 = screenHeight / 44.8;
     return Scaffold(
       body: StreamBuilder<List<Member>>(
         stream: groupController.getGroupMembers(),
@@ -47,7 +51,7 @@ class _AllMembersScreenState extends State<AllMembersScreen> {
                     'Back',
                     style: TextStyle(
                       color: black,
-                      fontSize: 20,
+                      fontSize: height20,
                       fontWeight: FontWeight.w500,
                     ),
                   ),

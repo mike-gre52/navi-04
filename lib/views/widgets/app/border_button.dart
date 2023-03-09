@@ -20,13 +20,16 @@ class BorderButton extends StatelessWidget {
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
     double screenHeight = mediaQuery.size.height;
+    double screenWidth = mediaQuery.size.width;
+    double height60 = screenHeight / 14.933;
     double fontSize22 = screenHeight / 40.727;
+    double width2 = screenWidth / 207;
     return Container(
-      height: 60,
+      height: height60,
       width: buttonWidth,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(borderRadius),
-        border: Border.all(color: buttonColor, width: 2),
+        border: Border.all(color: buttonColor, width: width2),
       ),
       child: Center(
         child: Text(

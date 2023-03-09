@@ -152,6 +152,28 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenHeight = mediaQuery.size.height;
+    double screenWidth = mediaQuery.size.width;
+    double height5 = screenHeight / 179.2;
+    double height10 = screenHeight / 89.6;
+    double height15 = screenHeight / 59.733;
+    double height20 = screenHeight / 44.8;
+    double height25 = screenHeight / 35.84;
+    double height30 = screenHeight / 29.86;
+    double height35 = screenHeight / 25.6;
+    double height40 = screenHeight / 22.4;
+    double height50 = screenHeight / 17.92;
+    double height75 = screenHeight / 11.946;
+    double height150 = screenHeight / 5.973;
+    double height200 = screenHeight / 4.48;
+    double width25 = screenWidth / 16.56;
+    double width35 = screenWidth / 11.828;
+    double width75 = screenWidth / 5.52;
+    double width100 = screenWidth / 4.14;
+    double width200 = screenWidth / 2.07;
+    double fontSize20 = screenHeight / 44.8;
+
     return Scaffold(
       backgroundColor: appBlue,
       body: SafeArea(
@@ -169,11 +191,11 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                   textColor: Colors.white,
                   dividerColor: Colors.white,
                   safeArea: true,
-                  rightAction: const Text(
+                  rightAction: Text(
                     'Cancel',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 20,
+                      fontSize: fontSize20,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -183,12 +205,12 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                 ),
                 //Column under nav
                 Container(
-                  margin: const EdgeInsets.only(top: 10),
+                  margin: EdgeInsets.only(top: height10),
                   child: Column(
                     children: [
                       //Recipe Name
                       Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 25),
+                        margin: EdgeInsets.symmetric(horizontal: height25),
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: HeaderAndTextField(
@@ -202,10 +224,10 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 10),
+                      SizedBox(height: height10),
                       //Select Image Row
                       Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 25),
+                        margin: EdgeInsets.symmetric(horizontal: width25),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -216,33 +238,34 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                               },
                               child: isImageSelected
                                   ? Container(
-                                      height: 75,
-                                      width: 75,
+                                      height: height75,
+                                      width: width75,
                                       decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
+                                        borderRadius:
+                                            BorderRadius.circular(height10),
                                         color: Colors.grey,
                                       ),
                                       child: ClipRRect(
                                         borderRadius:
-                                            BorderRadius.circular(8.0),
+                                            BorderRadius.circular(height10),
                                         child: Image.file(
                                           imageController.image!,
-                                          height: 150.0,
-                                          width: 100.0,
+                                          height: height150,
+                                          width: width100,
                                           fit: BoxFit.cover,
                                         ),
                                       ),
                                     )
                                   : Container(
-                                      height: 75,
-                                      width: 75,
+                                      height: height75,
+                                      width: width75,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
                                         color: Colors.grey,
                                       ),
                                       child: Icon(
                                         Icons.camera_alt_outlined,
-                                        size: 35,
+                                        size: height35,
                                         color: appBlue,
                                       ),
                                     ),
@@ -256,8 +279,8 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                               },
                               child: RichText(
                                 text: TextSpan(
-                                  style: const TextStyle(
-                                      fontSize: 20,
+                                  style: TextStyle(
+                                      fontSize: fontSize20,
                                       color: Colors.black,
                                       fontFamily: 'IBMPlexSansDevanagari'),
                                   children: <TextSpan>[
@@ -273,10 +296,10 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 10),
+                      SizedBox(height: height10),
                       //Prep, Cook, Servings Row
                       Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 25),
+                        margin: EdgeInsets.symmetric(horizontal: height25),
                         child: Column(
                           children: [
                             Row(
@@ -285,7 +308,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                                 HeaderAndTextField(
                                   header: 'Prep Time',
                                   controller: _recipePrepTimeController,
-                                  width: 75,
+                                  width: width75,
                                   placeHolderText: '',
                                   onChanged: checkTimeInput,
                                   centerText: true,
@@ -293,7 +316,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                                 HeaderAndTextField(
                                   header: 'Cook Time',
                                   controller: _recipeCookTimeController,
-                                  width: 75,
+                                  width: width75,
                                   placeHolderText: '',
                                   onChanged: checkTimeInput,
                                   centerText: true,
@@ -301,7 +324,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                                 HeaderAndTextField(
                                   header: 'Servings',
                                   controller: _recipeServingsController,
-                                  width: 75,
+                                  width: width75,
                                   placeHolderText: '',
                                   onChanged: (_) {},
                                   centerText: true,
@@ -310,7 +333,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                             ),
                             showTimeError
                                 ? Container(
-                                    height: 25,
+                                    height: height25,
                                     alignment: Alignment.centerRight,
                                     child: Text(
                                       'Input must be a valid number',
@@ -321,25 +344,25 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                                     ),
                                   )
                                 : Container(
-                                    height: 25,
+                                    height: height25,
                                   ),
                           ],
                         ),
                       ),
                       //Ingredients tab
                       Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 25),
+                        margin: EdgeInsets.symmetric(horizontal: width25),
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: TextHeader(
                             text: 'Ingredients:',
-                            fontSize: 20,
+                            fontSize: fontSize20,
                           ),
                         ),
                       ),
                       //Ingredient Name
                       Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 25),
+                        margin: EdgeInsets.symmetric(horizontal: width25),
                         child: Column(
                           children: [
                             Row(
@@ -349,7 +372,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                                 HeaderAndTextField(
                                   header: 'Add ingredientssdf',
                                   controller: _ingredientController,
-                                  width: 200,
+                                  width: width200,
                                   leftAlign: true,
                                   placeHolderText: '',
                                   useTextKeyboard: true,
@@ -358,7 +381,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                                 ),
                                 Expanded(child: Container()),
                                 SizedBox(
-                                  height: 50,
+                                  height: height50,
                                   child: GestureDetector(
                                     onTap: () {
                                       //
@@ -380,7 +403,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                                     child: Icon(
                                       Icons.add_rounded,
                                       color: appBlue,
-                                      size: 40,
+                                      size: height40,
                                     ),
                                   ),
                                 )
@@ -388,8 +411,9 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                             ),
                             showAmountError
                                 ? Container(
-                                    margin: EdgeInsets.symmetric(vertical: 5),
-                                    height: 20,
+                                    margin:
+                                        EdgeInsets.symmetric(vertical: height5),
+                                    height: height20,
                                     alignment: Alignment.centerRight,
                                     child: Text(
                                       'Amount must be a valid number',
@@ -400,14 +424,14 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                                     ),
                                   )
                                 : Container(
-                                    height: 30,
+                                    height: height30,
                                   ),
                           ],
                         ),
                       ),
                       //Ingredients Scroll View
                       Container(
-                        height: 200,
+                        height: height200,
                         width: double.maxFinite,
                         decoration: BoxDecoration(
                           border: Border(
@@ -424,13 +448,13 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                       ),
                       //Instructions tab
                       Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 35),
+                        margin: EdgeInsets.symmetric(horizontal: width35),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             TextHeader(
                               text: 'Instructions:',
-                              fontSize: 20,
+                              fontSize: fontSize20,
                             ),
                             GestureDetector(
                               onTap: () {
@@ -451,7 +475,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                               child: Icon(
                                 Icons.add_rounded,
                                 color: appBlue,
-                                size: 40,
+                                size: height40,
                               ),
                             )
                           ],
@@ -461,9 +485,9 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                       NotesTextfield(
                         controller: _instructionController,
                         borderColor: appBlue,
-                        height: 150,
+                        height: height150,
                       ),
-                      const SizedBox(height: 10),
+                      SizedBox(height: height10),
                       //Instruction Scroll View
                       Container(
                           height: 200,
@@ -480,19 +504,19 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                             showDelete: true,
                             deleteInstruction: deleteInstruction,
                           )),
-                      const SizedBox(height: 20),
+                      SizedBox(height: height20),
                       Container(
-                        height: 20,
+                        height: height20,
                         child: isLoading
                             ? CupertinoActivityIndicator(
-                                radius: 15,
+                                radius: height15,
                                 color: appBlue,
                                 animating: true,
                               )
                             : null,
                       ),
 
-                      const SizedBox(height: 20),
+                      SizedBox(height: height20),
                       //Submit Button
                       Column(
                         children: [
@@ -553,13 +577,13 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                           ),
                           isformValid
                               ? Container(
-                                  height: 25,
+                                  height: height25,
                                 )
                               : Container(
                                   alignment: Alignment.center,
                                   margin:
-                                      const EdgeInsets.symmetric(vertical: 5),
-                                  height: 20,
+                                      EdgeInsets.symmetric(vertical: height5),
+                                  height: height20,
                                   child: Text(
                                     'Input is invalid',
                                     style: TextStyle(
@@ -570,7 +594,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                                 ),
                         ],
                       ),
-                      const SizedBox(height: 30),
+                      SizedBox(height: height30),
                     ],
                   ),
                 )
@@ -612,13 +636,21 @@ class HeaderAndTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenHeight = mediaQuery.size.height;
+    double screenWidth = mediaQuery.size.width;
+    double height10 = screenHeight / 89.6;
+    double height50 = screenHeight / 17.92;
+    double width5 = screenWidth / 82.8;
+    double fontSize14 = screenHeight / 64;
+    double fontSize16 = screenHeight / 56;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           header,
-          style: const TextStyle(
-            fontSize: 16,
+          style: TextStyle(
+            fontSize: fontSize16,
             fontWeight: FontWeight.w700,
           ),
         ),
@@ -628,11 +660,11 @@ class HeaderAndTextField extends StatelessWidget {
           controller: controller,
           borderColor: appBlue,
           textfieldWidth: width,
-          textfieldHeight: 50,
+          textfieldHeight: height50,
           keyboard: useTextKeyboard
               ? TextInputType.text
               : const TextInputType.numberWithOptions(decimal: true),
-          borderRadius: 10,
+          borderRadius: height10,
           showIcon: false,
           onSubmit: (_) {},
           onChanged: onChanged,
@@ -640,11 +672,11 @@ class HeaderAndTextField extends StatelessWidget {
         ),
         showSubText
             ? Container(
-                margin: EdgeInsets.only(left: 5),
+                margin: EdgeInsets.only(left: width5),
                 child: Text(
                   subText,
-                  style: const TextStyle(
-                    fontSize: 14,
+                  style: TextStyle(
+                    fontSize: fontSize14,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
