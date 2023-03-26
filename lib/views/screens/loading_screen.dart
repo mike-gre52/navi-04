@@ -11,14 +11,23 @@ class LoadingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
     double screenHeight = mediaQuery.size.height;
+    double screenWidth = mediaQuery.size.width;
     double height20 = screenHeight / 44.8;
+    double width75percent = mediaQuery.size.width * .75;
     return Scaffold(
       body: Center(
-        child: CupertinoActivityIndicator(
-          color: royalYellow,
-          radius: height20,
+          child: Image(
+        width: width75percent,
+        image: const AssetImage(
+          'assets/images/loading_screen.png',
         ),
-      ),
+      )),
     );
   }
 }
+ /*
+         CupertinoActivityIndicator(
+          color: royalYellow,
+          radius: height20,
+        ),
+        */

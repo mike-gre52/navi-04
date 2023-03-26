@@ -26,7 +26,7 @@ class GroupMembers extends StatelessWidget {
     double height5 = screenHeight / 179.2;
     double height50 = screenHeight / 17.92;
     double height60 = screenHeight / 14.933;
-    double width40 = screenWidth / 10.35;
+    double width30 = screenWidth / 13.8;
 
     return StreamBuilder<List<Member>>(
         stream: groupController.getGroupMembers(),
@@ -38,9 +38,9 @@ class GroupMembers extends StatelessWidget {
               width: double.maxFinite,
               child: Stack(
                 children: List.generate(
-                  6,
+                  data.length > 5 ? 6 : data.length,
                   (index) => Positioned(
-                    left: index * width40,
+                    left: index * width30,
                     child: index == 5 && data.length > 6
                         ? buildMemberCell(
                             "+${data.length - index}", data[index].color, true)

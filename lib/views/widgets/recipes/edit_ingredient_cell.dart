@@ -28,8 +28,9 @@ class EditIngredientCell extends StatelessWidget {
     double screenWidth = mediaQuery.size.width;
     double screenHeight = mediaQuery.size.height;
     double height5 = screenHeight / 179.2;
+    double height24 = screenHeight / 37.33333;
     double width10 = screenWidth / 41.4;
-    double width330 = screenWidth / 1.254;
+    double width315 = screenWidth / 1.31428571;
     double fontSize18 = screenHeight / 49.777;
 
     return Container(
@@ -47,7 +48,7 @@ class EditIngredientCell extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            width: width330,
+            width: width315,
             child: Text(
               ingredient.name,
               style:
@@ -55,26 +56,36 @@ class EditIngredientCell extends StatelessWidget {
             ),
           ),
           Expanded(child: Container()),
-          GestureDetector(
-            onTap: () {
-              Get.toNamed(RouteHelper.editRecipeItemScreen, arguments: [
-                'Ingredient',
-                ingredient,
-                counterValue,
-                editIngredient,
-                addIngredient,
-                false
-              ]);
-            },
-            child: const Icon(Icons.edit),
+          Row(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  Get.toNamed(RouteHelper.editRecipeItemScreen, arguments: [
+                    'Ingredient',
+                    ingredient,
+                    counterValue,
+                    editIngredient,
+                    addIngredient,
+                    false
+                  ]);
+                },
+                child: Icon(
+                  Icons.edit,
+                  size: height24,
+                ),
+              ),
+              SizedBox(width: width10),
+              GestureDetector(
+                onTap: () {
+                  deleteIngredient(counterValue - 1);
+                },
+                child: Icon(
+                  CupertinoIcons.delete,
+                  size: height24,
+                ),
+              ),
+            ],
           ),
-          SizedBox(width: width10),
-          GestureDetector(
-            onTap: () {
-              deleteIngredient(counterValue - 1);
-            },
-            child: Icon(CupertinoIcons.delete),
-          )
         ],
       ),
     );

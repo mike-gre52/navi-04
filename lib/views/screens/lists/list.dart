@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:whats_for_dinner/models/list.dart';
+import 'package:whats_for_dinner/utils/ad_helper.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
 import 'package:whats_for_dinner/views/widgets/app/custom_textfield.dart';
@@ -27,12 +29,6 @@ class _ListScreenState extends State<ListScreen> {
 
   final list = Get.arguments as ListData;
 
-  @override
-  void dispose() {
-    super.dispose();
-    _itemController.dispose();
-  }
-
   addItem() {
     if (_itemController.text.trim() != "") {
       listController.addListItem(
@@ -41,6 +37,41 @@ class _ListScreenState extends State<ListScreen> {
       );
       _itemController.clear();
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      _createBottomBannerAd();
+    });
+  }
+
+  late BannerAd _bottomBannerAd;
+  bool _isBottomBanerAdLoaded = false;
+
+  void _createBottomBannerAd() {
+    _bottomBannerAd = BannerAd(
+      size: AdSize.banner,
+      adUnitId: AdHelper.bannerAdUnitId,
+      listener: BannerAdListener(onAdLoaded: (_) {
+        setState(() {
+          _isBottomBanerAdLoaded = true;
+        });
+      }, onAdFailedToLoad: (ad, error) {
+        //print('Ad failed to load');
+        ad.dispose();
+      }),
+      request: const AdRequest(),
+    );
+    _bottomBannerAd.load();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _itemController.dispose();
+    _bottomBannerAd.dispose();
   }
 
   @override

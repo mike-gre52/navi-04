@@ -305,8 +305,9 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                   child: Container(
                     width: double.maxFinite,
                     height: height450,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    child: ListView(
+                      padding: const EdgeInsets.all(0),
+                      //crossAxisAlignment: CrossAxisAlignment.start,
                       children: restaurant.orders.map(buildOrderCell).toList(),
                     ),
                   ),

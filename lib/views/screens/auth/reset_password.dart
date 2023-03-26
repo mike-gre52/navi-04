@@ -112,7 +112,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                   placeholderText: 'Email',
                   controller: _emailController,
                   borderColor: royalYellow,
-                  textfieldWidth: height350,
+                  textfieldWidth: double.maxFinite,
                   textfieldHeight: height65,
                   borderRadius: height10,
                   onSubmit: (_) {},

@@ -57,8 +57,25 @@ class ListsController extends GetxController {
     return data;
   }
 
+  Future<int> getListLength(listId) async {
+    CollectionReference _collectionRef = firestore
+        .collection('groups')
+        .doc(globalGroupId)
+        .collection('lists')
+        .doc(listId) //specific list
+        .collection('items');
+
+    QuerySnapshot<Object?> data = await _collectionRef.get();
+
+    List<Item> items = [];
+
+    data.docs.forEach((element) {
+      items.add(Item.fromJsonQuery(element));
+    });
+    return items.length;
+  }
+
   Future<List<Item>> getRecentlyDeletedTest(listId) async {
-    print("running test");
     CollectionReference _collectionRef = firestore
         .collection('groups')
         .doc(globalGroupId)
@@ -97,6 +114,15 @@ class ListsController extends GetxController {
     return data;
   }
 
+  void adjustListCounter(listId, numItems) {
+    firestore
+        .collection('groups')
+        .doc(globalGroupId)
+        .collection('lists')
+        .doc(listId) //specific list
+        .update({'itemCount': numItems});
+  }
+
   void addListItem(String newItem, String listId) async {
     var itemId = DateTime.now().toString();
     final item =
@@ -120,12 +146,8 @@ class ListsController extends GetxController {
     }
     //update itemCount if item succesfully added
     if (shouldIncrement) {
-      firestore
-          .collection('groups')
-          .doc(globalGroupId)
-          .collection('lists')
-          .doc(listId) //specific list
-          .update({'itemCount': FieldValue.increment(1)});
+      int numItems = await getListLength(listId);
+      adjustListCounter(listId, numItems);
     }
   }
 
@@ -133,7 +155,7 @@ class ListsController extends GetxController {
       bool addToRecentlyDeleted) async {
     if (addToRecentlyDeleted) {
       //add to recently deleted
-      item.imageUrl = '';
+
       firestore
           .collection('groups')
           .doc(globalGroupId)
@@ -151,6 +173,12 @@ class ListsController extends GetxController {
       deleteRecentlyDeletedItem(recentlyDeleted.first.id, listId);
     }
 
+    //delete image if it exists
+    if (item.imageUrl != '') {
+      deleteListItemImage(item, listId);
+      item.imageUrl = '';
+    }
+
     firestore
         .collection('groups')
         .doc(globalGroupId)
@@ -160,19 +188,10 @@ class ListsController extends GetxController {
         .doc(item.id)
         .delete(); //will need to build Item
 
-    //delete image if it exists
-    if (item.imageUrl != '') {
-      deleteListItemImage(item, listId);
-    }
-
     //update itemCount
 
-    firestore
-        .collection('groups')
-        .doc(globalGroupId)
-        .collection('lists')
-        .doc(listId) //specific list
-        .update({'itemCount': FieldValue.increment(-1)});
+    int numItems = await getListLength(listId);
+    adjustListCounter(listId, numItems);
     /*
     if (showSnackBar) {
       Get.snackbar(
@@ -229,7 +248,7 @@ class ListsController extends GetxController {
         .update({'imageUrl': imageUrl});
   }
 
-  void restoreListItem(Item item, String listId) {
+  void restoreListItem(Item item, String listId) async {
     var itemId = DateTime.now().toString();
     //create new item
     final newItem = Item(
@@ -250,12 +269,8 @@ class ListsController extends GetxController {
         .set(item.toJson());
 
     //update itemCount
-    firestore
-        .collection('groups')
-        .doc(globalGroupId)
-        .collection('lists')
-        .doc(listId) //specific list
-        .update({'itemCount': FieldValue.increment(1)});
+    int numItems = await getListLength(listId);
+    adjustListCounter(listId, numItems);
 
     firestore
         .collection('groups')

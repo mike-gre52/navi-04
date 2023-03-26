@@ -207,9 +207,16 @@ class _EditRecipeState extends State<EditRecipe> {
             ]);
           }
         },
-        child: Icon(
-          Icons.add_rounded,
-          size: height30,
+        child: Container(
+          padding: EdgeInsets.all(height5),
+          decoration: BoxDecoration(
+            color: appBlue.withAlpha(200),
+            shape: BoxShape.circle,
+          ),
+          child: Icon(
+            Icons.add_rounded,
+            size: height30,
+          ),
         ),
       ),
     );

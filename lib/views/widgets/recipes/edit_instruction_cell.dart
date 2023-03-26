@@ -26,6 +26,7 @@ class EditInstructionCell extends StatelessWidget {
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
     double screenHeight = mediaQuery.size.height;
+    double height24 = screenHeight / 37.33333;
     double fontSize16 = screenHeight / 56;
 
     return Container(
@@ -50,13 +51,19 @@ class EditInstructionCell extends StatelessWidget {
                     false
                   ]);
                 },
-                child: const Icon(Icons.edit),
+                child: Icon(
+                  Icons.edit,
+                  size: height24,
+                ),
               ),
               GestureDetector(
                 onTap: () {
                   deleteInstruction(counterValue - 1);
                 },
-                child: Icon(CupertinoIcons.delete),
+                child: Icon(
+                  CupertinoIcons.delete,
+                  size: height24,
+                ),
               )
             ],
           ),

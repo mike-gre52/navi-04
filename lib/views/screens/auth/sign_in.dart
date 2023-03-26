@@ -50,6 +50,9 @@ class _SignInState extends State<SignIn> {
     double height250 = screenHeight / 3.584;
     double width30 = screenWidth / 13.8;
     double fontSize35 = screenHeight / 25.6;
+    double height30 = screenHeight / 29.86;
+    double height100 = screenHeight / 8.96;
+    double width60percent = mediaQuery.size.width * .60;
 
     return Scaffold(
       body: Stack(
@@ -60,7 +63,19 @@ class _SignInState extends State<SignIn> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
-                  height: height200,
+                  height: height100,
+                ),
+                Align(
+                  alignment: Alignment.center,
+                  child: Image(
+                    width: width60percent,
+                    image: const AssetImage(
+                      'assets/images/loading_screen.png',
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: height30,
                 ),
                 Text(
                   'Login',
@@ -143,13 +158,14 @@ class _SignInState extends State<SignIn> {
                     secondColor: royalYellow,
                   ),
                 ),
-                SizedBox(
-                  height: height250,
-                ),
-                BottomText(
-                  firstText: 'Don\'t have an account? ',
-                  secondText: 'Sign Up',
-                  buttonRoute: RouteHelper.getSignUpRoute(),
+                Expanded(child: Container()),
+                Container(
+                  margin: EdgeInsets.only(bottom: height40),
+                  child: BottomText(
+                    firstText: 'Don\'t have an account? ',
+                    secondText: 'Sign Up',
+                    buttonRoute: RouteHelper.getSignUpRoute(),
+                  ),
                 ),
               ],
             ),

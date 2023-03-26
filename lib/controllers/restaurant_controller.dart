@@ -95,7 +95,6 @@ class RestaurantController extends GetxController {
         }
 
         //filter Rating
-
       }
     } else {
       return restaurants;
@@ -158,16 +157,17 @@ class RestaurantController extends GetxController {
   }
 
   addOrder(Restaurant restaurant, Order order) {
-    print("in add order func");
+    print("in add order 1");
     List<Order> orders = restaurant.orders;
     orders.add(order);
-    print(orders.length);
+    print("in add order 2");
     firestore
         .collection('groups')
         .doc(globalGroupId)
         .collection('restaurants')
         .doc(restaurant.id)
         .update({"orders": Order.orderToJson(orders)});
+    print("in add order 3");
   }
 
   editOrder(Restaurant restaurant, Order oldOrder, Order newOrder) {

@@ -144,7 +144,7 @@ class ListItem extends StatelessWidget {
                         },
                         child: Icon(
                           recentlyDeleted
-                              ? CupertinoIcons.arrowshape_turn_up_left_circle
+                              ? CupertinoIcons.arrow_counterclockwise
                               : Icons.close_rounded,
                           size: fontSize28,
                         ),

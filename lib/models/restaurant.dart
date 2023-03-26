@@ -76,7 +76,11 @@ class Order {
     Map<String, dynamic> jsonData = {};
     orders.forEach(
       (i) {
-        jsonData[i.name] = i.item;
+        if (i.name == "") {
+          jsonData[" "] = i.item;
+        } else {
+          jsonData[i.name] = i.item;
+        }
       },
     );
 

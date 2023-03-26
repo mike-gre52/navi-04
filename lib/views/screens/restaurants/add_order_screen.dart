@@ -149,18 +149,25 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
             GestureDetector(
               onTap: () async {
                 if (isUpdate) {
-                  copyOrder.item = _orderTextController.text;
-                  copyOrder.name = _nameTextController.text;
-                  await restaurantController.editOrder(
-                      restaurant, newOrder, copyOrder);
+                  if (_nameTextController.text.trim() != "" &&
+                      _orderTextController.text.trim() != "") {
+                    copyOrder.item = _orderTextController.text;
+                    copyOrder.name = _nameTextController.text;
+                    await restaurantController.editOrder(
+                        restaurant, newOrder, copyOrder);
+                    Navigator.pop(context);
+                    onSubmit();
+                  }
                 } else {
-                  newOrder.item = _orderTextController.text;
-                  newOrder.name = _nameTextController.text;
-                  await restaurantController.addOrder(restaurant, newOrder);
+                  if (_nameTextController.text.trim() != "" &&
+                      _orderTextController.text.trim() != "") {
+                    newOrder.item = _orderTextController.text;
+                    newOrder.name = _nameTextController.text;
+                    await restaurantController.addOrder(restaurant, newOrder);
+                    Navigator.pop(context);
+                    onSubmit();
+                  }
                 }
-
-                Navigator.pop(context);
-                onSubmit();
               },
               child: BorderButton(
                 buttonColor: appRed,

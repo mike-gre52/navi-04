@@ -91,29 +91,37 @@ class RecipeCell extends StatelessWidget {
                           maxLines: 2,
                         ),
                       ),
-                      Row(
-                        children: [
-                          const Text(
-                            'Time: ',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
+                      Container(
+                        child: Row(
+                          children: [
+                            const Text(
+                              'Time: ',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                height: 0.9,
+                              ),
                             ),
-                          ),
-                          recipe.totalTime != -2
-                              ? Text('${recipe.totalTime} mins')
-                              : Container(
-                                  width: width30,
-                                ),
-                          //Icon(Icons.),
-                          SizedBox(width: width10),
-                          const Text(
-                            'Yield: ',
-                            style: TextStyle(fontWeight: FontWeight.w700),
-                          ),
-                          Text(
-                            '${recipe.servings}',
-                          ),
-                        ],
+                            recipe.totalTime != -2
+                                ? Text(
+                                    '${recipe.totalTime} mins',
+                                    style: const TextStyle(height: 0.9),
+                                  )
+                                : Container(
+                                    width: width30,
+                                  ),
+                            //Icon(Icons.),
+                            SizedBox(width: width10),
+                            const Text(
+                              'Yield: ',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w700, height: 0.9),
+                            ),
+                            Text(
+                              '${recipe.servings}',
+                              style: const TextStyle(height: 0.9),
+                            ),
+                          ],
+                        ),
                       )
                     ],
                   ),

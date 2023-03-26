@@ -35,6 +35,7 @@ class _RecipeTabControllerState extends State<RecipeTabController>
     double height50 = screenHeight / 17.92;
     double height100 = screenHeight / 8.96;
     double height125 = screenHeight / 7.168;
+    double height150 = screenHeight / 5.973;
     double height200 = screenHeight / 4.48;
     double height600 = screenHeight / 1.493;
     double width30 = screenWidth / 13.8;
@@ -50,7 +51,7 @@ class _RecipeTabControllerState extends State<RecipeTabController>
       child: Column(
         children: [
           Container(
-            height: widget.recipe.isImport ? height125 : height100,
+            height: widget.recipe.isImport ? height150 : height100,
             width: double.maxFinite,
             decoration: BoxDecoration(
                 border: Border(
@@ -60,9 +61,6 @@ class _RecipeTabControllerState extends State<RecipeTabController>
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                widget.recipe.cookTime == -1 || widget.recipe.prepTime == -1
-                    ? TotalTime(recipe: widget.recipe)
-                    : SplitTime(recipe: widget.recipe),
                 widget.recipe.isImport
                     ? Container(
                         margin: EdgeInsets.symmetric(horizontal: width30),
@@ -89,6 +87,9 @@ class _RecipeTabControllerState extends State<RecipeTabController>
                         ),
                       )
                     : Container(),
+                widget.recipe.cookTime == -1 || widget.recipe.prepTime == -1
+                    ? TotalTime(recipe: widget.recipe)
+                    : SplitTime(recipe: widget.recipe),
                 TabBar(
                   onTap: (value) {
                     if (value == 0) {

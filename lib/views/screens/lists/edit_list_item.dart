@@ -133,6 +133,8 @@ class _EditListItemScreenState extends State<EditListItemScreen> {
     double width30 = screenWidth / 13.8;
     double fontSize18 = screenHeight / 49.777;
 
+    double imageBoxWidth = double.maxFinite;
+
     return Scaffold(
         body: SafeArea(
       child: Container(
@@ -203,7 +205,7 @@ class _EditListItemScreenState extends State<EditListItemScreen> {
                     child: Image.network(
                       item.imageUrl,
                       height: height350,
-                      width: double.maxFinite,
+                      width: screenWidth,
                       fit: BoxFit.cover,
                     ),
                   )

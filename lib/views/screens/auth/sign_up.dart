@@ -57,11 +57,13 @@ class _SignUpState extends State<SignUp> {
     double height10 = screenHeight / 89.6;
     double height20 = screenHeight / 44.8;
     double height30 = screenHeight / 29.86;
+    double height40 = screenHeight / 22.4;
     double height65 = screenHeight / 13.784;
     double height100 = screenHeight / 8.96;
     double height200 = screenHeight / 4.48;
     double width30 = screenWidth / 13.8;
     double fontSize35 = screenHeight / 25.6;
+    double width60percent = mediaQuery.size.width * .60;
 
     return Scaffold(
       body: Stack(
@@ -73,7 +75,19 @@ class _SignUpState extends State<SignUp> {
               children: [
                 //AddProfileImage(),
                 SizedBox(
-                  height: height200,
+                  height: height100,
+                ),
+                Align(
+                  alignment: Alignment.center,
+                  child: Image(
+                    width: width60percent,
+                    image: const AssetImage(
+                      'assets/images/loading_screen.png',
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: height30,
                 ),
                 Text(
                   'Sign Up',
@@ -153,13 +167,14 @@ class _SignUpState extends State<SignUp> {
                     secondColor: royalYellow,
                   ),
                 ),
-                SizedBox(
-                  height: height100,
-                ),
-                BottomText(
-                  firstText: 'Already have an account ',
-                  secondText: 'Login',
-                  buttonRoute: RouteHelper.getSignInRoute(),
+                Expanded(child: Container()),
+                Container(
+                  margin: EdgeInsets.only(bottom: height40),
+                  child: BottomText(
+                    firstText: 'Already have an account ',
+                    secondText: 'Login',
+                    buttonRoute: RouteHelper.getSignInRoute(),
+                  ),
                 )
               ],
             ),

@@ -10,6 +10,7 @@ import 'package:whats_for_dinner/data/local_data.dart';
 import 'package:whats_for_dinner/routes/routes.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
 import 'package:whats_for_dinner/views/screens/auth/sign_up.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'controllers/auth_controller.dart';
 import 'views/screens/auth/sign_in.dart';
@@ -24,6 +25,8 @@ Future<void> main() async {
     Get.put(ListsController());
     Get.put(RecipeController());
   });
+
+  MobileAds.instance.initialize();
   //await getData();
   runApp(const MyApp());
 }

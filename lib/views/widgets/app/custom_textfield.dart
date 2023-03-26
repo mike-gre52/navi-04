@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 
 import '../../../utils/colors.dart';
 
@@ -51,10 +52,12 @@ class _CustomTextfieldState extends State<CustomTextfield> {
     double screenWidth = mediaQuery.size.width;
     double height5 = screenHeight / 179.2;
     double height15 = screenHeight / 59.73;
-    double height25 = screenHeight / 35.84;
+    double height20 = screenHeight / 44.8;
     double textfieldWidth = screenWidth / (414 / widget.textfieldWidth);
     double textfieldHeight = screenHeight / (896 / widget.textfieldHeight);
     double textfieldBorderRadius = screenHeight / (896 / widget.borderRadius);
+
+    double fontSize18 = screenHeight / 49.777;
 
     return SizedBox(
       height: textfieldHeight,
@@ -63,8 +66,9 @@ class _CustomTextfieldState extends State<CustomTextfield> {
         textAlign: widget.centerText ? TextAlign.center : TextAlign.start,
         onSubmitted: widget.onSubmit,
         cursorColor: black,
-        cursorHeight: height25,
+        cursorHeight: height20,
         placeholder: widget.placeholderText,
+        placeholderStyle: TextStyle(fontSize: fontSize18, color: lightGrey),
         controller: widget.controller,
         keyboardType: widget.keyboard,
         onChanged: widget.onChanged,
@@ -97,7 +101,9 @@ class _CustomTextfieldState extends State<CustomTextfield> {
               )
             : null,
         style: TextStyle(
+          fontFamily: "IBMPlexSansDevanagari",
           color: black,
+          fontSize: fontSize18,
           height: 1.5,
         ),
         decoration: BoxDecoration(

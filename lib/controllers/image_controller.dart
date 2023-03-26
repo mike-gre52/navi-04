@@ -28,12 +28,12 @@ class ImageController {
           .pickImage(source: ImageSource.gallery, imageQuality: 1);
     }
     //print(pickedImage);
-    if (pickedImage != null) {
-      Get.snackbar(
-          'Recipe Picture', 'You have successfully selected a recipe picture!');
-    } else {
-      print('no image selected');
-    }
+    //if (pickedImage != null) {
+    //  Get.snackbar(
+    //      'Recipe Picture', 'You have successfully selected a recipe picture!');
+    //} else {
+    //  print('no image selected');
+    //}
     Rx<File?> image = Rx<File?>(File(pickedImage!.path));
     _pickedImage = image;
     isImageSelected = true;
@@ -46,10 +46,14 @@ class ImageController {
     File image,
     Reference ref,
   ) async {
-    UploadTask uploadTask = ref.putFile(image);
-    TaskSnapshot snap = await uploadTask;
-    String downloadUrl = await snap.ref.getDownloadURL();
-
-    return downloadUrl;
+    try {
+      UploadTask uploadTask = ref.putFile(image);
+      TaskSnapshot snap = await uploadTask;
+      String downloadUrl = await snap.ref.getDownloadURL();
+      return downloadUrl;
+    } catch (e) {
+      Get.snackbar('Error uploading image', e.toString());
+      return "";
+    }
   }
 }
