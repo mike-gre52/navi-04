@@ -52,10 +52,10 @@ class _ListBottomPopupState extends State<ListBottomPopup> {
                   });
                   */
               Navigator.pop(context);
+              Navigator.pop(context);
+              Navigator.pop(context);
               listController.deleteList(
-                  widget.list.id, listItems, deletedItems);
-              Navigator.pop(context);
-              Navigator.pop(context);
+                  widget.list.id!, listItems, deletedItems);
             },
           ),
         ],
@@ -78,7 +78,7 @@ class _ListBottomPopupState extends State<ListBottomPopup> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      getDeletedItems(widget.list.id);
+      getDeletedItems(widget.list.id!);
     });
   }
 
@@ -114,7 +114,7 @@ class _ListBottomPopupState extends State<ListBottomPopup> {
                     buttonName: 'Clear Selected',
                     onClick: () {
                       listController.deleteSelectedItems(
-                          widget.list.id, listItems);
+                          widget.list.id!, listItems);
                       Navigator.pop(context);
                     },
                   ),
@@ -123,7 +123,7 @@ class _ListBottomPopupState extends State<ListBottomPopup> {
                     buttonName: 'Clear All',
                     onClick: () {
                       listController.deleteAllListItems(
-                          widget.list.id, listItems, true);
+                          widget.list.id!, listItems, true);
                       Navigator.pop(context);
                     },
                   ),
@@ -150,14 +150,12 @@ class _ListBottomPopupState extends State<ListBottomPopup> {
                     isRed: true,
                     onClick: () {
                       _showDialog(context);
-                      //Navigator.pop(context);
                     },
                   ),
                 ],
               ),
             );
           } else {
-            print("error loading");
             return Container();
           }
         });

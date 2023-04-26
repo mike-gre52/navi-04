@@ -42,7 +42,7 @@ class SelectListFromImportRecipe extends StatelessWidget {
     Widget buildListCell(ListData list) => GestureDetector(
           onTap: () {
             for (String element in ingredients) {
-              listController.addListItem(element, list.id);
+              listController.addListItem(element, list.id!);
             }
             Navigator.pop(context);
             showSnackBar("Success",
@@ -59,7 +59,7 @@ class SelectListFromImportRecipe extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final lists = snapshot.data!;
-
+            print(lists.isEmpty);
             return Column(
               children: [
                 AppHeader(
@@ -80,15 +80,26 @@ class SelectListFromImportRecipe extends StatelessWidget {
                     Navigator.pop(context);
                   },
                 ),
-                Expanded(
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: width30),
-                    child: ListView(
-                      padding: const EdgeInsets.all(0),
-                      children: lists.map(buildListCell).toList(),
-                    ),
-                  ),
-                )
+                lists.isNotEmpty
+                    ? Expanded(
+                        child: Container(
+                          margin: EdgeInsets.symmetric(horizontal: width30),
+                          child: ListView(
+                            padding: const EdgeInsets.all(0),
+                            children: lists.map(buildListCell).toList(),
+                          ),
+                        ),
+                      )
+                    : Container(
+                        margin: EdgeInsets.only(top: height55),
+                        child: const Text(
+                          "You dont have any lists created",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
               ],
             );
           } else {
@@ -148,7 +159,7 @@ class SmallListCell extends StatelessWidget {
                 width: double.maxFinite,
                 margin: EdgeInsets.only(top: height5),
                 child: Text(
-                  list.name,
+                  list.name != null ? list.name! : "",
                   style: TextStyle(
                       fontSize: fontSize18,
                       fontWeight: FontWeight.w600,

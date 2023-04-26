@@ -35,6 +35,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
 
     double height5 = screenHeight / 186.4;
     double height20 = screenHeight / 48.6;
+    double height30 = screenHeight / 29.86;
     double height40 = screenHeight / 22.4;
     double height55 = screenHeight / 16.945;
     double height70 = screenHeight / 13.314;
@@ -59,7 +60,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
             .ref()
             .child(globalGroupId)
             .child('recipeImages')
-            .child(recipe.id);
+            .child(recipe.id!);
 
         String url =
             await imageController.uploadToStorage(imageController.image!, ref);
@@ -112,7 +113,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
                   ),
                 ],
                 //floating: true,
-                title: Text(recipe.name),
+                title: Text(recipe.name != null ? recipe.name! : "no name"),
                 flexibleSpace: FlexibleSpaceBar(
                   background: ConstrainedBox(
                     constraints: BoxConstraints(
@@ -120,7 +121,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
                       minWidth: double.infinity,
                     ),
                     child: Image.network(
-                      recipe.imageUrl,
+                      recipe.imageUrl != null ? recipe.imageUrl! : "",
                       fit: BoxFit.cover,
                       errorBuilder: (BuildContext context, Object exception,
                           StackTrace? stackTrace) {
@@ -152,37 +153,52 @@ class _RecipeScreenState extends State<RecipeScreen> {
                   ),
                 ),
               ),
-              /*
+              recipe.isImport != null &&
+                      recipe.isImport! &&
+                      recipe.sourceUrl != null
+                  ? SliverToBoxAdapter(
+                      child: Container(
+                        color: paperBackground,
+                        //margin: EdgeInsets.symmetric(horizontal: width30),
+                        height: height30,
+                        child: Container(
+                          margin: EdgeInsets.only(
+                            left: width30,
+                          ),
+                          child: Row(
+                            children: [
+                              Text(
+                                'Source: ',
+                                style: TextStyle(fontSize: fontSize18),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  searchUrl(recipe.sourceUrl!);
+                                },
+                                child: Text(
+                                  trimSourceUrl(recipe.sourceUrl!),
+                                  style: TextStyle(
+                                      color: royalYellow, fontSize: fontSize16),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
+                  : SliverToBoxAdapter(
+                      child: Container(
+                        height: height30,
+                      ),
+                    ),
               SliverToBoxAdapter(
                 child: Container(
-                  height: 50,
                   color: paperBackground,
-                  child: Container(
-                    margin: const EdgeInsets.only(left: 10, bottom: 5),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        const Text(
-                          'Source: ',
-                          style: TextStyle(fontSize: 18),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            searchUrl(
-                                'https://sallysbakingaddiction.com/chewy-chocolate-chip-cookies/');
-                          },
-                          child: Text(
-                            'sallysbakingaddiction.com',
-                            style: TextStyle(fontSize: 18, color: royalYellow),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  //color: Color.fromRGBO(245, 242, 233, 1.0),
+                  height: 30,
                 ),
-              ),
-              */
+              )
             ],
           ),
         ),

@@ -193,8 +193,7 @@ class _GroupScreenState extends State<GroupScreen> {
                               onTap: () {
                                 //Invite Member
                                 Share.share(" $appUrl" +
-                                    "\n" +
-                                    "Download Whats for Dinner? and join our group with the code ${group.groupId}");
+                                    "Download Whats for Dinner? and join our group with the code: ${group.groupId}");
                               },
                               child: GradientButton(
                                 buttonText: 'Invite',
@@ -239,13 +238,18 @@ class _GroupScreenState extends State<GroupScreen> {
                 return Column(
                   children: [
                     AppHeader(
-                      headerText: 'Profile',
+                      headerText: 'Group',
                       headerColor: Colors.white,
                       borderColor: royalYellow,
                       textColor: black,
                       dividerColor: royalYellow,
-                      rightAction: Container(),
-                      onIconClick: () {},
+                      rightAction: Container(
+                        margin: EdgeInsets.only(bottom: height10),
+                        child: const Icon(Icons.settings),
+                      ),
+                      onIconClick: () {
+                        Get.toNamed(RouteHelper.getProfileRoute());
+                      },
                     ),
                     SizedBox(
                       height: height20,

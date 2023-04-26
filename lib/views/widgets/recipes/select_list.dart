@@ -125,7 +125,7 @@ class SmallListCell extends StatelessWidget {
                 width: double.maxFinite,
                 margin: EdgeInsets.only(top: height5),
                 child: Text(
-                  list.name,
+                  list.name != null ? list.name! : "",
                   style: TextStyle(
                     fontSize: fontSize18,
                     fontWeight: FontWeight.w600,

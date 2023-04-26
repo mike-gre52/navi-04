@@ -105,6 +105,9 @@ class _EditRecipeState extends State<EditRecipe> {
 
   @override
   Widget build(BuildContext context) {
+    ingredientCounter = 0;
+    instructionCounter = 0;
+
     MediaQueryData mediaQuery = MediaQuery.of(context);
     double screenHeight = mediaQuery.size.height;
     double screenWidth = mediaQuery.size.width;

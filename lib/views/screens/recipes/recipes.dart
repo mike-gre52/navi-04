@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:whats_for_dinner/main.dart';
@@ -20,24 +21,39 @@ class RecipesScreen extends StatefulWidget {
 }
 
 class _RecipesScreenState extends State<RecipesScreen> {
-  Widget buildRecipeCell(Recipe recipe) => recipe.isLink
-      ? GestureDetector(
-          onTap: (() {
-            searchUrl(recipe.sourceUrl);
-          }),
-          child: RecipeLinkCell(
-            recipe: recipe,
-          ),
-        )
-      : GestureDetector(
+  Widget buildRecipeCell(Recipe recipe) {
+    if (recipe.isLink != null) {
+      return recipe.isLink!
+          ? GestureDetector(
+              onTap: (() {
+                if (recipe.sourceUrl != null) {
+                  searchUrl(recipe.sourceUrl!);
+                }
+              }),
+              child: RecipeLinkCell(
+                recipe: recipe,
+              ),
+            )
+          : GestureDetector(
+              onTap: (() {
+                Get.toNamed(RouteHelper.recipeScreen, arguments: recipe);
+                //Get.toNamed(RouteHelper.testScreen);
+              }),
+              child: RecipeCell(
+                recipe: recipe,
+              ),
+            );
+    } else {
+      return GestureDetector(
           onTap: (() {
             Get.toNamed(RouteHelper.recipeScreen, arguments: recipe);
             //Get.toNamed(RouteHelper.testScreen);
           }),
           child: RecipeCell(
             recipe: recipe,
-          ),
-        );
+          ));
+    }
+  }
 
   updateUI() {
     setState(() {});
@@ -50,6 +66,7 @@ class _RecipesScreenState extends State<RecipesScreen> {
     double screenWidth = mediaQuery.size.width;
 
     double height5 = screenHeight / 186.4;
+    double height15 = screenHeight / 59.733;
     double height20 = screenHeight / 48.6;
     double height40 = screenHeight / 22.4;
     double height55 = screenHeight / 16.945;
@@ -106,7 +123,15 @@ class _RecipesScreenState extends State<RecipesScreen> {
                     ],
                   );
                 } else {
-                  return Container();
+                  return Container(
+                    child: Center(
+                      child: CupertinoActivityIndicator(
+                        radius: height15,
+                        color: appGreen,
+                        animating: true,
+                      ),
+                    ),
+                  );
                 }
               },
             )

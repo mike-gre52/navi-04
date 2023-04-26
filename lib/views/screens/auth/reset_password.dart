@@ -52,6 +52,7 @@ class _ResetPasswordState extends State<ResetPassword> {
     double fontSize35 = screenHeight / 25.6;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
           Container(

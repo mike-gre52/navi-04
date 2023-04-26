@@ -4,6 +4,7 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:whats_for_dinner/models/restaurant.dart';
+import 'package:whats_for_dinner/routes/routes.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
 import 'package:whats_for_dinner/views/widgets/app/app_header.dart';
@@ -33,7 +34,8 @@ class _ViewRestaurantState extends State<ViewRestaurant> {
 
   bool doesDelivery = false;
   int rating = 1;
-  int price = 3;
+  int price = 1;
+  String restaurantUrl = "";
 
   Object _selectedSegment = 0;
 
@@ -54,8 +56,10 @@ class _ViewRestaurantState extends State<ViewRestaurant> {
   }
 
   void setPriceStatus(value) {
-    price = value;
-    print(price);
+    print(value);
+    setState(() {
+      price = value;
+    });
   }
 
   void newRatingSelected(newValue) {
@@ -64,15 +68,33 @@ class _ViewRestaurantState extends State<ViewRestaurant> {
     });
   }
 
+  addUrl(String url) {
+    setState(() {
+      restaurantUrl = url;
+    });
+  }
+
   @override
   void initState() {
     restaurant = data[0];
     onSubmit = data[1];
-    _nameController.text = restaurant.name;
-    _timeController.text = restaurant.time.toString();
-    rating = restaurant.rating;
+    if (restaurant.name != null) {
+      _nameController.text = restaurant.name!;
+    }
+    if (restaurant.time != null) {
+      _timeController.text = restaurant.time.toString();
+    }
+    if (restaurant.rating != null) {
+      rating = restaurant.rating!;
+    }
+    if (restaurant.price != null) {
+      setPriceStatus(restaurant.price);
+    }
+    if (restaurant.restaurantUrl != null) {
+      restaurantUrl = restaurant.restaurantUrl!;
+    }
+
     setDeliveryStatus(restaurant.doesDelivery);
-    setPriceStatus(restaurant.price);
 
     super.initState();
   }
@@ -100,10 +122,12 @@ class _ViewRestaurantState extends State<ViewRestaurant> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AppHeader(
-            headerText: restaurant.name.length <= 12
-                ? restaurant.name[0].toUpperCase() +
-                    restaurant.name.substring(1)
-                : "${restaurant.name[0].toUpperCase()}${restaurant.name.substring(1, 12)}...",
+            headerText: restaurant.name != null
+                ? restaurant.name!.length <= 12
+                    ? restaurant.name![0].toUpperCase() +
+                        restaurant.name!.substring(1)
+                    : "${restaurant.name![0].toUpperCase()}${restaurant.name!.substring(1, 12)}..."
+                : "",
             headerColor: appRed,
             borderColor: royalYellow,
             textColor: Colors.white,
@@ -152,6 +176,24 @@ class _ViewRestaurantState extends State<ViewRestaurant> {
                   ),
                 ),
               ],
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              Get.toNamed(RouteHelper.getSingleTextfieldAndSubmitScreen(),
+                  arguments: [
+                    appRed,
+                    "Paste a Url below:",
+                    addUrl,
+                    CupertinoIcons.link
+                  ]);
+            },
+            child: Container(
+              margin: EdgeInsets.only(left: width30, top: 5),
+              child: Text(
+                restaurantUrl.trim() == "" ? "Add Url" : "Change Url",
+                style: TextStyle(color: appRed, fontWeight: FontWeight.w600),
+              ),
             ),
           ),
           Container(
@@ -236,7 +278,7 @@ class _ViewRestaurantState extends State<ViewRestaurant> {
                     ),
                     PriceSegmentedControll(
                       setPriceStatus: setPriceStatus,
-                      initialValue: restaurant.price,
+                      initialValue: price,
                     )
                   ],
                 ),
@@ -255,7 +297,11 @@ class _ViewRestaurantState extends State<ViewRestaurant> {
                     ),
                     DeliverySegmentedControll(
                       setDeliveryStatus: setDeliveryStatus,
-                      initialValue: restaurant.doesDelivery ? 0 : 1,
+                      initialValue: restaurant.doesDelivery != null
+                          ? restaurant.doesDelivery!
+                              ? 0
+                              : 1
+                          : 1,
                     ),
                   ],
                 ),
@@ -275,7 +321,7 @@ class _ViewRestaurantState extends State<ViewRestaurant> {
                   doesDelivery: doesDelivery,
                   isFavorite: restaurant.isFavorite,
                   id: restaurant.id,
-                  restaurantUrl: restaurant.restaurantUrl,
+                  restaurantUrl: restaurantUrl,
                   orders: restaurant.orders,
                 );
 

@@ -7,7 +7,7 @@ import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/views/widgets/app/border_button.dart';
 import 'package:whats_for_dinner/views/widgets/app/custom_textfield.dart';
 
-import '../../models/recipe.dart';
+import '../../../models/recipe.dart';
 
 class TextfieldAndSubmitScreen extends StatefulWidget {
   const TextfieldAndSubmitScreen({Key? key}) : super(key: key);
@@ -21,6 +21,20 @@ class _TextfieldAndSubmitScreenState extends State<TextfieldAndSubmitScreen> {
   final TextEditingController _textController = TextEditingController();
 
   final data = Get.arguments as List;
+  late final Color color;
+  late final String header;
+  late final Function onSubmit;
+  late final IconData textfieldIcon;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    color = data[0];
+    header = data[1];
+    onSubmit = data[2];
+    textfieldIcon = data[3];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +65,7 @@ class _TextfieldAndSubmitScreenState extends State<TextfieldAndSubmitScreen> {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      'Add a Recipe Name below',
+                      header,
                       style: TextStyle(
                         fontSize: fontSize18,
                         color: black,
@@ -77,10 +91,10 @@ class _TextfieldAndSubmitScreenState extends State<TextfieldAndSubmitScreen> {
             ),
             SizedBox(height: height15),
             CustomTextfield(
-              icon: CupertinoIcons.link,
-              placeholderText: 'recipe link',
+              icon: textfieldIcon,
+              placeholderText: '',
               controller: _textController,
-              borderColor: appBlue,
+              borderColor: color,
               textfieldWidth: double.maxFinite,
               textfieldHeight: height60,
               borderRadius: height10,
@@ -90,11 +104,12 @@ class _TextfieldAndSubmitScreenState extends State<TextfieldAndSubmitScreen> {
             SizedBox(height: height15),
             GestureDetector(
               onTap: () {
-                //recipeController.addLinkRecipe(_linkController.text);
-                //Navigator.pop(context);
+                //Takes a single String parameter(the text in the textfield)
+                onSubmit(_textController.text);
+                Navigator.pop(context);
               },
               child: BorderButton(
-                buttonColor: appBlue,
+                buttonColor: color,
                 buttonText: 'Submit',
               ),
             ),

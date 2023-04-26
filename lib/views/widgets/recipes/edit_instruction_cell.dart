@@ -67,9 +67,12 @@ class EditInstructionCell extends StatelessWidget {
               )
             ],
           ),
-          Text(
-            instruction.instruction,
-            style: TextStyle(fontSize: fontSize16),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              instruction.instruction,
+              style: TextStyle(fontSize: fontSize16),
+            ),
           ),
         ],
       ),

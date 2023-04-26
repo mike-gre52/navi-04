@@ -1,11 +1,15 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:whats_for_dinner/main.dart';
+import 'package:whats_for_dinner/utils/colors.dart';
+import 'package:whats_for_dinner/utils/helper.dart';
 import 'package:whats_for_dinner/views/screens/auth/sign_in.dart';
 import 'package:whats_for_dinner/views/screens/auth/sign_up.dart';
 import 'package:whats_for_dinner/views/screens/navigation.dart';
@@ -56,13 +60,10 @@ class AuthController extends GetxController {
   }
 
   _setInitialScreen(User? user) async {
-    print('1----------');
-
+    await Future.delayed(const Duration(milliseconds: 300));
     if (user == null) {
-      print('2----------');
       Get.offAll(() => SignIn(), transition: Transition.cupertino);
     } else {
-      print('3----------');
       await getData();
       Get.offAll(() => const Navigation(), transition: Transition.cupertino);
     }
@@ -74,6 +75,33 @@ class AuthController extends GetxController {
 
   setlocalColor(String color) {
     Database().setColor(color);
+  }
+
+  String pickRandomColor() {
+    List<Color> colors = [
+      color1,
+      color2,
+      color3,
+      color4,
+      color5,
+      color6,
+      color7,
+      color8,
+      color9,
+      color10,
+      color11,
+      color12,
+      color13,
+      color14,
+      color15,
+      color16,
+      color17,
+      color18,
+    ];
+    Random random = new Random();
+    int ran = random.nextInt(17);
+    Color color = colors[ran];
+    return color.value.toString();
   }
 
   void pickImage() async {
@@ -124,13 +152,15 @@ class AuthController extends GetxController {
 
         //String downloadUrl = await _uploadToStorage(image);
         model.User user = model.User(
-            name: username,
-            email: email,
-            uid: cred.user!.uid,
-            profileImage: '',
-            groupId: cred.user!.uid,
-            inGroup: false,
-            color: '4278933797');
+          name: username,
+          email: email,
+          uid: cred.user!.uid,
+          profileImage: '',
+          groupId: cred.user!.uid,
+          inGroup: false,
+          color: pickRandomColor(),
+          isPremium: false,
+        );
         await firestore
             .collection('users')
             .doc(cred.user!.uid)
@@ -147,7 +177,7 @@ class AuthController extends GetxController {
     } catch (e) {
       Get.snackbar(
         'Error Creating Account',
-        e.toString(),
+        filterErrorMessage(e.toString()),
       );
       print(e);
     }
@@ -170,7 +200,7 @@ class AuthController extends GetxController {
     } catch (e) {
       Get.snackbar(
         'Error Logging in',
-        e.toString(),
+        filterErrorMessage(e.toString()),
       );
     }
   }

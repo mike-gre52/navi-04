@@ -3,18 +3,18 @@ import 'dart:ffi';
 import 'package:whats_for_dinner/utils/helper.dart';
 
 class Recipe {
-  String name;
-  int prepTime;
-  int cookTime;
-  int totalTime;
-  String servings;
-  String id;
-  String imageUrl;
+  String? name;
+  int? prepTime;
+  int? cookTime;
+  int? totalTime;
+  String? servings;
+  String? id;
+  String? imageUrl;
   List<Ingredient> ingredients;
   List<Instruction> instructions;
-  String sourceUrl;
-  bool isLink;
-  bool isImport;
+  String? sourceUrl;
+  bool? isLink;
+  bool? isImport;
   Recipe({
     required this.name,
     required this.prepTime,
@@ -52,7 +52,7 @@ class Recipe {
       json['ingredients'].forEach((_, ingredient) {
         final newIngredient = Ingredient(
           name: ingredient,
-          id: id,
+          id: id!,
         );
         newIngredients.add(newIngredient);
       });

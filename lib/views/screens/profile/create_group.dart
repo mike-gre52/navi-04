@@ -36,6 +36,10 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
     double width5 = screenWidth / 82.8;
     double width30 = screenWidth / 13.8;
     double fontSize18 = screenHeight / 49.777;
+
+    List data = Get.arguments as List;
+    Function onCreateGroup = data[0];
+
     return Scaffold(
         body: Column(
       children: [
@@ -96,6 +100,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
               GestureDetector(
                 onTap: () {
                   if (_groupNameController.text.length > 3) {
+                    onCreateGroup();
                     groupController.createGroup(_groupNameController.text);
                     //should then dismiss the screen
                     Navigator.pop(context);

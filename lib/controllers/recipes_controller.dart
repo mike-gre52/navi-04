@@ -28,7 +28,9 @@ class RecipeController extends GetxController {
                 doc.data(),
               );
             },
-          ).toList(),
+          ).where((recipe) {
+            return recipe.id != null && recipe.id != "";
+          }).toList(),
         );
     return data;
   }
@@ -42,18 +44,30 @@ class RecipeController extends GetxController {
         .set(recipe.toJson());
   }
 
-  void deleteRecipeImageFromStorage(String recipeId) {
+  void deleteRecipeImageFromStorage(Recipe recipe) {
+    if (recipe.isLink == true || recipe.isImport == true) {
+      return;
+    }
     try {
-      firebaseStorage.ref().child(globalGroupId).child(recipeId).delete();
+      firebaseStorage
+          .ref()
+          .child(globalGroupId)
+          .child("recipeImages")
+          .child(recipe.id!)
+          .delete();
     } catch (e) {
       throw ("Error deleting recipe Image");
     }
   }
 
   void deleteRecipe(Recipe recipe) {
-    if (!recipe.isImport && recipe.imageUrl != "") {
-      deleteRecipeImageFromStorage(recipe.id);
+    //if (!recipe.isImport && recipe.imageUrl != "") {
+    try {
+      deleteRecipeImageFromStorage(recipe);
+    } catch (e) {
+      print("No image found at that location.");
     }
+    //}
     firestore
         .collection('groups')
         .doc(globalGroupId)
@@ -124,8 +138,95 @@ class RecipeController extends GetxController {
     }
   }
 
+  void updateRecipePrepTime(Recipe recipe, int prepTime) {
+    /*
+    int newTotalTime;
+    if (recipe.totalTime == null) {
+      if (recipe.cookTime == null) {
+        newTotalTime = prepTime;
+      } else {
+        newTotalTime = prepTime + recipe.cookTime!;
+      }
+    } else {
+      //changed prepTime value
+      if (recipe.prepTime != null) {
+        int prepDif = prepTime - recipe.prepTime!;
+        print("prepDIf   $prepDif");
+        newTotalTime = prepDif + recipe.totalTime!;
+      } else {
+        //prepTime was empty
+        newTotalTime = prepTime + recipe.totalTime!;
+      }
+    }
+    print("updating");
+    updateRecipeTotalTime(recipe, newTotalTime);
+
+    */
+
+    try {
+      firestore
+          .collection('groups')
+          .doc(globalGroupId)
+          .collection('recipes')
+          .doc(recipe.id)
+          .update({'prepTime': prepTime});
+    } catch (e) {
+      Get.snackbar(
+        'Error editing prepTime',
+        '$e',
+      );
+    }
+  }
+
+  void updateRecipeCookTime(Recipe recipe, int cookTime) {
+    try {
+      firestore
+          .collection('groups')
+          .doc(globalGroupId)
+          .collection('recipes')
+          .doc(recipe.id)
+          .update({'cookTime': cookTime});
+    } catch (e) {
+      Get.snackbar(
+        'Error editing cookTime',
+        '$e',
+      );
+    }
+  }
+
+  void updateRecipeTotalTime(Recipe recipe, int totalTime) {
+    try {
+      firestore
+          .collection('groups')
+          .doc(globalGroupId)
+          .collection('recipes')
+          .doc(recipe.id)
+          .update({'totalTime': totalTime});
+    } catch (e) {
+      Get.snackbar(
+        'Error editing totalTime',
+        '$e',
+      );
+    }
+  }
+
+  void updateRecipeServings(Recipe recipe, String servings) {
+    try {
+      firestore
+          .collection('groups')
+          .doc(globalGroupId)
+          .collection('recipes')
+          .doc(recipe.id)
+          .update({'servings': servings});
+    } catch (e) {
+      Get.snackbar(
+        'Error editing servings',
+        '$e',
+      );
+    }
+  }
+
   void updateImageUrl(Recipe recipe, String url) {
-    print('upadting url');
     try {
       firestore
           .collection('groups')
@@ -156,6 +257,5 @@ class RecipeController extends GetxController {
         '$e',
       );
     }
-    print('updated instruct');
   }
 }

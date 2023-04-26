@@ -33,7 +33,7 @@ class _ListScreenState extends State<ListScreen> {
     if (_itemController.text.trim() != "") {
       listController.addListItem(
         _itemController.text,
-        list.id,
+        list.id!,
       );
       _itemController.clear();
     }
@@ -98,7 +98,7 @@ class _ListScreenState extends State<ListScreen> {
         child: Column(
           children: [
             AppHeader(
-              headerText: list.name,
+              headerText: list.name != null ? list.name! : "",
               headerColor: appGreen,
               borderColor: royalYellow,
               textColor: Colors.white,
@@ -160,7 +160,7 @@ class _ListScreenState extends State<ListScreen> {
                     },
                   ),
                   GestureDetector(
-                    onTap: () {
+                    onTap: () async {
                       addItem();
                     },
                     child: Container(

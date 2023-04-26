@@ -70,7 +70,7 @@ class RecipeLinkCell extends StatelessWidget {
                 width: double.maxFinite,
                 margin: EdgeInsets.only(left: width5, top: height5),
                 child: Text(
-                  recipe.name,
+                  recipe.name != null ? recipe.name! : "no name",
                   style: TextStyle(
                       fontSize: fontSize18,
                       fontWeight: FontWeight.w600,

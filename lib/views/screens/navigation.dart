@@ -94,7 +94,7 @@ class _NavigationState extends State<Navigation> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             _isBottomBanerAdLoaded
-                ? SizedBox(
+                ? Container(
                     height: _bottomBannerAd.size.height.toDouble(),
                     width: double.maxFinite,
                     child: AdWidget(ad: _bottomBannerAd),
@@ -114,14 +114,6 @@ class _NavigationState extends State<Navigation> {
                     width: 3,
                   ),
                 ),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.grey,
-                    offset: Offset(0.0, 1.0),
-                    blurRadius: 3.0,
-                    spreadRadius: 1.0,
-                  ), //Bo
-                ],
               ),
               child: BottomNavigationBar(
                 type: BottomNavigationBarType.fixed,

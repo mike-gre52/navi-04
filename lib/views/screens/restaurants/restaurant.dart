@@ -27,25 +27,13 @@ class RestaurantScreen extends StatefulWidget {
 }
 
 class _RestaurantScreenState extends State<RestaurantScreen> {
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _timeController = TextEditingController();
-  TextEditingController _notesController = TextEditingController();
-
   Restaurant restaurant = Get.arguments as Restaurant;
 
   bool doesDelivery = false;
   int rating = 1;
-  int price = 3;
+  int price = -1;
 
   Object _selectedSegment = 0;
-
-  @override
-  void dispose() {
-    super.dispose();
-    _nameController.dispose();
-    _timeController.dispose();
-    _notesController.dispose();
-  }
 
   void setDeliveryStatus(value) {
     if (value == 0) {
@@ -56,8 +44,9 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
   }
 
   void setPriceStatus(value) {
-    price = value;
-    print(price);
+    setState(() {
+      price = value;
+    });
   }
 
   void newRatingSelected(newValue) {
@@ -68,19 +57,17 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
 
   onUpdateRestaurant(Restaurant newRestaurant) {
     setState(() {
-      print(restaurant.rating);
-      print(newRestaurant.rating);
       restaurant = newRestaurant;
-      print(restaurant.rating);
     });
   }
 
   @override
   void initState() {
-    _nameController.text = restaurant.name;
-    _timeController.text = restaurant.time.toString();
     setDeliveryStatus(restaurant.doesDelivery);
-    setPriceStatus(restaurant.price);
+    if (restaurant.price != null) {
+      setPriceStatus(restaurant.price);
+    }
+
     super.initState();
   }
 
@@ -96,6 +83,13 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
     setState(() {});
   }
 
+  addUrl(String url) {
+    restaurantController.updateRestaurantUrl(restaurant.id!, url);
+    setState(() {
+      restaurant.restaurantUrl = url;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
@@ -103,34 +97,16 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
     double screenHeight = mediaQuery.size.height;
     double screenWidth75 = screenWidth * .75;
     double height5 = screenHeight / 179.2;
-    double height10 = screenHeight / 89.6;
-    double height15 = screenHeight / 59.733;
-    double height20 = screenHeight / 44.8;
     double height25 = screenHeight / 35.84;
     double height30 = screenHeight / 29.86;
-    double height40 = screenHeight / 22.4;
-    double height50 = screenHeight / 17.92;
-    double height60 = screenHeight / 14.933;
-    double height65 = screenHeight / 13.784;
-    double height200 = screenHeight / 4.48;
-    double height250 = screenHeight / 3.584;
-    double fontSize35 = screenHeight / 25.6;
-    double height205 = screenHeight / 4.3707;
     double height450 = screenHeight / 1.991;
     double width5 = screenWidth / 82.8;
     double width10 = screenWidth / 41.4;
-    double width15 = screenWidth / 27.6;
     double width25 = screenWidth / 16.56;
     double width30 = screenWidth / 13.8;
-    double width80 = screenWidth / 5.175;
-    double width100 = screenWidth / 4.14;
-    double width200 = screenWidth / 2.07;
-    double width350 = screenWidth / 1.182;
     double fontSize14 = screenHeight / 64;
-    double fontSize16 = screenHeight / 56;
     double fontSize18 = screenHeight / 49.777;
     double fontSize20 = screenHeight / 44.8;
-    double fontSize22 = screenHeight / 40.727;
     double fontSize24 = screenHeight / 37.333;
     double fontSize28 = screenHeight / 32;
     double fontSize40 = screenHeight / 22.4;
@@ -170,8 +146,10 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                     ConstrainedBox(
                       constraints: BoxConstraints(maxWidth: screenWidth75),
                       child: Text(
-                        restaurant.name.substring(0, 1).toUpperCase() +
-                            restaurant.name.substring(1),
+                        restaurant.name != null
+                            ? restaurant.name!.substring(0, 1).toUpperCase() +
+                                restaurant.name!.substring(1)
+                            : "Add Name",
                         maxLines: 2,
                         style: TextStyle(
                           color: black,
@@ -198,15 +176,16 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                     )
                   ],
                 ),
-                restaurant.restaurantUrl != ""
+                restaurant.restaurantUrl != null &&
+                        restaurant.restaurantUrl != ""
                     ? GestureDetector(
                         onTap: () {
-                          searchUrl(restaurant.restaurantUrl);
+                          searchUrl(restaurant.restaurantUrl!);
                         },
                         child: Container(
                           margin: EdgeInsets.only(left: width5),
                           child: Text(
-                            trimSourceUrl(restaurant.restaurantUrl),
+                            trimSourceUrl(restaurant.restaurantUrl!),
                             style: TextStyle(
                                 fontSize: fontSize18,
                                 color: darkGrey,
@@ -214,32 +193,55 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                           ),
                         ),
                       )
-                    : Container(),
+                    : GestureDetector(
+                        onTap: () {
+                          Get.toNamed(
+                              RouteHelper.getSingleTextfieldAndSubmitScreen(),
+                              arguments: [
+                                appRed,
+                                "Paste a Url below:",
+                                addUrl,
+                                CupertinoIcons.link
+                              ]);
+                        },
+                        child: Container(
+                          margin: EdgeInsets.only(left: width5),
+                          child: Text(
+                            "add url",
+                            style: TextStyle(
+                                fontSize: fontSize14,
+                                color: darkGrey,
+                                fontWeight: FontWeight.w400),
+                          ),
+                        ),
+                      ),
                 SelectRating(
-                  rating: restaurant.rating,
+                  rating: restaurant.rating != null ? restaurant.rating! : 1,
                   onTap: newRatingSelected,
                   isTapable: false,
                 ),
-                Container(
-                  margin: EdgeInsets.only(top: height5),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.timer_outlined,
-                        size: height30,
-                      ),
-                      SizedBox(width: width10),
-                      Text(
-                        restaurant.time.toString() + " min",
-                        style: TextStyle(
-                            fontSize: fontSize18,
-                            color: black,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      SizedBox(width: width10),
-                    ],
-                  ),
-                ),
+                restaurant.time != null
+                    ? Container(
+                        margin: EdgeInsets.only(top: height5),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.timer_outlined,
+                              size: height30,
+                            ),
+                            SizedBox(width: width10),
+                            Text(
+                              restaurant.time.toString() + " min",
+                              style: TextStyle(
+                                  fontSize: fontSize18,
+                                  color: black,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            SizedBox(width: width10),
+                          ],
+                        ),
+                      )
+                    : Container(),
                 Row(
                   children: [
                     Container(
@@ -251,7 +253,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                                 ? '\$\$'
                                 : restaurant.price == 3
                                     ? '\$\$\$'
-                                    : '\$\$\$',
+                                    : '',
                         style: TextStyle(
                           fontSize: fontSize24,
                           fontWeight: FontWeight.w800,
@@ -259,13 +261,17 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(width: width30),
-                    restaurant.doesDelivery
-                        ? Icon(
-                            Icons.delivery_dining_outlined,
-                            size: height30,
-                            color: green,
-                          )
+                    restaurant.doesDelivery != null && restaurant.price != null
+                        ? SizedBox(width: width30)
+                        : Container(),
+                    restaurant.doesDelivery != null
+                        ? restaurant.doesDelivery!
+                            ? Icon(
+                                Icons.delivery_dining_outlined,
+                                size: height30,
+                                color: green,
+                              )
+                            : Container()
                         : Container(),
                   ],
                 ),

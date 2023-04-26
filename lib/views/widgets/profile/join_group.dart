@@ -119,7 +119,9 @@ class _JoinGroupState extends State<JoinGroup> {
               ),
               GestureDetector(
                 onTap: () {
-                  Get.toNamed(RouteHelper.createGroup);
+                  print("create group");
+                  Get.toNamed(RouteHelper.createGroup,
+                      arguments: [widget.onSubmit]);
                 },
                 child: Text(
                   'Click Here',

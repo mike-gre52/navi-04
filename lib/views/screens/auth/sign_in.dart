@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:whats_for_dinner/controllers/auth_controller.dart';
 import 'package:whats_for_dinner/controllers/user_controller.dart';
 import 'package:whats_for_dinner/main.dart';
@@ -55,6 +56,7 @@ class _SignInState extends State<SignIn> {
     double width60percent = mediaQuery.size.width * .60;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
           Container(

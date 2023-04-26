@@ -116,7 +116,7 @@ class _SelectIngredientsState extends State<SelectIngredients> {
                     GestureDetector(
                       onTap: () {
                         ingredientsToAdd.forEach((ingrediant) {
-                          listController.addListItem(ingrediant, list.id);
+                          listController.addListItem(ingrediant, list.id!);
                         });
 
                         Navigator.pop(context);

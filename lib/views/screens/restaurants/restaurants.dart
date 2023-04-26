@@ -79,6 +79,7 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
     double screenHeight = mediaQuery.size.height;
+    double height15 = screenHeight / 59.733;
     double height40 = screenHeight / 22.4;
     double height50 = screenHeight / 17.92;
 
@@ -336,7 +337,15 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
                     ],
                   );
                 } else {
-                  return Container();
+                  return Container(
+                    child: Center(
+                      child: CupertinoActivityIndicator(
+                        radius: height15,
+                        color: appRed,
+                        animating: true,
+                      ),
+                    ),
+                  );
                 }
               },
             )

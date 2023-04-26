@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -43,6 +44,7 @@ class _ListsScreenState extends State<ListsScreen> {
     MediaQueryData mediaQuery = MediaQuery.of(context);
     double screenHeight = mediaQuery.size.height;
     double screenWidth = mediaQuery.size.width;
+    double height15 = screenHeight / 59.733;
     double height40 = screenHeight / 22.4;
     double width30 = screenWidth / 13.8;
     return Scaffold(
@@ -51,6 +53,7 @@ class _ListsScreenState extends State<ListsScreen> {
               stream: listController.getListData(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
+                  print("aftter delete");
                   final lists = snapshot.data!;
                   return Column(
                     children: [
@@ -81,7 +84,15 @@ class _ListsScreenState extends State<ListsScreen> {
                     ],
                   );
                 } else {
-                  return Container();
+                  return Container(
+                    child: Center(
+                      child: CupertinoActivityIndicator(
+                        radius: height15,
+                        color: appGreen,
+                        animating: true,
+                      ),
+                    ),
+                  );
                 }
               },
             )

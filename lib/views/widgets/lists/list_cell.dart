@@ -1,7 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:get/get.dart';
 import 'package:whats_for_dinner/models/list.dart';
+import 'package:whats_for_dinner/routes/routes.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
 import 'package:whats_for_dinner/views/widgets/lists/list_item.dart';
@@ -18,8 +21,12 @@ class ListCell extends StatefulWidget {
 }
 
 class _ListCellState extends State<ListCell> {
+  addName(String listName) {
+    listController.updateListName(widget.list, listName);
+  }
+
   Widget buildListItem(Item item) => ListItem(
-        listId: widget.list.id,
+        listId: widget.list.id!,
         showCheckBox: false,
         item: item,
         list: widget.list,
@@ -41,6 +48,7 @@ class _ListCellState extends State<ListCell> {
     double height30 = screenHeight / 29.86;
     double height50 = screenHeight / 17.92;
     double height100 = screenHeight / 8.96;
+    double width5 = screenWidth / 82.8;
     double width15 = screenWidth / 27.6;
     double width30 = screenWidth / 13.8;
     double width250 = screenWidth / 1.656;
@@ -52,13 +60,15 @@ class _ListCellState extends State<ListCell> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final listItems = snapshot.data!;
+            int itemCount = 0;
+            if (widget.list.itemCount != null) {
+              itemCount = widget.list.itemCount!;
+            }
             return AnimatedContainer(
               margin: EdgeInsets.symmetric(vertical: height10),
               duration: Duration(milliseconds: animationDuration),
               curve: Curves.easeIn,
-              height: isOpened
-                  ? (widget.list.itemCount * height25) + height100
-                  : height100,
+              height: isOpened ? (itemCount * height25) + height100 : height100,
               width: double.maxFinite,
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -81,14 +91,43 @@ class _ListCellState extends State<ListCell> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          widget.list.name,
-                          style: TextStyle(
-                            fontSize: fontSize24,
-                            fontWeight: FontWeight.w600,
-                            color: black,
-                            height: 1,
-                          ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ConstrainedBox(
+                              constraints: BoxConstraints(maxWidth: width250),
+                              child: Text(
+                                widget.list.name != null
+                                    ? widget.list.name!
+                                    : "add name",
+                                style: TextStyle(
+                                    fontSize: fontSize24,
+                                    fontWeight: FontWeight.w600,
+                                    color: black,
+                                    height: 1.2,
+                                    overflow: TextOverflow.ellipsis),
+                              ),
+                            ),
+                            widget.list.name == null
+                                ? GestureDetector(
+                                    onTap: () {
+                                      Get.toNamed(
+                                          RouteHelper
+                                              .getSingleTextfieldAndSubmitScreen(),
+                                          arguments: [
+                                            appGreen,
+                                            "Add a name for the list: ",
+                                            addName,
+                                            CupertinoIcons.list_bullet
+                                          ]);
+                                    },
+                                    child: Container(
+                                        margin: EdgeInsets.only(left: width5),
+                                        child: const Icon(
+                                            Icons.edit_note_rounded)),
+                                  )
+                                : Container(),
+                          ],
                         ),
                         Container(
                             width: height50, height: height3, color: appGreen),
@@ -113,56 +152,60 @@ class _ListCellState extends State<ListCell> {
                                       ),
                                     )
                                   : Container(),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        '${widget.list.itemCount} items',
-                                        style: TextStyle(
-                                          fontSize: fontSize16,
-                                          fontWeight: FontWeight.w400,
-                                          color: black,
-                                        ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: (() {
-                                          if (listItems.isNotEmpty) {
-                                            setState(() {
-                                              isOpened = !isOpened;
-                                              //showList = !showList;
-
-                                              if (showList) {
-                                                Future.delayed(
-                                                    Duration(
-                                                      milliseconds:
-                                                          animationDuration,
-                                                    ), () {
+                              widget.list.itemCount != null
+                                  ? Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              '${widget.list.itemCount} items',
+                                              style: TextStyle(
+                                                fontSize: fontSize16,
+                                                fontWeight: FontWeight.w400,
+                                                color: black,
+                                              ),
+                                            ),
+                                            GestureDetector(
+                                              onTap: (() {
+                                                if (listItems.isNotEmpty) {
                                                   setState(() {
-                                                    showList = !showList;
+                                                    isOpened = !isOpened;
+                                                    //showList = !showList;
+                                                    if (showList) {
+                                                      Future.delayed(
+                                                          Duration(
+                                                            milliseconds:
+                                                                animationDuration,
+                                                          ), () {
+                                                        setState(() {
+                                                          showList = !showList;
+                                                        });
+                                                      });
+                                                    } else {
+                                                      showList = !showList;
+                                                    }
                                                   });
-                                                });
-                                              } else {
-                                                showList = !showList;
-                                              }
-                                            });
-                                          }
-                                        }),
-                                        child: Icon(
-                                          isOpened
-                                              ? Icons.arrow_drop_up_rounded
-                                              : Icons.arrow_drop_down_rounded,
-                                          size: height50,
-                                          color: appGreen,
+                                                }
+                                              }),
+                                              child: Icon(
+                                                isOpened
+                                                    ? Icons
+                                                        .arrow_drop_up_rounded
+                                                    : Icons
+                                                        .arrow_drop_down_rounded,
+                                                size: height50,
+                                                color: appGreen,
+                                              ),
+                                            )
+                                          ],
                                         ),
-                                      )
-                                    ],
-                                  ),
-                                ],
-                              ),
+                                      ],
+                                    )
+                                  : Container(),
                             ],
                           ),
                         )

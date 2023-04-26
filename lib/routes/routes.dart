@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:whats_for_dinner/test.dart';
-import 'package:whats_for_dinner/views/app/textfield_And_Submit_Screen.dart';
+import 'package:whats_for_dinner/views/screens/app/textfield_And_Submit_Screen.dart';
 import 'package:whats_for_dinner/views/screens/auth/confirm_reset_email_sent.dart';
 import 'package:whats_for_dinner/views/screens/auth/reset_password.dart';
 import 'package:whats_for_dinner/views/screens/lists/add_list.dart';

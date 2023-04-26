@@ -52,7 +52,7 @@ class SelectRecipeCell extends StatelessWidget {
                 width: double.maxFinite,
                 margin: EdgeInsets.only(top: height5),
                 child: Text(
-                  recipe.name,
+                  recipe.name != null ? recipe.name! : "",
                   style: TextStyle(
                       fontSize: fontSize18,
                       fontWeight: FontWeight.w600,

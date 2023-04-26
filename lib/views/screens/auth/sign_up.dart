@@ -61,11 +61,13 @@ class _SignUpState extends State<SignUp> {
     double height65 = screenHeight / 13.784;
     double height100 = screenHeight / 8.96;
     double height200 = screenHeight / 4.48;
+    double height205 = screenHeight / 4.3707;
     double width30 = screenWidth / 13.8;
     double fontSize35 = screenHeight / 25.6;
     double width60percent = mediaQuery.size.width * .60;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
           Container(
@@ -181,7 +183,7 @@ class _SignUpState extends State<SignUp> {
           ),
           isLoading
               ? Container(
-                  margin: EdgeInsets.only(top: height100),
+                  margin: EdgeInsets.only(top: height205),
                   child: Align(
                     alignment: Alignment.topCenter,
                     child: CupertinoActivityIndicator(

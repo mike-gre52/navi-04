@@ -1,14 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Restaurant {
-  String name;
-  int time;
-  int rating;
-  int price;
-  bool doesDelivery;
-  bool isFavorite;
-  String id;
-  String restaurantUrl;
+  String? name;
+  int? time;
+  int? rating;
+  int? price;
+  bool? doesDelivery;
+  bool? isFavorite;
+  String? id;
+  String? restaurantUrl;
   List<Order> orders;
 
   Restaurant({

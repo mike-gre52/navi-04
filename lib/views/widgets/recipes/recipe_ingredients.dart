@@ -53,23 +53,29 @@ class RecipeIngredient extends StatelessWidget {
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
     double screenHeight = mediaQuery.size.height;
-    double fontSize22 = screenHeight / 40.727;
-    double fontSize24 = screenHeight / 37.333;
+
+    double height5 = screenHeight / 179.2;
+    double fontSize20 = screenHeight / 44.8;
 
     return Container(
+      margin: EdgeInsets.only(top: height5),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             '$stepNumber)  ',
-            style: TextStyle(fontSize: fontSize24),
+            style: TextStyle(
+                fontSize: fontSize20, fontWeight: FontWeight.w500, height: 1.2),
           ),
           Expanded(
             child: Text(
               ingredient,
-              style:
-                  TextStyle(fontSize: fontSize22, fontWeight: FontWeight.w300),
-              maxLines: null,
+              style: TextStyle(
+                  fontSize: fontSize20,
+                  fontWeight: FontWeight.w500,
+                  height: 1.2),
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
           showDelete

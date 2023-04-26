@@ -27,11 +27,13 @@ class ListsController extends GetxController {
         .map(
           (snapshot) => snapshot.docs
               .map(
-                (doc) => ListData.static().fromJson(
-                  doc.data(),
-                ),
-              )
-              .toList(),
+            (doc) => ListData.static().fromJson(
+              doc.data(),
+            ),
+          )
+              .where((list) {
+            return list.id != null && list.id != "";
+          }).toList(),
         );
     return data;
   }
@@ -248,6 +250,15 @@ class ListsController extends GetxController {
         .update({'imageUrl': imageUrl});
   }
 
+  void updateListName(ListData list, String listName) {
+    firestore
+        .collection('groups')
+        .doc(globalGroupId)
+        .collection('lists')
+        .doc(list.id) //specific list
+        .update({'name': listName});
+  }
+
   void restoreListItem(Item item, String listId) async {
     var itemId = DateTime.now().toString();
     //create new item
@@ -284,14 +295,16 @@ class ListsController extends GetxController {
 
   void deleteSelectedItems(String listId, List<Item> listItems) {
     for (var i = 0; i < listItems.length; i++) {
-      if (listItems[i].isChecked) {
-        deleteListItem(listItems[i], listId, false, true);
+      if (listItems[i].isChecked != null) {
+        if (listItems[i].isChecked!) {
+          deleteListItem(listItems[i], listId, false, true);
+        }
       }
     }
   }
 
-  void deleteAllListItems(
-      String listId, List<Item> listItems, bool addToRecentlyDeleted) {
+  Future<void> deleteAllListItems(
+      String listId, List<Item> listItems, bool addToRecentlyDeleted) async {
     for (var i = 0; i < listItems.length; i++) {
       deleteListItem(listItems[i], listId, false, addToRecentlyDeleted);
     }
@@ -308,7 +321,7 @@ class ListsController extends GetxController {
         .delete(); //will need to build Item
   }
 
-  void clearRecentlyDeleted(String listId, List<Item> items) {
+  Future<void> clearRecentlyDeleted(String listId, List<Item> items) async {
     for (var i = 0; i < items.length; i++) {
       deleteRecentlyDeletedItem(items[i].id, listId);
     }
@@ -342,10 +355,10 @@ class ListsController extends GetxController {
         .set(list.toJson());
   }
 
-  void deleteList(String listId, List<Item> listItems,
-      List<Item> recentlyDeletedListItems) {
-    deleteAllListItems(listId, listItems, false);
-    clearRecentlyDeleted(listId, recentlyDeletedListItems);
+  Future<void> deleteList(String listId, List<Item> listItems,
+      List<Item> recentlyDeletedListItems) async {
+    await deleteAllListItems(listId, listItems, false);
+    await clearRecentlyDeleted(listId, recentlyDeletedListItems);
     firestore
         .collection('groups')
         .doc(globalGroupId)

@@ -31,21 +31,56 @@ class RestaurantController extends GetxController {
   List<Restaurant> filterRestaurants(
       List<Restaurant> restaurants, Filter filterData) {
     List<Restaurant> filteredList = [];
+    List<Restaurant> nullList = [];
     if (filterData.useFilter) {
       for (var i = 0; i < restaurants.length; i++) {
         var currentRestaurant = restaurants[i];
+        if (currentRestaurant.price != null &&
+            currentRestaurant.rating != null &&
+            currentRestaurant.doesDelivery != null &&
+            currentRestaurant.isFavorite != null) {
+          //current resturant has a value for price
 
-        if (filterData.useTime) {
-          if (filterData.maxTime > currentRestaurant.price) {
-            if (currentRestaurant.rating >= filterData.minRating) {
+          if (filterData.useTime) {
+            if (filterData.maxTime > currentRestaurant.price!) {
+              if (currentRestaurant.rating! >= filterData.minRating) {
+                //filter Price
+                if (currentRestaurant.price! <= filterData.maxPrice) {
+                  //filter Delivery
+
+                  if (filterData.onlyDelivery) {
+                    if (currentRestaurant.doesDelivery!) {
+                      if (filterData.onlyFavorite) {
+                        if (currentRestaurant.isFavorite!) {
+                          filteredList.add(currentRestaurant);
+                        }
+                      } else {
+                        filteredList.add(currentRestaurant);
+                      }
+                    }
+                  } else {
+                    if (filterData.onlyFavorite) {
+                      if (currentRestaurant.isFavorite!) {
+                        filteredList.add(currentRestaurant);
+                      }
+                    } else {
+                      filteredList.add(currentRestaurant);
+                    }
+                  }
+                }
+              }
+            }
+          } else {
+            if (currentRestaurant.rating! >= filterData.minRating) {
               //filter Price
-              if (currentRestaurant.price <= filterData.maxPrice) {
+
+              if (currentRestaurant.price! <= filterData.maxPrice) {
                 //filter Delivery
 
                 if (filterData.onlyDelivery) {
-                  if (currentRestaurant.doesDelivery) {
+                  if (currentRestaurant.doesDelivery!) {
                     if (filterData.onlyFavorite) {
-                      if (currentRestaurant.isFavorite) {
+                      if (currentRestaurant.isFavorite!) {
                         filteredList.add(currentRestaurant);
                       }
                     } else {
@@ -54,7 +89,7 @@ class RestaurantController extends GetxController {
                   }
                 } else {
                   if (filterData.onlyFavorite) {
-                    if (currentRestaurant.isFavorite) {
+                    if (currentRestaurant.isFavorite!) {
                       filteredList.add(currentRestaurant);
                     }
                   } else {
@@ -65,36 +100,20 @@ class RestaurantController extends GetxController {
             }
           }
         } else {
-          if (currentRestaurant.rating >= filterData.minRating) {
-            //filter Price
-
-            if (currentRestaurant.price <= filterData.maxPrice) {
-              //filter Delivery
-
-              if (filterData.onlyDelivery) {
-                if (currentRestaurant.doesDelivery) {
-                  if (filterData.onlyFavorite) {
-                    if (currentRestaurant.isFavorite) {
-                      filteredList.add(currentRestaurant);
-                    }
-                  } else {
-                    filteredList.add(currentRestaurant);
-                  }
-                }
-              } else {
-                if (filterData.onlyFavorite) {
-                  if (currentRestaurant.isFavorite) {
-                    filteredList.add(currentRestaurant);
-                  }
-                } else {
-                  filteredList.add(currentRestaurant);
-                }
-              }
-            }
-          }
+          //current resturant doesnt have a price
+          nullList.add(currentRestaurant);
+          continue;
         }
 
         //filter Rating
+      }
+
+      for (var i = 0; i < nullList.length; i++) {
+        // if (filterData.onlyDelivery && nullList[i].doesDelivery) {
+        //   filteredList.add(nullList[i]);
+        // } else if (filterData.onlyFavorite && nullList[i].isFavorite) {
+        //   filteredList.add(nullList[i]);
+        // }
       }
     } else {
       return restaurants;
@@ -104,7 +123,6 @@ class RestaurantController extends GetxController {
   }
 
   Stream<List<Restaurant>> getRestuarants() {
-    print(globalGroupId);
     Stream<List<Restaurant>> data = firestore
         .collection('groups')
         .doc(globalGroupId)
@@ -113,7 +131,9 @@ class RestaurantController extends GetxController {
         .map(
           (snapshot) => snapshot.docs
               .map((doc) => Restaurant.fromJson(doc.data()))
-              .toList(),
+              .where((restaurant) {
+            return restaurant.id != null && restaurant.id != "";
+          }).toList(),
         );
 
     return data;
@@ -220,6 +240,15 @@ class RestaurantController extends GetxController {
         .update({'isFavorite': !isFavorite});
   }
 
+  updateRestaurantUrl(String restaurantId, String url) {
+    firestore
+        .collection('groups')
+        .doc(globalGroupId)
+        .collection('restaurants')
+        .doc(restaurantId)
+        .update({'restaurantUrl': url});
+  }
+
   List<Restaurant> sortByPrice(
       List<Restaurant> restaurants, bool expensiveFirst) {
     List<Restaurant> orderedList = [];
@@ -249,20 +278,28 @@ class RestaurantController extends GetxController {
 
   List<Restaurant> sortRestaurantFromSlowestToFastest(
       List<Restaurant> restaurants) {
-    print('filter');
     List<Restaurant> orderedList = [];
     for (var i = 0; i < restaurants.length; i++) {
       final currentRestaurant = restaurants[i];
-      final currentTime = currentRestaurant.time;
+      final currentTime;
+      if (currentRestaurant.time != null) {
+        currentTime = currentRestaurant.time;
+      } else {
+        //orderedList.insert(orderedList.length, currentRestaurant);
+        continue;
+      }
+
       if (orderedList.isEmpty) {
         orderedList.insert(i, currentRestaurant);
       } else {
         for (var y = 0; y < orderedList.length; y++) {
-          print(currentTime);
-          if (currentTime <= orderedList[y].time) {
-            orderedList.insert(y, currentRestaurant);
-            break;
+          if (orderedList[y].time != null) {
+            if (currentTime <= orderedList[y].time) {
+              orderedList.insert(y, currentRestaurant);
+              break;
+            }
           }
+
           if (y == orderedList.length - 1) {
             orderedList.insert(y + 1, currentRestaurant);
             break;

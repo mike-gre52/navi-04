@@ -69,28 +69,50 @@ class ListItem extends StatelessWidget {
                     showCheckBox
                         ? GestureDetector(
                             onTap: () {
+                              bool isChecked = false;
+                              if (item.isChecked != null) {
+                                if (item.isChecked!) {
+                                  isChecked = true;
+                                }
+                              }
+
                               listController.toggleListItemCheckedStatus(
-                                  item.id, listId, item.isChecked);
+                                  item.id, listId, isChecked);
                             },
                             child: recentlyDeleted
                                 ? Container()
-                                : item.isChecked
-                                    ? Container(
-                                        height: height40,
-                                        width: height40,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(height10),
-                                          color: appGreen,
-                                        ),
-                                        child: Center(
-                                          child: Icon(
-                                            Icons.check_rounded,
-                                            color: Colors.white,
-                                            size: height30,
-                                          ),
-                                        ),
-                                      )
+                                : item.isChecked != null
+                                    ? item.isChecked!
+                                        ? Container(
+                                            height: height40,
+                                            width: height40,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      height10),
+                                              color: appGreen,
+                                            ),
+                                            child: Center(
+                                              child: Icon(
+                                                Icons.check_rounded,
+                                                color: Colors.white,
+                                                size: height30,
+                                              ),
+                                            ),
+                                          )
+                                        : Container(
+                                            height: height40,
+                                            width: height40,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      height10),
+                                              border: Border.all(
+                                                color: appGreen,
+                                                width: 2,
+                                              ),
+                                            ),
+                                          )
                                     : Container(
                                         height: height40,
                                         width: height40,
@@ -118,14 +140,16 @@ class ListItem extends StatelessWidget {
                         maxWidth: showCheckBox ? width275 : width200,
                       ),
                       child: Text(
-                        item.name,
+                        item.name != null ? item.name! : "",
                         style: TextStyle(
                           fontSize: showCheckBox ? fontSize20 : fontSize16,
                           fontWeight: FontWeight.w400,
                           color: recentlyDeleted
                               ? black
-                              : item.isChecked
-                                  ? Colors.black38
+                              : item.isChecked != null
+                                  ? item.isChecked!
+                                      ? Colors.black38
+                                      : black
                                   : black,
                         ),
                         maxLines: showCheckBox ? null : 1,

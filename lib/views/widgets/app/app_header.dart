@@ -34,6 +34,7 @@ class AppHeader extends StatelessWidget {
     double height90 = screenHeight / 9.955;
     double width30 = screenWidth / 13.8;
     double width50 = screenWidth / 8.28;
+    double width250 = screenWidth / 1.656;
     double height120 = screenHeight / 7.466;
     double fontSize30 = screenHeight / 29.866;
 
@@ -66,13 +67,16 @@ class AppHeader extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                headerText,
-                style: TextStyle(
-                  fontSize: fontSize30,
-                  color: textColor,
-                  fontWeight: FontWeight.w600,
-                  //overflow: TextOverflow.ellipsis,
+              ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: width250),
+                child: Text(
+                  headerText,
+                  style: TextStyle(
+                    fontSize: fontSize30,
+                    color: textColor,
+                    fontWeight: FontWeight.w600,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ),
               Container(

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:get/get.dart';
 import 'package:whats_for_dinner/main.dart';
@@ -37,8 +38,25 @@ class ImageController {
     Rx<File?> image = Rx<File?>(File(pickedImage!.path));
     _pickedImage = image;
     isImageSelected = true;
+    compressImage();
     onSubmit();
     //Future<String> url = uploadToStorage(profileImage!);
+  }
+
+  Future<void> compressImage() async {
+    print("compressed");
+    print("before : " + image!.lengthSync().toString());
+    if (isImageSelected) {
+      var compressedImageFile = await FlutterImageCompress.compressAndGetFile(
+          image!.absolute.path, "${image!.path}compressed.jpg",
+          quality: 1);
+
+      print("during : " + compressedImageFile!.lengthSync().toString());
+      Rx<File?> compressedImage = Rx<File?>(File(compressedImageFile!.path));
+
+      _pickedImage = compressedImage;
+      print("after : " + image!.lengthSync().toString());
+    }
   }
 
   // upload to firebase storage
@@ -52,7 +70,7 @@ class ImageController {
       String downloadUrl = await snap.ref.getDownloadURL();
       return downloadUrl;
     } catch (e) {
-      Get.snackbar('Error uploading image', e.toString());
+      Get.snackbar('Error uploading image', ' The image is too large');
       return "";
     }
   }

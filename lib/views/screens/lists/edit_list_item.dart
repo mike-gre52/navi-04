@@ -47,7 +47,11 @@ class _EditListItemScreenState extends State<EditListItemScreen> {
   Widget build(BuildContext context) {
     final item = data[0] as Item;
     final listId = data[1] as String;
-    _listItemController.text = item.name;
+    if (item.name != null) {
+      _listItemController.text = item.name!;
+    } else {
+      _listItemController.text = "";
+    }
 
     if (item.imageUrl != '') {
       setState(() {
@@ -199,11 +203,11 @@ class _EditListItemScreenState extends State<EditListItemScreen> {
               ),
             ),
             SizedBox(height: height25),
-            isImageUploaded
+            isImageUploaded && item.imageUrl != null
                 ? ClipRRect(
                     borderRadius: BorderRadius.circular(height10),
                     child: Image.network(
-                      item.imageUrl,
+                      item.imageUrl!,
                       height: height350,
                       width: screenWidth,
                       fit: BoxFit.cover,

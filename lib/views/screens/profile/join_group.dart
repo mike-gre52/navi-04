@@ -74,6 +74,7 @@ class _JoinGroupScreenState extends State<JoinGroupScreen> {
 
     Function onCreateGroup = Get.arguments as Function;
 
+    print("creating group runnning function");
     return Scaffold(
       body: Stack(
         children: [
@@ -162,7 +163,8 @@ class _JoinGroupScreenState extends State<JoinGroupScreen> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Get.toNamed(RouteHelper.createGroup);
+                        Get.toNamed(RouteHelper.createGroup,
+                            arguments: [onCreateGroup]);
                       },
                       child: Text(
                         'Click Here',

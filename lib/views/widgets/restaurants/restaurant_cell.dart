@@ -71,18 +71,29 @@ class RestaurantCell extends StatelessWidget {
               GestureDetector(
                 onTap: () {
                   //
-                  restaurantController.toggleRestaurantFavorite(
-                      restaurant.id, restaurant.isFavorite);
+                  if (restaurant.isFavorite != null) {
+                    restaurantController.toggleRestaurantFavorite(
+                        restaurant.id!, restaurant.isFavorite!);
+                  } else {
+                    restaurantController.toggleRestaurantFavorite(
+                        restaurant.id!, false);
+                  }
                 },
                 child: Container(
                   width: width40,
                   //margin: EdgeInsets.only(right: 10),
-                  child: restaurant.isFavorite
-                      ? Icon(
-                          Icons.star_rounded,
-                          size: height35,
-                          color: appRed,
-                        )
+                  child: restaurant.isFavorite != null
+                      ? restaurant.isFavorite!
+                          ? Icon(
+                              Icons.star_rounded,
+                              size: height35,
+                              color: appRed,
+                            )
+                          : Icon(
+                              Icons.star_outline_rounded,
+                              size: height35,
+                              color: appRed,
+                            )
                       : Icon(
                           Icons.star_outline_rounded,
                           size: height35,
@@ -93,8 +104,10 @@ class RestaurantCell extends StatelessWidget {
               Container(
                 width: width235,
                 child: Text(
-                  restaurant.name.substring(0, 1).toUpperCase() +
-                      restaurant.name.substring(1),
+                  restaurant.name != null
+                      ? restaurant.name!.substring(0, 1).toUpperCase() +
+                          restaurant.name!.substring(1)
+                      : "",
                   //maxLines: 2,
                   style: TextStyle(
                     //height: 1,

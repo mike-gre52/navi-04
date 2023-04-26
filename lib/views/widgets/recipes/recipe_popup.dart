@@ -17,6 +17,34 @@ class RecipePopup extends StatelessWidget {
     required this.updateUI,
   }) : super(key: key);
 
+  _showDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) => CupertinoAlertDialog(
+        title: const Text('Are you sure you want to delete this Recipe?'),
+        content: const Text('All data will be lost'),
+        actions: [
+          CupertinoDialogAction(
+            child: const Text('Cancel'),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          CupertinoDialogAction(
+            child: const Text('Yes'),
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.pop(context);
+              Navigator.pop(context);
+              recipeController.deleteRecipe(recipe);
+            },
+          ),
+        ],
+      ),
+      barrierDismissible: true,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
@@ -24,10 +52,11 @@ class RecipePopup extends StatelessWidget {
     double screenHeight = mediaQuery.size.height;
     double height5 = screenHeight / 179.2;
     double height160 = screenHeight / 5.6;
+    double height200 = screenHeight / 4.48;
     double width100 = screenWidth / 4.14;
 
     return Container(
-      height: height160,
+      height: height200,
       child: Column(
         children: [
           Container(
@@ -74,6 +103,14 @@ class RecipePopup extends StatelessWidget {
               ]);
             },
           ),
+          PopupButton(
+            icon: Icons.delete,
+            isRed: true,
+            buttonName: 'Delete List',
+            onClick: () {
+              _showDialog(context);
+            },
+          ),
         ],
       ),
     );
@@ -111,7 +148,10 @@ class PopupButton extends StatelessWidget {
         margin: EdgeInsets.only(left: width30, top: height7),
         child: Row(
           children: [
-            Icon(icon),
+            Icon(
+              icon,
+              color: isRed ? red : black,
+            ),
             SizedBox(width: width15),
             Text(
               buttonName,

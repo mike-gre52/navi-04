@@ -35,18 +35,24 @@ class _AddToListSelectRecipeScreenState
     color = data[1] as Color;
   }
 
-  Widget buildRecipeCell(Recipe recipe) => !recipe.isLink
-      ? GestureDetector(
-          onTap: (() {
-            Navigator.pop(context);
-            Get.toNamed(RouteHelper.getSelectIngredients(),
-                arguments: [recipe, list, color]);
-          }),
-          child: SelectRecipeCell(
-            recipe: recipe,
-          ),
-        )
-      : Container();
+  Widget buildRecipeCell(Recipe recipe) {
+    if (recipe.isLink != null) {
+      return recipe.isLink!
+          ? GestureDetector(
+              onTap: (() {
+                Navigator.pop(context);
+                Get.toNamed(RouteHelper.getSelectIngredients(),
+                    arguments: [recipe, list, color]);
+              }),
+              child: SelectRecipeCell(
+                recipe: recipe,
+              ),
+            )
+          : Container();
+    } else {
+      return Container();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

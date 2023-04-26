@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ListData {
-  String name;
-  String id;
-  int itemCount;
+  String? name;
+  String? id;
+  int? itemCount;
 
   ListData({
     required this.name,
@@ -36,10 +36,10 @@ class ListData {
 }
 
 class Item {
-  String name;
+  String? name;
   String id;
-  bool isChecked;
-  String imageUrl;
+  bool? isChecked;
+  String? imageUrl;
 
   Item(
       {required this.name,

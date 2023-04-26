@@ -53,7 +53,6 @@ class _BookmarkLinkState extends State<BookmarkLink> {
                 child: GestureDetector(
                   onTap: (() {
                     Navigator.pop(context);
-                    Navigator.pop(context);
                   }),
                   child: Text(
                     'Cancel',
@@ -89,8 +88,6 @@ class _BookmarkLinkState extends State<BookmarkLink> {
                 onTap: () {
                   if (_linkController.text != '') {
                     recipeController.addLinkRecipe(url, _linkController.text);
-                    Navigator.pop(context);
-                    Navigator.pop(context);
                     Navigator.pop(context);
                   }
                 },

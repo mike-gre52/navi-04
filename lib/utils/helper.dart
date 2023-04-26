@@ -12,12 +12,26 @@ String generateId() {
   return DateTime.now().toString();
 }
 
+String filterErrorMessage(String e) {
+  int newIndex;
+  if (e.contains("]")) {
+    newIndex = e.indexOf("]") + 1;
+  } else {
+    newIndex = 0;
+  }
+  return e.substring(newIndex);
+}
+
 String trimSourceUrl(String url) {
+  if (url.trim() == "") {
+    return "";
+  }
   int start = 0;
+  if (url.contains('https://')) {
+    start = url.indexOf('https://') + 8;
+  }
   if (url.contains('www')) {
     start = url.indexOf('www') + 4;
-  } else {
-    start = url.indexOf('https://') + 8;
   }
 
   url = url.substring(start);

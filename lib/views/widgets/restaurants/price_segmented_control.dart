@@ -73,6 +73,7 @@ class _PriceSegmentedControllState extends State<PriceSegmentedControll> {
       onValueChanged: (value) {
         if (value != null) {
           setState(() {
+            print("setting segmented value");
             _selectedSegment = value;
             widget.setPriceStatus((value as int) + 1);
           });

@@ -31,6 +31,8 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
     _linkController.dispose();
   }
 
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
@@ -103,14 +105,19 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
               onTap: () async {
                 Get.toNamed(RouteHelper.getLoadingScreen());
                 Navigator.pop(context);
+                setState(() {
+                  isLoading = true;
+                });
                 try {
                   dynamic recipeData =
-                      await getWebsiteData(_linkController.text);
+                      await getWebsiteDataTest(_linkController.text);
 
                   // Get.toNamed(RouteHelper.getConfirmImportRecipe(),
                   //     arguments: [recipeData, _linkController.text]);
 
                   dynamic jsonData;
+                  print("test============");
+                  print(recipeData);
 
                   late String recipeName;
                   late int cookTime;
@@ -124,16 +131,25 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
 
                   jsonData = recipeData;
                   sourceUrl = _linkController.text;
+                  print('1');
                   int index = findData(jsonData);
+                  print('2');
                   recipeName = getRecipeName(jsonData, index);
+                  print('3');
                   imageUrl = getRecipeImage(jsonData, index);
+                  print('4');
                   prepTime = getPrepTime(jsonData, index);
+                  print('5');
                   cookTime = getCookTime(jsonData, index);
+                  print('6');
                   totalTime = getTotalTime(jsonData, index);
+                  print('7');
                   recipeYield = getRecipeYield(jsonData, index);
+                  print('8');
                   recipeInstructions = getRecipeInstructions(jsonData, index);
+                  print('9');
                   recipeIngredients = getRecipeIngredients(jsonData, index);
-
+                  print('10');
                   Recipe recipe = Recipe(
                     name: recipeName,
                     prepTime: prepTime,
@@ -159,9 +175,13 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                   //Get.toNamed(RouteHelper.recipeScreen, arguments: recipe);
                 } catch (e) {
                   print(e);
+                  Navigator.pop(context);
                   Get.toNamed(RouteHelper.getBookmarkList(),
                       arguments: _linkController.text);
                 }
+                setState(() {
+                  isLoading = false;
+                });
               },
               child: BorderButton(
                 buttonColor: appBlue,
@@ -188,7 +208,15 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                     fontWeight: FontWeight.w600,
                     fontSize: fontSize22),
               ),
-            )
+            ),
+            SizedBox(height: height60),
+            isLoading
+                ? CupertinoActivityIndicator(
+                    radius: height15,
+                    color: appBlue,
+                    animating: true,
+                  )
+                : Container(),
           ],
         ),
       ),

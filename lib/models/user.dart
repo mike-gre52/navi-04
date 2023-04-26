@@ -8,6 +8,7 @@ class User {
   String groupId;
   bool inGroup;
   String color;
+  bool isPremium;
 
   User({
     required this.name,
@@ -17,6 +18,7 @@ class User {
     required this.groupId,
     required this.inGroup,
     required this.color,
+    required this.isPremium,
   });
 
   Map<String, dynamic> toJson() => {
@@ -27,18 +29,19 @@ class User {
         "groupId": groupId,
         "inGroup": inGroup,
         "color": color,
+        "isPremium": isPremium,
       };
 
   static User fromJson(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
     return User(
-      name: snapshot['name'],
-      email: snapshot['email'],
-      uid: snapshot['uid'],
-      profileImage: snapshot['profilePhoto'],
-      groupId: snapshot['groupId'],
-      inGroup: (snapshot['inGroup']),
-      color: snapshot["color"],
-    );
+        name: snapshot['name'],
+        email: snapshot['email'],
+        uid: snapshot['uid'],
+        profileImage: snapshot['profilePhoto'],
+        groupId: snapshot['groupId'],
+        inGroup: (snapshot['inGroup']),
+        color: snapshot["color"],
+        isPremium: snapshot["isPremium"]);
   }
 }

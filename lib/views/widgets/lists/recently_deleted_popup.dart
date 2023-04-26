@@ -60,7 +60,7 @@ class RecentlyDeletedBottomPopup extends StatelessWidget {
                     icon: Icons.clear_all_rounded,
                     buttonName: 'Clear',
                     onClick: () {
-                      listController.clearRecentlyDeleted(list.id, listItems);
+                      listController.clearRecentlyDeleted(list.id!, listItems);
                       Navigator.pop(context);
                     },
                   ),

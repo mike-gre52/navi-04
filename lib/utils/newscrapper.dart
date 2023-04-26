@@ -4,38 +4,95 @@ import 'package:http/http.dart' as http;
 import 'package:whats_for_dinner/models/recipe.dart';
 import 'package:whats_for_dinner/utils/helper.dart';
 
-dynamic getWebsiteData(String uri) async {
+dynamic getWebsiteDataTest(String uri) async {
   final url = Uri.parse(uri);
   final response = await http.get(url);
-
+  String responseData = response.body;
   dynamic finalData = '';
 
   //print(response.body);
-  int headerIndex = 0;
-  if (response.body.contains('type="application/ld+json"') == true) {
-    headerIndex = response.body.indexOf('type="application/ld+json"');
-  } else {
-    headerIndex = response.body.indexOf('type=application/ld+json');
-  }
 
-  while (response.body.contains('type="application/ld+json"') &&
-      finalData != null) {
-    String response = "";
-    int index = response.indexOf('type="application/ld+json"');
-    String data = response.substring(index + 1);
-    int nextIndex = response.indexOf('type="application/ld+json"');
-  }
+  while (
+      response.body.contains('type="application/ld+json"') && finalData != '') {
+    int headerIndex = 0;
+    if (responseData.contains('type="application/ld+json"') == true) {
+      headerIndex = responseData.indexOf('type="application/ld+json"');
+    } else {
+      headerIndex = responseData.indexOf('type=application/ld+json');
+    }
+    //int index = response.indexOf('type="application/ld+json"');
+    //String data = response.substring(index + 1);
+    //int nextIndex = response.indexOf('type="application/ld+json"');
+    String parse = responseData.substring(headerIndex);
+    print('--------------------------');
 
-  String parse = response.body.substring(headerIndex);
+    int start = parse.indexOf('>');
+
+    final jsonStart = parse.substring(start + 1);
+
+    int end = jsonStart.indexOf('</script>');
+
+    parse = jsonStart.substring(0, end);
+
+    final data = parse;
+
+    final finalJson = json.decode(data);
+
+    if (finalJson.runtimeType == List) {
+      for (var i = 0; i < finalJson.length; i++) {
+        if (finalJson[i]['@type'].runtimeType == List) {
+          for (var j = 0; i < finalJson[i]['@type'].length; i++) {
+            if (finalJson[i]['@type'][j] == 'Recipe') {
+              return finalJson[i];
+            }
+          }
+        } else {
+          if (finalJson[i]['@type'] == 'Recipe') {
+            return finalJson[i];
+          }
+        }
+      }
+      for (var i = 0; i < finalJson.length; i++) {
+        if (finalJson[i]['@context'] == 'https://schema.org/') {
+          return finalJson[i];
+        }
+      }
+    } else {
+      if (finalJson['name'] == null) {
+        print('@graph......');
+        // print(finalJson['@graph']);
+        // finalData = finalJson['@graph'];
+      } else {
+        //finalData = finalJson;
+      }
+    }
+
+    print("&&&&&&&&&&&&&&&&");
+    print(finalData);
+    if (finalData != null) {
+      return finalData;
+    }
+    //skip past current 'type="application/ld+json"
+    responseData = responseData.substring(headerIndex + 1);
+
+    //
+    //
+    //end
+    //
+    //
+  }
+  return "";
+
+  //String parse = response.body.substring(headerIndex);
   //print('--------------------------');
 
-  int start = parse.indexOf('>');
+  //int start = parse.indexOf('>');
 
-  final jsonStart = parse.substring(start + 1);
+  //final jsonStart = parse.substring(start + 1);
 
-  int end = jsonStart.indexOf('</script>');
+  //int end = jsonStart.indexOf('</script>');
 
-  parse = jsonStart.substring(0, end);
+  //parse = jsonStart.substring(0, end);
 
   //print(parse);
 
@@ -48,12 +105,14 @@ dynamic getWebsiteData(String uri) async {
   //}
   //print(parse);
 
+  /*
+
   final data = parse;
 
   final finalJson = json.decode(data);
 
   if (finalJson.runtimeType == List) {
-    //print("isList");
+    print("isList");
     for (var i = 0; i < finalJson.length; i++) {
       if (finalJson[i]['@type'].runtimeType == List) {
         for (var j = 0; i < finalJson[i]['@type'].length; i++) {
@@ -74,8 +133,8 @@ dynamic getWebsiteData(String uri) async {
     }
   } else {
     if (finalJson['name'] == null) {
-      //print('@graph......');
-      //print(finalJson['@graph'].runtimeType);
+      print('@graph......');
+      print(finalJson['@graph'].runtimeType);
       finalData = finalJson['@graph'];
     } else {
       finalData = finalJson;
@@ -83,6 +142,8 @@ dynamic getWebsiteData(String uri) async {
   }
 
   return finalData;
+
+  */
 
   /*
   print('Recipe Name:' + finalData['name'] + '\n');
@@ -120,22 +181,9 @@ int findData(dynamic jsonData) {
 
 String getRecipeName(dynamic jsonData, int index) {
   //dont call func if index == -2
-  print("getting name");
-  print(" value:  ${jsonData}");
+
   if (index == -1) {
     return jsonData['name'];
-  } else if (index == -2) {
-    //jsonData is list
-    int innerI = 0;
-    for (var i = 0; i < jsonData.length; i++) {
-      print("getting I");
-      if (jsonData[i]['@type'] == 'Recipe' ||
-          jsonData[i]['@type'] == ['Recipe']) {
-        innerI = 0;
-        break;
-      }
-    }
-    return jsonData[innerI]['name'];
   } else {
     return jsonData[index]['name'];
   }
@@ -191,12 +239,6 @@ int getCookTime(dynamic jsonData, int index) {
     }
     data = jsonData[index]['cookTime'];
   }
-  print("time found : $data");
-  print(DateTime.now().toIso8601String());
-  DateTime? time = DateTime.tryParse("2023-04-14T17:08:22.009030");
-
-  print("time: $time");
-
   try {
     String hourString = data.replaceAll(RegExp(r'[^0-9]'), '');
 
@@ -230,7 +272,6 @@ int getPrepTime(dynamic jsonData, int index) {
     }
     data = jsonData[index]['prepTime'];
   }
-  print("time found: $data");
   try {
     String hourString = data.replaceAll(RegExp(r'[^0-9]'), '');
 
@@ -325,22 +366,7 @@ List<Instruction> getRecipeInstructions(dynamic jsonData, int index) {
 
     data = data as List;
   } else {
-    //no instructions found
     return [];
-  }
-
-  //if list is only Strings of each instruction
-  if (data.runtimeType == List && data[0].runtimeType == String) {
-    for (var i = 0; i < data.length; i++) {
-      List<Instruction> instructions = [];
-      Instruction instruction = Instruction(
-        instruction: data[i],
-        id: generateId(),
-        orderNumber: 1,
-      );
-      instructions.add(instruction);
-      return instructions;
-    }
   }
 
   for (var i = 0; i < data.length; i++) {
@@ -389,161 +415,4 @@ List<Ingredient> getRecipeIngredients(dynamic jsonData, int index) {
   });
 
   return ingredients;
-}
-
-dynamic getWebsiteDataTest(String uri) async {
-  final url = Uri.parse(uri);
-  final response = await http.get(url);
-  String responseData = response.body;
-  dynamic finalData = '';
-
-  while ((response.body.contains('type="application/ld+json"') ||
-          response.body.contains('type=application/ld+json')) &&
-      (finalData == '' || finalData == null)) {
-    int headerIndex = 0;
-    if (responseData.contains('type="application/ld+json"') == true) {
-      headerIndex = responseData.indexOf('type="application/ld+json"');
-    } else {
-      headerIndex = responseData.indexOf('type=application/ld+json');
-    }
-    //int index = response.indexOf('type="application/ld+json"');
-    //String data = response.substring(index + 1);
-    //int nextIndex = response.indexOf('type="application/ld+json"');
-    String parse = responseData.substring(headerIndex);
-
-    int start = parse.indexOf('>');
-
-    final jsonStart = parse.substring(start + 1);
-
-    int end = jsonStart.indexOf('</script>');
-
-    parse = jsonStart.substring(0, end);
-
-    final data = parse;
-
-    final finalJson = json.decode(data);
-
-    if (finalJson.runtimeType == List) {
-      for (var i = 0; i < finalJson.length; i++) {
-        if (finalJson[i]['@type'].runtimeType == List) {
-          for (var j = 0; i < finalJson[i]['@type'].length; i++) {
-            if (finalJson[i]['@type'][j] == 'Recipe') {
-              return finalJson[i];
-            }
-          }
-        } else {
-          if (finalJson[i]['@type'] == 'Recipe') {
-            return finalJson[i];
-          }
-        }
-      }
-      for (var i = 0; i < finalJson.length; i++) {
-        if (finalJson[i]['@context'] == 'https://schema.org/') {
-          return finalJson[i];
-        }
-      }
-    } else if (finalJson['@type'] == 'Recipe') {
-      return finalJson;
-    } else {
-      String rest = responseData.substring(headerIndex + 1);
-      if (rest.contains('type="application/ld+json"') ||
-          rest.contains('type=application/ld+json')) {
-        //Skip @Graph check
-      } else {
-        if (finalJson['name'] == null) {
-          finalData = finalJson['@graph'];
-        } else {
-          finalData = finalJson;
-        }
-      }
-    }
-    //print(finalData);
-    if (finalData != '' && finalData != null) {
-      return finalData;
-    }
-    //skip past current 'type="application/ld+json"
-    responseData = responseData.substring(headerIndex + 1);
-    //print("looooooooooooooooooooooooooooooooooooooping");
-
-    //
-    //
-    //end
-    //
-    //
-  }
-  return "";
-
-  //String parse = response.body.substring(headerIndex);
-  //print('--------------------------');
-
-  //int start = parse.indexOf('>');
-
-  //final jsonStart = parse.substring(start + 1);
-
-  //int end = jsonStart.indexOf('</script>');
-
-  //parse = jsonStart.substring(0, end);
-
-  //print(parse);
-
-  //removes links
-  //while (parse.contains('<a href')) {
-  //  int start = parse.indexOf('<a href');
-  //  int end = parse.indexOf('</a>') + 3;
-  //
-  //  parse = parse.substring(0, start) + parse.substring(end, parse.length);
-  //}
-  //print(parse);
-
-  /*
-
-  final data = parse;
-
-  final finalJson = json.decode(data);
-
-  if (finalJson.runtimeType == List) {
-    print("isList");
-    for (var i = 0; i < finalJson.length; i++) {
-      if (finalJson[i]['@type'].runtimeType == List) {
-        for (var j = 0; i < finalJson[i]['@type'].length; i++) {
-          if (finalJson[i]['@type'][j] == 'Recipe') {
-            return finalJson[i];
-          }
-        }
-      } else {
-        if (finalJson[i]['@type'] == 'Recipe') {
-          return finalJson[i];
-        }
-      }
-    }
-    for (var i = 0; i < finalJson.length; i++) {
-      if (finalJson[i]['@context'] == 'https://schema.org/') {
-        return finalJson[i];
-      }
-    }
-  } else {
-    if (finalJson['name'] == null) {
-      print('@graph......');
-      print(finalJson['@graph'].runtimeType);
-      finalData = finalJson['@graph'];
-    } else {
-      finalData = finalJson;
-    }
-  }
-
-  return finalData;
-
-  */
-
-  /*
-  print('Recipe Name:' + finalData['name'] + '\n');
-  //print('Recipe Prep time:' + finalData['prepTime'] + '\n');
-  //print('Recipe Cook Time:' + finalData['cookTime'] + '\n');
-  //print('Recipe Yield:' + finalData['recipeYield'].toString() + '\n');
-  print('Recipe Image:' + finalData['image'].toString() + '\n');
-  print('Recipe Ingredient:' + finalData['recipeIngredient'].toString() + '\n');
-  print('Recipe Instructions:' +
-      finalData['recipeInstructions'].toString() +
-      '\n');
-  */
 }

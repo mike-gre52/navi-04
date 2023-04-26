@@ -28,6 +28,7 @@ class _AddRestaurantState extends State<AddRestaurant> {
   int price = 3;
 
   Object _selectedSegment = 0;
+  bool isInvalidNumber = false;
 
   @override
   void dispose() {
@@ -55,23 +56,21 @@ class _AddRestaurantState extends State<AddRestaurant> {
     });
   }
 
-  bool isValidNumber = true;
-
   void validateInput(input) {
     if (input != null) {
       if (input == '') {
         setState(() {
-          isValidNumber = false;
+          isInvalidNumber = false;
         });
       } else {
         int? num = int.tryParse(input);
         if (num != null) {
           setState(() {
-            isValidNumber = false;
+            isInvalidNumber = false;
           });
         } else {
           setState(() {
-            isValidNumber = true;
+            isInvalidNumber = true;
           });
         }
       }
@@ -97,222 +96,228 @@ class _AddRestaurantState extends State<AddRestaurant> {
     double width350 = screenWidth / 1.182;
     double fontSize18 = screenHeight / 49.777;
     double fontSize20 = screenHeight / 44.8;
-    return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          AppHeader(
-            headerText: 'Add Restaurant',
-            headerColor: appRed,
-            borderColor: royalYellow,
-            textColor: Colors.white,
-            dividerColor: Colors.white,
-            rightAction: Text(
-              'Cancel',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: fontSize20,
-                fontWeight: FontWeight.w600,
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            AppHeader(
+              headerText: 'Add Restaurant',
+              headerColor: appRed,
+              borderColor: royalYellow,
+              textColor: Colors.white,
+              dividerColor: Colors.white,
+              rightAction: Text(
+                'Cancel',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: fontSize20,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            ),
-            onIconClick: () {
-              Navigator.pop(context);
-            },
-          ),
-          //NEED TO MAKE SURE TIME IS A NUMBER - WILL SET THE KEYBOARD TO NUMPAD BUT STILL NEED TO VERIFY
-          Container(
-            margin: EdgeInsets.only(left: width30, top: width30),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  margin: EdgeInsets.only(left: height5),
-                  child: Text(
-                    'Name',
-                    style: TextStyle(
-                      fontSize: fontSize18,
-                      color: black,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-                Container(
-                  child: CustomTextfield(
-                    icon: Icons.person,
-                    placeholderText: '',
-                    controller: _nameController,
-                    borderColor: appRed,
-                    showIcon: false,
-                    textfieldWidth: width350,
-                    textfieldHeight: height65,
-                    borderRadius: height10,
-                    onSubmit: (_) {},
-                    onChanged: (_) {},
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: width30),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(left: width5, top: height30),
-                      child: Text(
-                        'Time',
-                        style: TextStyle(
-                            fontSize: fontSize18,
-                            color: black,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                    Container(
-                      child: CustomTextfield(
-                        icon: Icons.timer,
-                        placeholderText: '',
-                        controller: _timeController,
-                        borderColor: appRed,
-                        textfieldWidth: width100,
-                        showIcon: false,
-                        textfieldHeight: height50,
-                        borderRadius: height10,
-                        onSubmit: (_) {},
-                        onChanged: validateInput,
-                      ),
-                    ),
-                    isValidNumber
-                        ? Container(
-                            height: height20,
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              'Must be a number',
-                              style: TextStyle(
-                                color: red,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          )
-                        : Container(
-                            height: height20,
-                          ),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(left: width5, top: height30),
-                      child: Text(
-                        'Rating',
-                        style: TextStyle(
-                          fontSize: fontSize18,
-                          color: black,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                    SelectRating(
-                      rating: rating,
-                      onTap: newRatingSelected,
-                      isTapable: true,
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: height30),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(left: width5, top: height30),
-                      child: Text(
-                        'Price',
-                        style: TextStyle(
-                            fontSize: fontSize18,
-                            color: black,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                    PriceSegmentedControll(
-                      setPriceStatus: setPriceStatus,
-                      initialValue: 3,
-                    )
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(left: width5, top: height30),
-                      child: Text(
-                        'Delivery',
-                        style: TextStyle(
-                            fontSize: fontSize18,
-                            color: black,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                    DeliverySegmentedControll(
-                      setDeliveryStatus: setDeliveryStatus,
-                      initialValue: 1,
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: height15),
-          Align(
-            alignment: Alignment.center,
-            child: GestureDetector(
-              onTap: () {
-                restaurantController.addRestaurant(
-                  _nameController.text,
-                  int.parse(_timeController.text),
-                  rating,
-                  price,
-                  doesDelivery,
-                  false,
-                  "",
-                );
+              onIconClick: () {
                 Navigator.pop(context);
               },
-              child: Container(
-                height: height60,
-                width: width100,
-                margin: EdgeInsets.only(
-                  top: height30,
-                ),
-                decoration: BoxDecoration(
-                  color: appRed,
-                  borderRadius: BorderRadius.circular(height15),
-                ),
-                child: Center(
-                  child: Text(
-                    'Add',
-                    style: TextStyle(
+            ),
+            //NEED TO MAKE SURE TIME IS A NUMBER - WILL SET THE KEYBOARD TO NUMPAD BUT STILL NEED TO VERIFY
+            Container(
+              margin: EdgeInsets.only(left: width30, top: width30),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(left: height5),
+                    child: Text(
+                      'Name',
+                      style: TextStyle(
                         fontSize: fontSize18,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600),
+                        color: black,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    child: CustomTextfield(
+                      icon: Icons.person,
+                      placeholderText: '',
+                      controller: _nameController,
+                      borderColor: appRed,
+                      showIcon: false,
+                      textfieldWidth: width350,
+                      textfieldHeight: height65,
+                      borderRadius: height10,
+                      onSubmit: (_) {},
+                      onChanged: (_) {},
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: width30),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(left: width5, top: height30),
+                        child: Text(
+                          'Time',
+                          style: TextStyle(
+                              fontSize: fontSize18,
+                              color: black,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                      Container(
+                        child: CustomTextfield(
+                          icon: Icons.timer,
+                          placeholderText: '',
+                          controller: _timeController,
+                          borderColor: appRed,
+                          textfieldWidth: width100,
+                          showIcon: false,
+                          textfieldHeight: height50,
+                          borderRadius: height10,
+                          onSubmit: (_) {},
+                          onChanged: validateInput,
+                          keyboard: TextInputType.number,
+                        ),
+                      ),
+                      isInvalidNumber
+                          ? Container(
+                              height: height20,
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                'Must be a number',
+                                style: TextStyle(
+                                  color: red,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            )
+                          : Container(
+                              height: height20,
+                            ),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(left: width5, top: height30),
+                        child: Text(
+                          'Rating',
+                          style: TextStyle(
+                            fontSize: fontSize18,
+                            color: black,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                      SelectRating(
+                        rating: rating,
+                        onTap: newRatingSelected,
+                        isTapable: true,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: height30),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(left: width5, top: height30),
+                        child: Text(
+                          'Price',
+                          style: TextStyle(
+                              fontSize: fontSize18,
+                              color: black,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                      PriceSegmentedControll(
+                        setPriceStatus: setPriceStatus,
+                        initialValue: 3,
+                      )
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(left: width5, top: height30),
+                        child: Text(
+                          'Delivery',
+                          style: TextStyle(
+                              fontSize: fontSize18,
+                              color: black,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                      DeliverySegmentedControll(
+                        setDeliveryStatus: setDeliveryStatus,
+                        initialValue: 1,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: height15),
+            Align(
+              alignment: Alignment.center,
+              child: GestureDetector(
+                onTap: () {
+                  restaurantController.addRestaurant(
+                    _nameController.text,
+                    int.parse(_timeController.text),
+                    rating,
+                    price,
+                    doesDelivery,
+                    false,
+                    "",
+                  );
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  height: height60,
+                  width: width100,
+                  margin: EdgeInsets.only(
+                    top: height30,
+                  ),
+                  decoration: BoxDecoration(
+                    color: appRed,
+                    borderRadius: BorderRadius.circular(height15),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Add',
+                      style: TextStyle(
+                          fontSize: fontSize18,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600),
+                    ),
                   ),
                 ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

@@ -2,9 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:get/get.dart';
 import 'package:whats_for_dinner/models/recipe.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
+import 'package:whats_for_dinner/utils/constants.dart';
 import 'package:whats_for_dinner/views/widgets/recipes/recipes_popup.dart';
+
+import '../../../routes/routes.dart';
 
 class RecipeCell extends StatelessWidget {
   Recipe recipe;
@@ -13,6 +17,31 @@ class RecipeCell extends StatelessWidget {
     Key? key,
     required this.recipe,
   }) : super(key: key);
+
+  int? getTime() {
+    int? time;
+    if ((recipe.cookTime != null && recipe.prepTime != null) &&
+        !(recipe.cookTime == -1 && recipe.prepTime == -1)) {
+      if (recipe.cookTime != -1 && recipe.prepTime != -1) {
+        time = recipe.cookTime! + recipe.prepTime!;
+      }
+    } else if (recipe.totalTime != null) {
+      if (recipe.totalTime! > 0) {
+        time = recipe.totalTime!;
+      }
+    } else {
+      time = null;
+    }
+    return time;
+  }
+
+  onEditTotalTime(String data) {
+    int? totalTime = int.tryParse(data);
+    if (totalTime != null) {
+      print("updating time");
+      recipeController.updateRecipeTotalTime(recipe, totalTime);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +52,14 @@ class RecipeCell extends StatelessWidget {
     double height15 = screenHeight / 59.733;
     double height32 = screenHeight / 28;
     double height75 = screenHeight / 11.946;
+    double height100 = screenHeight / 8.96;
     double width10 = screenWidth / 41.4;
     double width5 = screenWidth / 82.8;
     double width20 = screenWidth / 20.7;
     double width30 = screenWidth / 13.8;
     double fontSize22 = screenHeight / 40.727;
+
+    int? totalTime = getTime();
 
     return Container(
       margin: EdgeInsets.only(top: height5, bottom: height5),
@@ -51,19 +83,21 @@ class RecipeCell extends StatelessWidget {
             Container(
               height: height75,
               width: height75,
-              child: !recipe.imageUrl.isNotEmpty
-                  ? Icon(CupertinoIcons.photo)
-                  : null,
+              child: recipe.imageUrl != null
+                  ? !recipe.imageUrl!.isNotEmpty
+                      ? Icon(CupertinoIcons.photo)
+                      : null
+                  : Icon(CupertinoIcons.photo),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(height15),
                     bottomLeft: Radius.circular(height15)),
                 color: Colors.grey,
-                image: recipe.imageUrl.isNotEmpty
+                image: recipe.imageUrl != null && recipe.imageUrl!.isNotEmpty
                     ? DecorationImage(
                         fit: BoxFit.cover,
                         image: NetworkImage(
-                          recipe.imageUrl,
+                          recipe.imageUrl!,
                         ),
                       )
                     : null,
@@ -82,7 +116,7 @@ class RecipeCell extends StatelessWidget {
                       Container(
                         margin: EdgeInsets.only(top: height5),
                         child: Text(
-                          recipe.name,
+                          recipe.name != null ? recipe.name! : "no name",
                           style: TextStyle(
                               fontSize: fontSize22,
                               fontWeight: FontWeight.w600,
@@ -93,6 +127,7 @@ class RecipeCell extends StatelessWidget {
                       ),
                       Container(
                         child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             const Text(
                               'Time: ',
@@ -101,25 +136,53 @@ class RecipeCell extends StatelessWidget {
                                 height: 0.9,
                               ),
                             ),
-                            recipe.totalTime != -2
+                            totalTime != null
                                 ? Text(
-                                    '${recipe.totalTime} mins',
-                                    style: const TextStyle(height: 0.9),
+                                    '$totalTime mins',
+                                    style: const TextStyle(height: 1.05),
                                   )
                                 : Container(
-                                    width: width30,
+                                    width: 0,
                                   ),
-                            //Icon(Icons.),
+                            SizedBox(width: width5),
+                            GestureDetector(
+                              //edit TotalTime
+                              onTap: () {
+                                Get.toNamed(
+                                    RouteHelper
+                                        .getSingleTextfieldAndSubmitScreen(),
+                                    arguments: [
+                                      appBlue,
+                                      "Total Time",
+                                      onEditTotalTime,
+                                      Icons.edit_rounded
+                                    ]);
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.only(bottom: 1),
+                                child: const Icon(
+                                  CupertinoIcons.info,
+                                  size: 16,
+                                ),
+                              ),
+                            ),
+                            /*
                             SizedBox(width: width10),
                             const Text(
                               'Yield: ',
                               style: TextStyle(
-                                  fontWeight: FontWeight.w700, height: 0.9),
+                                  fontWeight: FontWeight.w700, height: 1.05),
                             ),
-                            Text(
-                              '${recipe.servings}',
-                              style: const TextStyle(height: 0.9),
+                            Container(
+                              width: height100,
+                              child: Text(
+                                '${recipe.servings}',
+                                style: const TextStyle(
+                                    height: 1.05,
+                                    overflow: TextOverflow.ellipsis),
+                              ),
                             ),
+                            */
                           ],
                         ),
                       )

@@ -24,4 +24,4 @@ var listController = ListsController.instance;
 var recipeController = RecipeController.instance;
 
 //App
-var appUrl = "https://apps.apple.com/us/app/us-states-visited/id1610597453";
+var appUrl = "https://apps.apple.com/us/app/what-is-for-dinner/id1639923197";

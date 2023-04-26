@@ -173,6 +173,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
     double width100 = screenWidth / 4.14;
     double width200 = screenWidth / 2.07;
     double fontSize20 = screenHeight / 44.8;
+    double fontSize16 = screenHeight / 74.66;
 
     return Scaffold(
       backgroundColor: appBlue,
@@ -370,7 +371,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 HeaderAndTextField(
-                                  header: 'Add ingredientssdf',
+                                  header: 'Add ingredients',
                                   controller: _ingredientController,
                                   width: width200,
                                   leftAlign: true,
@@ -585,8 +586,9 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                                       EdgeInsets.symmetric(vertical: height5),
                                   height: height20,
                                   child: Text(
-                                    'Input is invalid',
+                                    'Name, Prep/Cook Time, and Servings must be entered ',
                                     style: TextStyle(
+                                      fontSize: fontSize16,
                                       color: red,
                                       fontWeight: FontWeight.w500,
                                     ),

@@ -1,7 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:whats_for_dinner/routes/routes.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
 import 'package:whats_for_dinner/utils/helper.dart';
@@ -25,6 +28,43 @@ int tabIndex = 0;
 
 class _RecipeTabControllerState extends State<RecipeTabController>
     with TickerProviderStateMixin {
+  setPrepTime(String data) {
+    int? prepTime = int.tryParse(data);
+    if (prepTime != null) {
+      recipeController.updateRecipePrepTime(widget.recipe, prepTime);
+      setState(() {
+        widget.recipe.prepTime = prepTime;
+      });
+    }
+  }
+
+  setCookTime(String data) {
+    int? cookTime = int.tryParse(data);
+    if (cookTime != null) {
+      recipeController.updateRecipeCookTime(widget.recipe, cookTime);
+      setState(() {
+        widget.recipe.cookTime = cookTime;
+      });
+    }
+  }
+
+  setServings(String data) {
+    recipeController.updateRecipeServings(widget.recipe, data);
+    setState(() {
+      widget.recipe.servings = data;
+    });
+  }
+
+  setTotalTime(String data) {
+    int? totalTime = int.tryParse(data);
+    if (totalTime != null) {
+      recipeController.updateRecipeTotalTime(widget.recipe, totalTime);
+      setState(() {
+        widget.recipe.totalTime = totalTime;
+      });
+    }
+  }
+
   @override
   @override
   Widget build(BuildContext context) {
@@ -32,7 +72,9 @@ class _RecipeTabControllerState extends State<RecipeTabController>
     double screenWidth = mediaQuery.size.width;
     double screenHeight = mediaQuery.size.height;
     double height30 = screenHeight / 29.86;
+    double height45 = screenHeight / 19.911;
     double height50 = screenHeight / 17.92;
+    double height60 = screenHeight / 14.933;
     double height100 = screenHeight / 8.96;
     double height125 = screenHeight / 7.168;
     double height150 = screenHeight / 5.973;
@@ -51,7 +93,7 @@ class _RecipeTabControllerState extends State<RecipeTabController>
       child: Column(
         children: [
           Container(
-            height: widget.recipe.isImport ? height150 : height100,
+            height: height100,
             width: double.maxFinite,
             decoration: BoxDecoration(
                 border: Border(
@@ -61,35 +103,22 @@ class _RecipeTabControllerState extends State<RecipeTabController>
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                widget.recipe.isImport
-                    ? Container(
-                        margin: EdgeInsets.symmetric(horizontal: width30),
-                        height: height30,
-                        child: Row(
-                          children: [
-                            Text(
-                              'Source: ',
-                              style: TextStyle(fontSize: fontSize18),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                searchUrl(widget.recipe.sourceUrl);
-                              },
-                              child: Text(
-                                trimSourceUrl(widget.recipe.sourceUrl),
-                                style: TextStyle(
-                                    color: royalYellow, fontSize: fontSize16),
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
+                widget.recipe.cookTime == -1 ||
+                        widget.recipe.prepTime == -1 ||
+                        (widget.recipe.cookTime == null &&
+                            widget.recipe.prepTime == null &&
+                            widget.recipe.totalTime != null)
+                    ? TotalTime(
+                        recipe: widget.recipe,
+                        setTotalTime: setTotalTime,
+                        setServings: setServings,
                       )
-                    : Container(),
-                widget.recipe.cookTime == -1 || widget.recipe.prepTime == -1
-                    ? TotalTime(recipe: widget.recipe)
-                    : SplitTime(recipe: widget.recipe),
+                    : SplitTime(
+                        recipe: widget.recipe,
+                        setPrepTime: setPrepTime,
+                        setCookTime: setCookTime,
+                        setServings: setServings,
+                      ),
                 TabBar(
                   onTap: (value) {
                     if (value == 0) {
@@ -121,12 +150,12 @@ class _RecipeTabControllerState extends State<RecipeTabController>
             ),
             child: Container(
               height: tabIndex == 0
-                  ? widget.recipe.ingredients.length.toDouble() * height50
+                  ? widget.recipe.ingredients.length.toDouble() * height45
                   : widget.recipe.instructions.length.toDouble() * height200,
               color: paperBackground,
               width: double.maxFinite,
               child: TabBarView(
-                physics: const NeverScrollableScrollPhysics(),
+                physics: const AlwaysScrollableScrollPhysics(),
                 controller: _tabController,
                 children: [
                   RecipeIngredientList(
@@ -151,9 +180,15 @@ class _RecipeTabControllerState extends State<RecipeTabController>
 
 class SplitTime extends StatelessWidget {
   Recipe recipe;
+  Function setPrepTime;
+  Function setCookTime;
+  Function setServings;
   SplitTime({
     Key? key,
     required this.recipe,
+    required this.setPrepTime,
+    required this.setCookTime,
+    required this.setServings,
   }) : super(key: key);
 
   @override
@@ -163,15 +198,18 @@ class SplitTime extends StatelessWidget {
       children: [
         RecipeInfo(
           header: 'Prep Time:',
-          subheader: recipe.prepTime.toString(),
+          subheader: recipe.prepTime != null ? recipe.prepTime.toString() : '',
+          onEdit: setPrepTime,
         ),
         RecipeInfo(
           header: 'Cook Time:',
-          subheader: recipe.cookTime.toString(),
+          subheader: recipe.cookTime != null ? recipe.cookTime.toString() : '',
+          onEdit: setCookTime,
         ),
         RecipeInfo(
           header: 'Servings:',
-          subheader: recipe.servings.toString(),
+          subheader: recipe.servings != null ? recipe.servings.toString() : '',
+          onEdit: setServings,
         )
       ],
     );
@@ -180,9 +218,13 @@ class SplitTime extends StatelessWidget {
 
 class TotalTime extends StatelessWidget {
   Recipe recipe;
+  Function setTotalTime;
+  Function setServings;
   TotalTime({
     Key? key,
     required this.recipe,
+    required this.setTotalTime,
+    required this.setServings,
   }) : super(key: key);
 
   @override
@@ -193,10 +235,12 @@ class TotalTime extends StatelessWidget {
         RecipeInfo(
           header: 'Total Time:',
           subheader: recipe.totalTime != -2 ? recipe.totalTime.toString() : '',
+          onEdit: setTotalTime,
         ),
         RecipeInfo(
           header: 'Servings:',
-          subheader: recipe.servings.toString(),
+          subheader: recipe.servings != null ? recipe.servings.toString() : '',
+          onEdit: setServings,
         )
       ],
     );
@@ -206,35 +250,59 @@ class TotalTime extends StatelessWidget {
 class RecipeInfo extends StatelessWidget {
   String header;
   String subheader;
+  Function onEdit;
   RecipeInfo({
     Key? key,
     required this.header,
     required this.subheader,
+    required this.onEdit,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
     double screenHeight = mediaQuery.size.height;
+    double screenWidth = mediaQuery.size.width;
+    double width100 = screenWidth / 4.14;
     double fontSize14 = screenHeight / 64;
     double fontSize16 = screenHeight / 56;
-    return Column(
-      children: [
-        Text(
-          header,
-          style: TextStyle(
-            fontWeight: FontWeight.w800,
-            fontSize: fontSize16,
+    return Container(
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Text(
+                header,
+                style: TextStyle(
+                  fontWeight: FontWeight.w800,
+                  fontSize: fontSize16,
+                ),
+              ),
+              SizedBox(width: 5),
+              GestureDetector(
+                onTap: () {
+                  Get.toNamed(RouteHelper.getSingleTextfieldAndSubmitScreen(),
+                      arguments: [appBlue, header, onEdit, Icons.edit_rounded]);
+                },
+                child: const Icon(
+                  CupertinoIcons.info,
+                  size: 16,
+                ),
+              )
+            ],
           ),
-        ),
-        Text(
-          subheader,
-          style: TextStyle(
-            fontWeight: FontWeight.w400,
-            fontSize: fontSize14,
+          ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: width100),
+            child: Text(
+              subheader,
+              style: TextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontSize: fontSize14,
+                  overflow: TextOverflow.ellipsis),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

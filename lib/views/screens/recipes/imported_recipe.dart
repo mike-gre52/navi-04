@@ -70,7 +70,7 @@ class _ImportedRecipeState extends State<ImportedRecipe> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                recipe.name,
+                recipe.name != null ? recipe.name! : "no name",
                 style: TextStyle(
                   fontSize: fontSize28,
                   fontWeight: FontWeight.w700,
@@ -80,7 +80,9 @@ class _ImportedRecipeState extends State<ImportedRecipe> {
                 overflow: TextOverflow.ellipsis,
               ),
               Text(
-                trimSourceUrl(recipe.sourceUrl),
+                recipe.sourceUrl != null
+                    ? trimSourceUrl(recipe.sourceUrl!)
+                    : "",
                 style: TextStyle(
                   fontSize: fontSize16,
                   fontWeight: FontWeight.w600,
