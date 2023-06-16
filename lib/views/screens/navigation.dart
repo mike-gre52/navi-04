@@ -82,6 +82,7 @@ class _NavigationState extends State<Navigation> {
       const ResturantsScreen(),
       GroupScreen(),
     ];
+
     return Scaffold(
       body: pages[_selectedIndex],
       bottomNavigationBar: Theme(

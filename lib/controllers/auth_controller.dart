@@ -44,6 +44,7 @@ class AuthController extends GetxController {
         globalUsername = data['name'];
         globalColor = data['color'];
         inGroup = data["inGroup"];
+        isPremium = data["isPremium"];
       },
       onError: (e) => print("Error getting document: $e"),
     );

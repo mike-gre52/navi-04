@@ -192,13 +192,15 @@ class _GroupScreenState extends State<GroupScreen> {
                             GestureDetector(
                               onTap: () {
                                 //Invite Member
-                                Share.share(" $appUrl" +
-                                    "Download Whats for Dinner? and join our group with the code: ${group.groupId}");
+                                Share.share(
+                                    " $appUrl " +
+                                        "Download Souchef and join our group with the code: \n\n${group.groupId}",
+                                    subject: "Souchef");
                               },
                               child: GradientButton(
                                 buttonText: 'Invite',
-                                firstColor: lightYellow,
-                                secondColor: royalYellow,
+                                firstColor: royalYellow,
+                                secondColor: lightYellow,
                                 showArrow: false,
                               ),
                             ),

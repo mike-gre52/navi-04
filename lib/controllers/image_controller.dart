@@ -51,7 +51,7 @@ class ImageController {
           image!.absolute.path, "${image!.path}compressed.jpg",
           quality: 1);
 
-      print("during : " + compressedImageFile!.lengthSync().toString());
+      //print("during : " + compressedImageFile!.lengthSync().toString());
       Rx<File?> compressedImage = Rx<File?>(File(compressedImageFile!.path));
 
       _pickedImage = compressedImage;

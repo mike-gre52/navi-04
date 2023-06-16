@@ -283,16 +283,19 @@ class _AddRestaurantState extends State<AddRestaurant> {
               alignment: Alignment.center,
               child: GestureDetector(
                 onTap: () {
-                  restaurantController.addRestaurant(
-                    _nameController.text,
-                    int.parse(_timeController.text),
-                    rating,
-                    price,
-                    doesDelivery,
-                    false,
-                    "",
-                  );
-                  Navigator.pop(context);
+                  if (_timeController.text.trim() != "" &&
+                      _nameController.text.trim() != "") {
+                    restaurantController.addRestaurant(
+                      _nameController.text,
+                      int.parse(_timeController.text),
+                      rating,
+                      price,
+                      doesDelivery,
+                      false,
+                      "",
+                    );
+                    Navigator.pop(context);
+                  }
                 },
                 child: Container(
                   height: height60,

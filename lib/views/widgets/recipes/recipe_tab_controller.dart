@@ -3,11 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:whats_for_dinner/main.dart';
 import 'package:whats_for_dinner/routes/routes.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
 import 'package:whats_for_dinner/utils/helper.dart';
+import 'package:whats_for_dinner/utils/recipe_cell_helper.dart';
+import 'package:whats_for_dinner/views/widgets/app/banner_add.dart';
 import 'package:whats_for_dinner/views/widgets/recipes/recipe_ingredients.dart';
 import 'package:whats_for_dinner/views/widgets/recipes/recipe_instructions.dart';
 
@@ -93,7 +97,7 @@ class _RecipeTabControllerState extends State<RecipeTabController>
       child: Column(
         children: [
           Container(
-            height: height100,
+            height: isPremium ? height100 : height150,
             width: double.maxFinite,
             decoration: BoxDecoration(
                 border: Border(
@@ -141,6 +145,12 @@ class _RecipeTabControllerState extends State<RecipeTabController>
                     Tab(text: 'Instructions'),
                   ],
                 ),
+                isPremium
+                    ? Container()
+                    : Container(
+                        height: height50,
+                        child: BannerAdWidget(),
+                      ),
               ],
             ),
           ),
@@ -151,7 +161,8 @@ class _RecipeTabControllerState extends State<RecipeTabController>
             child: Container(
               height: tabIndex == 0
                   ? widget.recipe.ingredients.length.toDouble() * height45
-                  : widget.recipe.instructions.length.toDouble() * height200,
+                  : RecipeCellHelper.getInstructionHeight(
+                      widget.recipe.instructions, screenHeight, screenWidth),
               color: paperBackground,
               width: double.maxFinite,
               child: TabBarView(

@@ -12,6 +12,7 @@ import 'package:whats_for_dinner/views/screens/lists/select_ingredients.dart';
 import 'package:whats_for_dinner/views/screens/loading_screen.dart';
 import 'package:whats_for_dinner/views/screens/profile/all_members.dart';
 import 'package:whats_for_dinner/views/screens/profile/join_group.dart';
+import 'package:whats_for_dinner/views/screens/profile/premium_upgrade.dart';
 import 'package:whats_for_dinner/views/screens/profile/select_color_screen.dart';
 import 'package:whats_for_dinner/views/screens/recipes/bookmark_link.dart';
 import 'package:whats_for_dinner/views/screens/recipes/confirm_import_recipe.dart';
@@ -74,6 +75,7 @@ class RouteHelper {
   static String resetPassword = '/resetPassword';
   static String confirmResetPasswordSent = '/confirmResetPasswordSent';
   static String joinGroup = '/joinGroup';
+  static String premiumUpgradeScreen = '/premiumUpgradeScreen';
   static String testScreen = '/testScreen';
 
   static String getHomeRoute() => home;
@@ -111,6 +113,7 @@ class RouteHelper {
   static String getResetPassword() => resetPassword;
   static String getConfirmResetPasswordSent() => confirmResetPasswordSent;
   static String getJoinGroup() => joinGroup;
+  static String getPremiumUpgradeScreen() => premiumUpgradeScreen;
   static String getTestScreen() => testScreen;
 
   static List<GetPage> routes = [
@@ -312,13 +315,16 @@ class RouteHelper {
       transition: Transition.cupertino,
       transitionDuration: const Duration(milliseconds: 250),
     ),
-    //
-    //
-    //
     GetPage(
       name: joinGroup,
       page: () => const JoinGroupScreen(),
       transition: Transition.cupertino,
+      transitionDuration: const Duration(milliseconds: 250),
+    ),
+    GetPage(
+      name: premiumUpgradeScreen,
+      page: () => const PremiumUpgradeScreen(),
+      transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 250),
     ),
     GetPage(

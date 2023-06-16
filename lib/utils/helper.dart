@@ -94,6 +94,13 @@ String replaceCharAt(String string, int index, String newChar) {
 }
 
 searchUrl(String link) {
-  Uri url = Uri.parse(link);
+  Uri url;
+  if (!(link.trim().startsWith("https://") ||
+      link.trim().startsWith("http://"))) {
+    url = Uri.parse("https://$link");
+  } else {
+    url = Uri.parse(link);
+  }
+
   launchUrl(url);
 }

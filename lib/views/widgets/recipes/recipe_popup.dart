@@ -1,6 +1,9 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:whats_for_dinner/controllers/image_controller.dart';
+import 'package:whats_for_dinner/main.dart';
 import 'package:whats_for_dinner/models/list.dart';
 import 'package:whats_for_dinner/models/recipe.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
@@ -8,15 +11,22 @@ import 'package:whats_for_dinner/utils/constants.dart';
 
 import '../../../routes/routes.dart';
 
-class RecipePopup extends StatelessWidget {
+class RecipePopup extends StatefulWidget {
   Recipe recipe;
   Function updateUI;
+  Function updateImage;
   RecipePopup({
     Key? key,
     required this.recipe,
     required this.updateUI,
+    required this.updateImage,
   }) : super(key: key);
 
+  @override
+  State<RecipePopup> createState() => _RecipePopupState();
+}
+
+class _RecipePopupState extends State<RecipePopup> {
   _showDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -36,7 +46,7 @@ class RecipePopup extends StatelessWidget {
               Navigator.pop(context);
               Navigator.pop(context);
               Navigator.pop(context);
-              recipeController.deleteRecipe(recipe);
+              recipeController.deleteRecipe(widget.recipe);
             },
           ),
         ],
@@ -48,15 +58,36 @@ class RecipePopup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
+    ImageController imageController = ImageController();
     double screenWidth = mediaQuery.size.width;
     double screenHeight = mediaQuery.size.height;
     double height5 = screenHeight / 179.2;
     double height160 = screenHeight / 5.6;
     double height200 = screenHeight / 4.48;
+    double height240 = screenHeight / 3.733;
     double width100 = screenWidth / 4.14;
 
+    void onSubmit() async {
+      if (imageController.image != null) {
+        Reference ref = firebaseStorage
+            .ref()
+            .child(globalGroupId)
+            .child('recipeImages')
+            .child(widget.recipe.id!);
+
+        String url =
+            await imageController.uploadToStorage(imageController.image!, ref);
+
+        recipeController.updateImageUrl(widget.recipe, url);
+
+        widget.updateImage(url);
+      }
+    }
+
     return Container(
-      height: height200,
+      height: widget.recipe.isImport != null && !widget.recipe.isImport!
+          ? height240
+          : height200,
       child: Column(
         children: [
           Container(
@@ -73,7 +104,8 @@ class RecipePopup extends StatelessWidget {
             buttonName: 'Add Ingredient to list',
             onClick: () {
               Navigator.pop(context);
-              Get.toNamed(RouteHelper.getSelectList(), arguments: recipe);
+              Get.toNamed(RouteHelper.getSelectList(),
+                  arguments: widget.recipe);
             },
           ),
           PopupButton(
@@ -83,8 +115,8 @@ class RecipePopup extends StatelessWidget {
               Navigator.pop(context);
               Get.toNamed(RouteHelper.editRecipeScreen, arguments: [
                 'Ingredients',
-                recipe,
-                updateUI,
+                widget.recipe,
+                widget.updateUI,
               ]);
 
               //Edit Ingredients
@@ -98,11 +130,26 @@ class RecipePopup extends StatelessWidget {
               Navigator.pop(context);
               Get.toNamed(RouteHelper.editRecipeScreen, arguments: [
                 'Instructions',
-                recipe,
-                updateUI,
+                widget.recipe,
+                widget.updateUI,
               ]);
             },
           ),
+          widget.recipe.isImport != null && !widget.recipe.isImport!
+              ? PopupButton(
+                  icon: Icons.image,
+                  isRed: false,
+                  buttonName: 'Change Image',
+                  onClick: () {
+                    Navigator.pop(context);
+                    _showActionSheet(
+                      context,
+                      imageController,
+                      onSubmit,
+                    );
+                  },
+                )
+              : Container(),
           PopupButton(
             icon: Icons.delete,
             isRed: true,
@@ -115,6 +162,45 @@ class RecipePopup extends StatelessWidget {
       ),
     );
   }
+}
+
+void _showActionSheet(
+  BuildContext context,
+  ImageController imageController,
+  Function onSubmit,
+) {
+  showCupertinoModalPopup<void>(
+    context: context,
+    builder: (BuildContext context) => CupertinoActionSheet(
+      actions: <CupertinoActionSheetAction>[
+        CupertinoActionSheetAction(
+          /// This parameter indicates the action would be a default
+          /// defualt behavior, turns the action's text to bold text.
+          onPressed: () {
+            //Open Library
+            imageController.pickImage(false, onSubmit);
+            Navigator.pop(context);
+          },
+          child: const Text('Choose from library'),
+        ),
+        CupertinoActionSheetAction(
+          onPressed: () {
+            //Open Camera
+            imageController.pickImage(true, onSubmit);
+            Navigator.pop(context);
+          },
+          child: const Text('Take photo'),
+        ),
+        CupertinoActionSheetAction(
+          isDestructiveAction: true,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text('Cancel'),
+        ),
+      ],
+    ),
+  );
 }
 
 class PopupButton extends StatelessWidget {

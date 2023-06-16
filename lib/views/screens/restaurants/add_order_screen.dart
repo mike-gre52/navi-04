@@ -35,9 +35,9 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
 
   late Restaurant restaurant;
   late Function onSubmit;
-  late Order newOrder;
+  late RestaurantOrder newOrder;
   late bool isUpdate;
-  late Order copyOrder;
+  late RestaurantOrder copyOrder;
   @override
   void initState() {
     // TODO: implement initState
@@ -49,7 +49,7 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
     _nameTextController.text = newOrder.name;
     _orderTextController.text = newOrder.item;
     if (isUpdate) {
-      copyOrder = Order(name: newOrder.name, item: newOrder.item);
+      copyOrder = RestaurantOrder(name: newOrder.name, item: newOrder.item);
     }
   }
 

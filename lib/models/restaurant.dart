@@ -9,7 +9,7 @@ class Restaurant {
   bool? isFavorite;
   String? id;
   String? restaurantUrl;
-  List<Order> orders;
+  List<RestaurantOrder> orders;
 
   Restaurant({
     required this.name,
@@ -32,7 +32,7 @@ class Restaurant {
         "isFavorite": isFavorite,
         "id": id,
         "restaurantUrl": restaurantUrl,
-        "orders": Order.orderToJson(orders),
+        "orders": RestaurantOrder.orderToJson(orders),
       };
 
   static Restaurant fromJson(Map<String, dynamic> json) {
@@ -45,26 +45,26 @@ class Restaurant {
       isFavorite: json["isFavorite"],
       id: json["id"],
       restaurantUrl: json["restaurantUrl"],
-      orders: Order.ordersFromJson(json),
+      orders: RestaurantOrder.ordersFromJson(json),
     );
   }
 }
 
-class Order {
+class RestaurantOrder {
   String name;
   String item;
 
-  Order({
+  RestaurantOrder({
     required this.name,
     required this.item,
   });
 
-  static List<Order> ordersFromJson(Map<String, dynamic> json) {
-    List<Order> orders = [];
+  static List<RestaurantOrder> ordersFromJson(Map<String, dynamic> json) {
+    List<RestaurantOrder> orders = [];
 
     if (json['orders'] != null) {
       json['orders'].forEach((name, item) {
-        final newInstruction = Order(name: name, item: item);
+        final newInstruction = RestaurantOrder(name: name, item: item);
         orders.add(newInstruction);
       });
     }
@@ -72,7 +72,7 @@ class Order {
     return orders;
   }
 
-  static Map<String, dynamic> orderToJson(List<Order> orders) {
+  static Map<String, dynamic> orderToJson(List<RestaurantOrder> orders) {
     Map<String, dynamic> jsonData = {};
     orders.forEach(
       (i) {

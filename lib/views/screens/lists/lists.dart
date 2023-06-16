@@ -53,7 +53,6 @@ class _ListsScreenState extends State<ListsScreen> {
               stream: listController.getListData(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  print("aftter delete");
                   final lists = snapshot.data!;
                   return Column(
                     children: [

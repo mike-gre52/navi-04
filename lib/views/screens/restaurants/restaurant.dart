@@ -10,12 +10,16 @@ import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
 import 'package:whats_for_dinner/utils/helper.dart';
 import 'package:whats_for_dinner/views/widgets/app/app_header.dart';
+import 'package:whats_for_dinner/views/widgets/app/banner_add.dart';
 import 'package:whats_for_dinner/views/widgets/app/custom_textfield.dart';
 import 'package:whats_for_dinner/views/widgets/restaurants/notes_textfield.dart';
 import 'package:whats_for_dinner/views/widgets/restaurants/delivery_segmented_control.dart';
 import 'package:whats_for_dinner/views/widgets/restaurants/order_cell.dart';
 import 'package:whats_for_dinner/views/widgets/restaurants/price_segmented_control.dart';
+import 'package:whats_for_dinner/views/widgets/restaurants/restaurant_bottom_popup.dart';
 import 'package:whats_for_dinner/views/widgets/restaurants/select_rating.dart';
+
+import '../../widgets/lists/list_bottom_popup.dart';
 
 class RestaurantScreen extends StatefulWidget {
   const RestaurantScreen({
@@ -71,7 +75,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
     super.initState();
   }
 
-  Widget buildOrderCell(Order order) {
+  Widget buildOrderCell(RestaurantOrder order) {
     return OrderCell(
       restaurant: restaurant,
       order: order,
@@ -97,8 +101,12 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
     double screenHeight = mediaQuery.size.height;
     double screenWidth75 = screenWidth * .75;
     double height5 = screenHeight / 179.2;
+    double height10 = screenHeight / 89.6;
+    double height20 = screenHeight / 44.8;
     double height25 = screenHeight / 35.84;
     double height30 = screenHeight / 29.86;
+    double height35 = screenHeight / 25.6;
+    double height400 = screenHeight / 2.24;
     double height450 = screenHeight / 1.991;
     double width5 = screenWidth / 82.8;
     double width10 = screenWidth / 41.4;
@@ -112,6 +120,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
     double fontSize40 = screenHeight / 22.4;
 
     return Scaffold(
+      bottomNavigationBar: BannerAdWidget(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -121,13 +130,39 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
             borderColor: royalYellow,
             textColor: Colors.white,
             dividerColor: Colors.white,
-            rightAction: Text(
-              'Back',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: fontSize20,
-                fontWeight: FontWeight.w600,
-              ),
+            rightAction: Row(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      //isScrollControlled: true,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(height20),
+                        ),
+                      ),
+                      builder: (context) => RestaurantBottomPopup(
+                        restaurant: restaurant,
+                      ),
+                    );
+                  },
+                  child: Icon(
+                    Icons.more_vert,
+                    color: Colors.white,
+                    size: height35,
+                  ),
+                ),
+                SizedBox(width: height10),
+                Text(
+                  'Back',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: fontSize20,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
             ),
             onIconClick: () {
               Navigator.pop(context);
@@ -146,7 +181,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                     ConstrainedBox(
                       constraints: BoxConstraints(maxWidth: screenWidth75),
                       child: Text(
-                        restaurant.name != null
+                        restaurant.name != null && restaurant.name != ""
                             ? restaurant.name!.substring(0, 1).toUpperCase() +
                                 restaurant.name!.substring(1)
                             : "Add Name",
@@ -295,7 +330,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                             arguments: [
                               restaurant,
                               reloadAfterOrderAdded,
-                              Order(name: "", item: ""),
+                              RestaurantOrder(name: "", item: ""),
                               false,
                             ]);
                       },
@@ -310,7 +345,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                 SingleChildScrollView(
                   child: Container(
                     width: double.maxFinite,
-                    height: height450,
+                    height: height400,
                     child: ListView(
                       padding: const EdgeInsets.all(0),
                       //crossAxisAlignment: CrossAxisAlignment.start,

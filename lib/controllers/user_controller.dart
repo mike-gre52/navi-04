@@ -26,6 +26,20 @@ class UserController extends GetxController {
     return data;
   }
 
+  premiumIAPPurchased() {
+    try {
+      firestore
+          .collection('users')
+          .doc(firebaseAuth.currentUser!.uid)
+          .update({'isPremium': true});
+    } catch (e) {
+      Get.snackbar(
+        'Error Accessing Server',
+        '$e',
+      );
+    }
+  }
+
   Future<User> getUserDataSnapshot() async {
     User user;
     try {

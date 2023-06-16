@@ -35,13 +35,13 @@ class _FilterRestaurantScreensState extends State<FilterRestaurantScreens> {
   late bool onlyDelivery;
   late bool onlyFavorite;
   late int rating;
-  late Filter filter;
+  late RestaurantFilter filter;
   late Function setFilterState;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    filter = data[0] as Filter;
+    filter = data[0] as RestaurantFilter;
     setFilterState = data[1] as Function;
     onlyDelivery = filter.onlyDelivery;
     onlyFavorite = filter.onlyFavorite;
@@ -111,7 +111,7 @@ class _FilterRestaurantScreensState extends State<FilterRestaurantScreens> {
                 useTime = true;
               }
 
-              final filter = Filter(
+              final filter = RestaurantFilter(
                 maxTime: maxTime,
                 minRating: rating,
                 maxPrice: price,

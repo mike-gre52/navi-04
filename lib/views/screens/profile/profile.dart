@@ -6,6 +6,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:whats_for_dinner/data/local_data.dart';
+import 'package:whats_for_dinner/main.dart';
 import 'package:whats_for_dinner/models/group.dart';
 import 'package:whats_for_dinner/models/user.dart';
 import 'package:whats_for_dinner/routes/routes.dart';
@@ -105,6 +106,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         SizedBox(height: height10),
                         ProfileRow(name: data.email, icon: CupertinoIcons.mail),
                         SizedBox(height: height20),
+                        CurrentPlan(),
+                        /*
+                        ShaderMask(
+                          shaderCallback: (bounds) => LinearGradient(
+                            colors: [royalYellow, lightYellow],
+                          ).createShader(bounds),
+                          child: Text(
+                            'Premium Plan coming soon!',
+                            style: TextStyle(
+                              fontSize: fontSize18,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        */
                         Expanded(child: Container()),
                         GestureDetector(
                           onTap: () {
@@ -138,6 +154,93 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 }
 
+class CurrentPlan extends StatelessWidget {
+  const CurrentPlan({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenHeight = mediaQuery.size.height;
+    double screenWidth = mediaQuery.size.width;
+    double width10 = screenWidth / 41.4;
+    double width40 = screenWidth / 10.35;
+    double width100 = screenWidth / 4.14;
+    double height10 = screenHeight / 89.6;
+    double height60 = screenHeight / 14.933;
+    double fontSize20 = screenHeight / 44.8;
+    double fontSize22 = screenHeight / 40.727;
+
+    return Row(
+      children: [
+        Text(
+          "Current Plan:",
+          style: TextStyle(
+            fontSize: fontSize22,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        SizedBox(width: width10),
+        isPremium
+            ? ShaderMask(
+                shaderCallback: (bounds) => LinearGradient(
+                  colors: [royalYellow, lightYellow],
+                ).createShader(bounds),
+                child: Text(
+                  'Premium',
+                  style: TextStyle(
+                    fontSize: fontSize22,
+                    color: Colors.white,
+                  ),
+                ),
+              )
+            : Row(
+                children: [
+                  Text(
+                    "Free",
+                    style: TextStyle(
+                      fontSize: fontSize22,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  SizedBox(width: width40),
+                  GestureDetector(
+                    onTap: () {
+                      //
+                      Get.toNamed(RouteHelper.getPremiumUpgradeScreen());
+                    },
+                    child: Container(
+                      height: height60,
+                      width: width100,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                          height10,
+                        ),
+                        gradient: LinearGradient(
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                          stops: const [0, 1],
+                          colors: [royalYellow, lightYellow],
+                        ),
+                      ),
+                      child: Center(
+                        child: Text(
+                          "Upgrade",
+                          style: TextStyle(
+                            fontSize: fontSize20,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+      ],
+    );
+  }
+}
+
 class ProfileRow extends StatelessWidget {
   String name;
   IconData icon;
@@ -166,8 +269,11 @@ class ProfileRow extends StatelessWidget {
         SizedBox(width: width20),
         Text(
           name,
-          style: TextStyle(fontSize: fontSize22, fontWeight: FontWeight.w200),
-        )
+          style: TextStyle(
+            fontSize: fontSize22,
+            fontWeight: FontWeight.w200,
+          ),
+        ),
       ],
     );
   }

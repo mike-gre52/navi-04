@@ -40,8 +40,6 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
       TextEditingController();
   final TextEditingController _ingredientController = TextEditingController();
   final TextEditingController _instructionController = TextEditingController();
-  final TextEditingController _measurementController = TextEditingController();
-  final TextEditingController _amountController = TextEditingController();
 
   int ingredientCounter = 0;
   int instructionCounter = 0;
@@ -136,15 +134,44 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
     });
   }
 
+  void addIngredient(String? ingredient) {
+    setState(() {
+      if (_ingredientController.text != '') {
+        ingredientCounter++;
+
+        Ingredient ingredient = Ingredient(
+          name: _ingredientController.text,
+          id: generateId(),
+        );
+        recipeIngredients.add(ingredient);
+        _ingredientController.clear();
+      }
+    });
+  }
+
+  void addInstruction(String? ingredient) {
+    setState(() {
+      if (_instructionController.text != '') {
+        instructionCounter++;
+        Instruction instruction = Instruction(
+          instruction: _instructionController.text,
+          id: generateId(),
+          orderNumber: instructionCounter,
+        );
+        recipeInstructions.add(instruction);
+        _instructionController.clear();
+      }
+    });
+  }
+
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
     _recipeNameController.dispose();
-    _amountController.dispose();
     _ingredientController.dispose();
     _instructionController.dispose();
-    _measurementController.dispose();
+
     _recipeCookTimeController.dispose();
     _recipePrepTimeController.dispose();
     _recipeServingsController.dispose();
@@ -175,323 +202,263 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
     double fontSize20 = screenHeight / 44.8;
     double fontSize16 = screenHeight / 74.66;
 
-    return Scaffold(
-      backgroundColor: appBlue,
-      body: SafeArea(
-        bottom: false,
-        child: SingleChildScrollView(
-          child: Container(
-            color: Colors.white,
-            child: Column(
-              children: [
-                //top nav
-                AppHeader(
-                  headerText: 'Add Recipes',
-                  headerColor: appBlue,
-                  borderColor: royalYellow,
-                  textColor: Colors.white,
-                  dividerColor: Colors.white,
-                  safeArea: true,
-                  rightAction: Text(
-                    'Cancel',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: fontSize20,
-                      fontWeight: FontWeight.w600,
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        backgroundColor: appBlue,
+        body: SafeArea(
+          bottom: false,
+          child: SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            child: Container(
+              color: Colors.white,
+              child: Column(
+                children: [
+                  //top nav
+                  AppHeader(
+                    headerText: 'Add Recipes',
+                    headerColor: appBlue,
+                    borderColor: royalYellow,
+                    textColor: Colors.white,
+                    dividerColor: Colors.white,
+                    safeArea: true,
+                    rightAction: Text(
+                      'Cancel',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: fontSize20,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
+                    onIconClick: () {
+                      Navigator.pop(context);
+                    },
                   ),
-                  onIconClick: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                //Column under nav
-                Container(
-                  margin: EdgeInsets.only(top: height10),
-                  child: Column(
-                    children: [
-                      //Recipe Name
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: height25),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: HeaderAndTextField(
-                            header: 'Name:',
-                            controller: _recipeNameController,
-                            width: double.maxFinite,
-                            leftAlign: true,
-                            placeHolderText: '',
-                            useTextKeyboard: true,
-                            onChanged: (_) {},
+                  //Column under nav
+                  Container(
+                    margin: EdgeInsets.only(top: height10),
+                    child: Column(
+                      children: [
+                        //Recipe Name
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: height25),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: HeaderAndTextField(
+                              header: 'Name:',
+                              controller: _recipeNameController,
+                              width: double.maxFinite,
+                              leftAlign: true,
+                              placeHolderText: '',
+                              useTextKeyboard: true,
+                              onChanged: (_) {},
+                              onDismiss: addIngredient,
+                            ),
                           ),
                         ),
-                      ),
-                      SizedBox(height: height10),
-                      //Select Image Row
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: width25),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                _showActionSheet(
-                                    context, imageController, setImageStatus);
-                              },
-                              child: isImageSelected
-                                  ? Container(
-                                      height: height75,
-                                      width: width75,
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(height10),
-                                        color: Colors.grey,
+                        SizedBox(height: height10),
+                        //Select Image Row
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: width25),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  _showActionSheet(
+                                      context, imageController, setImageStatus);
+                                },
+                                child: isImageSelected
+                                    ? Container(
+                                        height: height75,
+                                        width: width75,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(height10),
+                                          color: Colors.grey,
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(height10),
+                                          child: Image.file(
+                                            imageController.image!,
+                                            height: height150,
+                                            width: width100,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      )
+                                    : Container(
+                                        height: height75,
+                                        width: width75,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: Colors.grey,
+                                        ),
+                                        child: Icon(
+                                          Icons.camera_alt_outlined,
+                                          size: height35,
+                                          color: appBlue,
+                                        ),
                                       ),
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(height10),
-                                        child: Image.file(
-                                          imageController.image!,
-                                          height: height150,
-                                          width: width100,
-                                          fit: BoxFit.cover,
+                              ),
+                              GestureDetector(
+                                onTap: () async {
+                                  // pick photo
+                                  //_showDialog(context);
+                                  _showActionSheet(
+                                      context, imageController, setImageStatus);
+                                },
+                                child: RichText(
+                                  text: TextSpan(
+                                    style: TextStyle(
+                                        fontSize: fontSize20,
+                                        color: Colors.black,
+                                        fontFamily: 'IBMPlexSansDevanagari'),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                        text: 'Click Here',
+                                        style: TextStyle(color: appBlue),
+                                      ),
+                                      const TextSpan(text: ' to add a image')
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: height10),
+                        //Prep, Cook, Servings Row
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: height25),
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  HeaderAndTextField(
+                                    header: 'Prep Time',
+                                    controller: _recipePrepTimeController,
+                                    width: width75,
+                                    placeHolderText: '',
+                                    onChanged: checkTimeInput,
+                                    centerText: true,
+                                    onDismiss: addIngredient,
+                                  ),
+                                  HeaderAndTextField(
+                                    header: 'Cook Time',
+                                    controller: _recipeCookTimeController,
+                                    width: width75,
+                                    placeHolderText: '',
+                                    onChanged: checkTimeInput,
+                                    centerText: true,
+                                    onDismiss: addIngredient,
+                                  ),
+                                  HeaderAndTextField(
+                                    header: 'Servings',
+                                    controller: _recipeServingsController,
+                                    width: width75,
+                                    placeHolderText: '',
+                                    onChanged: (_) {},
+                                    centerText: true,
+                                    onDismiss: addIngredient,
+                                  ),
+                                ],
+                              ),
+                              showTimeError
+                                  ? Container(
+                                      height: height25,
+                                      alignment: Alignment.centerRight,
+                                      child: Text(
+                                        'Input must be a valid number',
+                                        style: TextStyle(
+                                          color: red,
+                                          fontWeight: FontWeight.w500,
                                         ),
                                       ),
                                     )
                                   : Container(
-                                      height: height75,
-                                      width: width75,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: Colors.grey,
-                                      ),
-                                      child: Icon(
-                                        Icons.camera_alt_outlined,
-                                        size: height35,
-                                        color: appBlue,
-                                      ),
+                                      height: height25,
                                     ),
-                            ),
-                            GestureDetector(
-                              onTap: () async {
-                                // pick photo
-                                //_showDialog(context);
-                                _showActionSheet(
-                                    context, imageController, setImageStatus);
-                              },
-                              child: RichText(
-                                text: TextSpan(
-                                  style: TextStyle(
-                                      fontSize: fontSize20,
-                                      color: Colors.black,
-                                      fontFamily: 'IBMPlexSansDevanagari'),
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                      text: 'Click Here',
-                                      style: TextStyle(color: appBlue),
-                                    ),
-                                    const TextSpan(text: ' to add a image')
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: height10),
-                      //Prep, Cook, Servings Row
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: height25),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                HeaderAndTextField(
-                                  header: 'Prep Time',
-                                  controller: _recipePrepTimeController,
-                                  width: width75,
-                                  placeHolderText: '',
-                                  onChanged: checkTimeInput,
-                                  centerText: true,
-                                ),
-                                HeaderAndTextField(
-                                  header: 'Cook Time',
-                                  controller: _recipeCookTimeController,
-                                  width: width75,
-                                  placeHolderText: '',
-                                  onChanged: checkTimeInput,
-                                  centerText: true,
-                                ),
-                                HeaderAndTextField(
-                                  header: 'Servings',
-                                  controller: _recipeServingsController,
-                                  width: width75,
-                                  placeHolderText: '',
-                                  onChanged: (_) {},
-                                  centerText: true,
-                                ),
-                              ],
-                            ),
-                            showTimeError
-                                ? Container(
-                                    height: height25,
-                                    alignment: Alignment.centerRight,
-                                    child: Text(
-                                      'Input must be a valid number',
-                                      style: TextStyle(
-                                        color: red,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  )
-                                : Container(
-                                    height: height25,
-                                  ),
-                          ],
-                        ),
-                      ),
-                      //Ingredients tab
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: width25),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: TextHeader(
-                            text: 'Ingredients:',
-                            fontSize: fontSize20,
+                            ],
                           ),
                         ),
-                      ),
-                      //Ingredient Name
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: width25),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                HeaderAndTextField(
-                                  header: 'Add ingredients',
-                                  controller: _ingredientController,
-                                  width: width200,
-                                  leftAlign: true,
-                                  placeHolderText: '',
-                                  useTextKeyboard: true,
-                                  onChanged: (_) {},
-                                  showSubText: true,
-                                ),
-                                Expanded(child: Container()),
-                                SizedBox(
-                                  height: height50,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      //
-                                      setState(() {
-                                        if (_ingredientController.text != '') {
-                                          ingredientCounter++;
-
-                                          Ingredient ingredient = Ingredient(
-                                            name: _ingredientController.text,
-                                            id: generateId(),
-                                          );
-                                          recipeIngredients.add(ingredient);
-                                          _ingredientController.clear();
-                                          _measurementController.clear();
-                                          _amountController.clear();
-                                        }
-                                      });
-                                    },
-                                    child: Icon(
-                                      Icons.add_rounded,
-                                      color: appBlue,
-                                      size: height40,
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                            showAmountError
-                                ? Container(
-                                    margin:
-                                        EdgeInsets.symmetric(vertical: height5),
-                                    height: height20,
-                                    alignment: Alignment.centerRight,
-                                    child: Text(
-                                      'Amount must be a valid number',
-                                      style: TextStyle(
-                                        color: red,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  )
-                                : Container(
-                                    height: height30,
-                                  ),
-                          ],
-                        ),
-                      ),
-                      //Ingredients Scroll View
-                      Container(
-                        height: height200,
-                        width: double.maxFinite,
-                        decoration: BoxDecoration(
-                          border: Border(
-                            top: BorderSide(width: 3.0, color: appBlue),
-                            bottom: BorderSide(width: 3.0, color: appBlue),
-                          ),
-                          color: backgroundGrey,
-                        ),
-                        child: RecipeIngredientList(
-                          ingredients: recipeIngredients,
-                          showDelete: true,
-                          deleteIngredient: deleteIngredient,
-                        ),
-                      ),
-                      //Instructions tab
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: width35),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            TextHeader(
-                              text: 'Instructions:',
+                        //Ingredients tab
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: width25),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: TextHeader(
+                              text: 'Ingredients:',
                               fontSize: fontSize20,
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                //Add instruction
-                                setState(() {
-                                  if (_instructionController.text != '') {
-                                    instructionCounter++;
-                                    Instruction instruction = Instruction(
-                                      instruction: _instructionController.text,
-                                      id: generateId(),
-                                      orderNumber: instructionCounter,
-                                    );
-                                    recipeInstructions.add(instruction);
-                                    _instructionController.clear();
-                                  }
-                                });
-                              },
-                              child: Icon(
-                                Icons.add_rounded,
-                                color: appBlue,
-                                size: height40,
-                              ),
-                            )
-                          ],
+                          ),
                         ),
-                      ),
-                      //Instructions textfield
-                      NotesTextfield(
-                        controller: _instructionController,
-                        borderColor: appBlue,
-                        height: height150,
-                      ),
-                      SizedBox(height: height10),
-                      //Instruction Scroll View
-                      Container(
-                          height: 200,
+                        //Ingredient Name
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: width25),
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  HeaderAndTextField(
+                                    header: 'Add ingredients',
+                                    controller: _ingredientController,
+                                    width: width200,
+                                    leftAlign: true,
+                                    placeHolderText: '',
+                                    useTextKeyboard: true,
+                                    onChanged: (_) {},
+                                    showSubText: true,
+                                    onDismiss: addIngredient,
+                                  ),
+                                  Expanded(child: Container()),
+                                  SizedBox(
+                                    height: height50,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        //
+                                        addIngredient("");
+                                      },
+                                      child: Icon(
+                                        Icons.add_rounded,
+                                        color: appBlue,
+                                        size: height40,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              showAmountError
+                                  ? Container(
+                                      margin: EdgeInsets.symmetric(
+                                          vertical: height5),
+                                      height: height20,
+                                      alignment: Alignment.centerRight,
+                                      child: Text(
+                                        'Amount must be a valid number',
+                                        style: TextStyle(
+                                          color: red,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    )
+                                  : Container(
+                                      height: height30,
+                                    ),
+                            ],
+                          ),
+                        ),
+                        //Ingredients Scroll View
+                        Container(
+                          height: height200,
                           width: double.maxFinite,
                           decoration: BoxDecoration(
                             border: Border(
@@ -500,107 +467,157 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                             ),
                             color: backgroundGrey,
                           ),
-                          child: RecipeInstructionList(
-                            instructions: recipeInstructions,
+                          child: RecipeIngredientList(
+                            ingredients: recipeIngredients,
                             showDelete: true,
-                            deleteInstruction: deleteInstruction,
-                          )),
-                      SizedBox(height: height20),
-                      Container(
-                        height: height20,
-                        child: isLoading
-                            ? CupertinoActivityIndicator(
-                                radius: height15,
-                                color: appBlue,
-                                animating: true,
-                              )
-                            : null,
-                      ),
-
-                      SizedBox(height: height20),
-                      //Submit Button
-                      Column(
-                        children: [
-                          GestureDetector(
-                            onTap: () async {
-                              if (validateSubmit()) {
-                                setState(() {
-                                  isLoading = true;
-                                });
-                                String url = '';
-                                String recipeId = generateId();
-                                if (isImageSelected) {
-                                  Reference ref = firebaseStorage
-                                      .ref()
-                                      .child(globalGroupId)
-                                      .child('recipeImages')
-                                      .child(recipeId);
-
-                                  url = await imageController.uploadToStorage(
-                                      imageController.image!, ref);
-                                }
-                                int prepTime =
-                                    int.parse(_recipePrepTimeController.text);
-                                int cookTime =
-                                    int.parse(_recipeCookTimeController.text);
-                                Recipe recipe = Recipe(
-                                  name: _recipeNameController.text,
-                                  prepTime:
-                                      int.parse(_recipePrepTimeController.text),
-                                  cookTime:
-                                      int.parse(_recipeCookTimeController.text),
-                                  totalTime: prepTime + cookTime,
-                                  servings: _recipeServingsController.text,
-                                  id: recipeId,
-                                  imageUrl: url,
-                                  ingredients: recipeIngredients,
-                                  instructions: recipeInstructions,
-                                  sourceUrl: '',
-                                  isLink: false,
-                                  isImport: false,
-                                );
-
-                                // call upload function in recipe controller
-                                recipeController.uploadRecipe(recipe);
-
-                                setState(() {
-                                  isLoading = false;
-                                });
-
-                                Navigator.pop(context);
-                              }
-                            },
-                            child: GradientButton(
-                              buttonText: 'Add',
-                              firstColor: lightBlue,
-                              secondColor: appBlue,
-                            ),
+                            deleteIngredient: deleteIngredient,
                           ),
-                          isformValid
-                              ? Container(
-                                  height: height25,
+                        ),
+                        //Instructions tab
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: width35),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              TextHeader(
+                                text: 'Instructions:',
+                                fontSize: fontSize20,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  //Add instruction
+                                  addInstruction("");
+                                },
+                                child: Icon(
+                                  Icons.add_rounded,
+                                  color: appBlue,
+                                  size: height40,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        //Instructions textfield
+                        NotesTextfield(
+                          controller: _instructionController,
+                          borderColor: appBlue,
+                          height: height150,
+                          onDismiss: addInstruction,
+                        ),
+                        SizedBox(height: height10),
+                        //Instruction Scroll View
+                        Container(
+                            height: 200,
+                            width: double.maxFinite,
+                            decoration: BoxDecoration(
+                              border: Border(
+                                top: BorderSide(width: 3.0, color: appBlue),
+                                bottom: BorderSide(width: 3.0, color: appBlue),
+                              ),
+                              color: backgroundGrey,
+                            ),
+                            child: RecipeInstructionList(
+                              instructions: recipeInstructions,
+                              showDelete: true,
+                              deleteInstruction: deleteInstruction,
+                            )),
+                        SizedBox(height: height20),
+                        Container(
+                          height: height20,
+                          child: isLoading
+                              ? CupertinoActivityIndicator(
+                                  radius: height15,
+                                  color: appBlue,
+                                  animating: true,
                                 )
-                              : Container(
-                                  alignment: Alignment.center,
-                                  margin:
-                                      EdgeInsets.symmetric(vertical: height5),
-                                  height: height20,
-                                  child: Text(
-                                    'Name, Prep/Cook Time, and Servings must be entered ',
-                                    style: TextStyle(
-                                      fontSize: fontSize16,
-                                      color: red,
-                                      fontWeight: FontWeight.w500,
+                              : null,
+                        ),
+
+                        SizedBox(height: height20),
+                        //Submit Button
+                        Column(
+                          children: [
+                            GestureDetector(
+                              onTap: () async {
+                                if (validateSubmit()) {
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                  String url = '';
+                                  String recipeId = generateId();
+                                  if (isImageSelected) {
+                                    Reference ref = firebaseStorage
+                                        .ref()
+                                        .child(globalGroupId)
+                                        .child('recipeImages')
+                                        .child(recipeId);
+
+                                    url = await imageController.uploadToStorage(
+                                        imageController.image!, ref);
+                                  }
+                                  int prepTime =
+                                      int.parse(_recipePrepTimeController.text);
+                                  int cookTime =
+                                      int.parse(_recipeCookTimeController.text);
+                                  Recipe recipe = Recipe(
+                                    name: _recipeNameController.text,
+                                    prepTime: int.parse(
+                                        _recipePrepTimeController.text),
+                                    cookTime: int.parse(
+                                        _recipeCookTimeController.text),
+                                    totalTime: prepTime + cookTime,
+                                    servings: _recipeServingsController.text,
+                                    id: recipeId,
+                                    imageUrl: url,
+                                    ingredients: recipeIngredients,
+                                    instructions: recipeInstructions,
+                                    sourceUrl: '',
+                                    isLink: false,
+                                    isImport: false,
+                                  );
+
+                                  // call upload function in recipe controller
+                                  recipeController.uploadRecipe(recipe);
+
+                                  setState(() {
+                                    isLoading = false;
+                                  });
+
+                                  Navigator.pop(context);
+                                }
+                              },
+                              child: GradientButton(
+                                buttonText: 'Add',
+                                firstColor: lightBlue,
+                                secondColor: appBlue,
+                              ),
+                            ),
+                            isformValid
+                                ? Container(
+                                    height: height25,
+                                  )
+                                : Container(
+                                    alignment: Alignment.center,
+                                    margin:
+                                        EdgeInsets.symmetric(vertical: height5),
+                                    height: height20,
+                                    child: Text(
+                                      'Name, Prep/Cook Time, and Servings must be entered ',
+                                      style: TextStyle(
+                                        fontSize: fontSize16,
+                                        color: red,
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                     ),
                                   ),
-                                ),
-                        ],
-                      ),
-                      SizedBox(height: height30),
-                    ],
-                  ),
-                )
-              ],
+                          ],
+                        ),
+                        SizedBox(height: height30),
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),
@@ -621,6 +638,7 @@ class HeaderAndTextField extends StatelessWidget {
   String subText;
   bool showSubText;
   bool centerText;
+  void Function(String?) onDismiss;
 
   HeaderAndTextField({
     Key? key,
@@ -634,6 +652,7 @@ class HeaderAndTextField extends StatelessWidget {
     this.subText = '',
     this.showSubText = false,
     this.centerText = false,
+    required this.onDismiss,
   }) : super(key: key);
 
   @override
@@ -665,10 +684,12 @@ class HeaderAndTextField extends StatelessWidget {
           textfieldHeight: height50,
           keyboard: useTextKeyboard
               ? TextInputType.text
-              : const TextInputType.numberWithOptions(decimal: true),
+              : const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
           borderRadius: height10,
           showIcon: false,
-          onSubmit: (_) {},
+          onSubmit: onDismiss,
           onChanged: onChanged,
           centerText: centerText,
         ),

@@ -5,6 +5,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:whats_for_dinner/models/recipe.dart';
 import 'package:whats_for_dinner/routes/routes.dart';
+import 'package:whats_for_dinner/utils/colors.dart';
 
 class EditInstructionCell extends StatelessWidget {
   int counterValue;

@@ -50,14 +50,14 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
   bool isTopRatedSelected = false;
   int sortTime = 0;
   int sortCost = 0;
-  late Filter filter;
+  late RestaurantFilter filter;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     print('reset filter');
-    filter = Filter(
+    filter = RestaurantFilter(
       maxTime: 0,
       minRating: isTopRatedSelected ? 4 : 1,
       maxPrice: 1,
@@ -68,7 +68,7 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
     );
   }
 
-  setFilterState(Filter updatedFilter) {
+  setFilterState(RestaurantFilter updatedFilter) {
     filter = updatedFilter;
     setState(() {
       restaurantController.setfilter(filter);
@@ -136,7 +136,7 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
                         setState(() {
                           if (isFavoriteSelected) {
                             isFavoriteSelected = false;
-                            filter = Filter(
+                            filter = RestaurantFilter(
                               maxTime: 0,
                               minRating: isTopRatedSelected ? 4 : 1,
                               maxPrice: 3,
@@ -148,7 +148,7 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
                             restaurantController.setfilter(filter);
                           } else {
                             isFavoriteSelected = true;
-                            filter = Filter(
+                            filter = RestaurantFilter(
                               maxTime: 0,
                               minRating: isTopRatedSelected ? 4 : 1,
                               maxPrice: 3,
@@ -171,7 +171,7 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
                         setState(() {
                           if (isDeliverySelected) {
                             isDeliverySelected = false;
-                            filter = Filter(
+                            filter = RestaurantFilter(
                               maxTime: 0,
                               minRating: isTopRatedSelected ? 4 : 1,
                               maxPrice: 3,
@@ -183,7 +183,7 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
                             restaurantController.setfilter(filter);
                           } else {
                             isDeliverySelected = true;
-                            filter = Filter(
+                            filter = RestaurantFilter(
                               maxTime: 0,
                               minRating: isTopRatedSelected ? 4 : 1,
                               maxPrice: 3,
@@ -242,7 +242,7 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
                         setState(() {
                           if (isTopRatedSelected) {
                             isTopRatedSelected = false;
-                            filter = Filter(
+                            filter = RestaurantFilter(
                               maxTime: 0,
                               minRating: isTopRatedSelected ? 4 : 1,
                               maxPrice: 3,
@@ -254,7 +254,7 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
                             restaurantController.setfilter(filter);
                           } else {
                             isTopRatedSelected = true;
-                            filter = Filter(
+                            filter = RestaurantFilter(
                               maxTime: 0,
                               minRating: isTopRatedSelected ? 4 : 1,
                               maxPrice: 3,
@@ -278,7 +278,7 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
                           isTopRatedSelected = false;
                           sortTime = 0;
                           sortCost = 0;
-                          filter = Filter(
+                          filter = RestaurantFilter(
                             maxTime: 0,
                             minRating: 1,
                             maxPrice: 3,

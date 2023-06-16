@@ -9,13 +9,15 @@ class NotesTextfield extends StatefulWidget {
   TextEditingController controller;
   Color borderColor;
   double height;
+  void Function(String?) onDismiss;
 
-  NotesTextfield(
-      {Key? key,
-      required this.controller,
-      required this.borderColor,
-      required this.height})
-      : super(key: key);
+  NotesTextfield({
+    Key? key,
+    required this.controller,
+    required this.borderColor,
+    required this.height,
+    required this.onDismiss,
+  }) : super(key: key);
 
   @override
   State<NotesTextfield> createState() => _NotesTextfieldState();
@@ -44,6 +46,7 @@ class _NotesTextfieldState extends State<NotesTextfield> {
         expands: true,
         keyboardType: TextInputType.multiline,
         textInputAction: TextInputAction.done,
+        onSubmitted: widget.onDismiss,
         style: TextStyle(
           color: black,
           height: 1.5,

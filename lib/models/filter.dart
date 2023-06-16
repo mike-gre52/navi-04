@@ -1,4 +1,4 @@
-class Filter {
+class RestaurantFilter {
   int maxTime;
   int minRating;
   int maxPrice;
@@ -7,7 +7,7 @@ class Filter {
   bool useFilter;
   bool useTime;
 
-  Filter({
+  RestaurantFilter({
     required this.maxTime,
     required this.minRating,
     required this.maxPrice,

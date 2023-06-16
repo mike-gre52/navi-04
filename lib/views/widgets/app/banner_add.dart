@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -11,22 +13,34 @@ class BannerAdWidget extends StatefulWidget {
   State<BannerAdWidget> createState() => _BannerAdWidgetState();
 }
 
-class _BannerAdWidgetState extends State<BannerAdWidget> {
+class _BannerAdWidgetState extends State<BannerAdWidget>
+    with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+    // WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       _createBottomBannerAd();
     });
-    //reset ad
-    /*
-    Future.delayed(Duration(seconds: 3)).then((value) {
-      _createBottomBannerAd();
-      print("reset ad");
-    });
-    */
+
+    //reloadAd();
   }
 
+/*
+  bool inForeground = true;
+  reloadAd() {
+    int resetAdDuration = 45;
+    Timer.periodic(Duration(seconds: resetAdDuration), (timer) {
+      if (mounted && inForeground) {
+        //print("reset ad");
+        _createBottomBannerAd();
+      } else {
+        //print("timer cancled");
+        timer.cancel();
+      }
+    });
+  }
+*/
   late BannerAd _bottomBannerAd;
   bool _isBottomBanerAdLoaded = false;
 
@@ -47,10 +61,30 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
     _bottomBannerAd.load();
   }
 
+/*
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // TODO: implement didChangeAppLifecycleState
+    super.didChangeAppLifecycleState(state);
+    print(state);
+    if (state != AppLifecycleState.resumed) {
+      // in background
+      //print("stop ad");
+      inForeground = false;
+    }
+    if (state == AppLifecycleState.resumed) {
+      inForeground = true;
+      //print("restart ad");
+      //reloadAd();
+    }
+  }
+  */
+
   @override
   void dispose() {
     super.dispose();
     _bottomBannerAd.dispose();
+    WidgetsBinding.instance.removeObserver(this);
   }
 
   @override
@@ -61,6 +95,8 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
             height: _bottomBannerAd.size.height.toDouble(),
             child: AdWidget(ad: _bottomBannerAd),
           )
-        : Container();
+        : Container(
+            height: 0,
+          );
   }
 }

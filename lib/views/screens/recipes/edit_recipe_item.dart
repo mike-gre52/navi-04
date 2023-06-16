@@ -109,6 +109,10 @@ class _EditRecipeItemScreenState extends State<EditRecipeItemScreen> {
     }
   }
 
+  void onDismiss(String? s) {
+    print("dimiss keyboard");
+  }
+
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
@@ -192,6 +196,7 @@ class _EditRecipeItemScreenState extends State<EditRecipeItemScreen> {
                       controller: _contentTextController,
                       borderColor: appBlue,
                       height: height200,
+                      onDismiss: onDismiss,
                     ),
                   ),
             showAmountError

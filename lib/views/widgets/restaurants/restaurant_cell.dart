@@ -104,7 +104,7 @@ class RestaurantCell extends StatelessWidget {
               Container(
                 width: width235,
                 child: Text(
-                  restaurant.name != null
+                  restaurant.name != null && restaurant.name != ""
                       ? restaurant.name!.substring(0, 1).toUpperCase() +
                           restaurant.name!.substring(1)
                       : "",

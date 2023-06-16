@@ -11,7 +11,7 @@ import 'package:whats_for_dinner/utils/helper.dart';
 
 class OrderCell extends StatelessWidget {
   Restaurant restaurant;
-  Order order;
+  RestaurantOrder order;
   Function onSubmit;
 
   OrderCell({
@@ -94,7 +94,7 @@ class OrderCell extends StatelessWidget {
                       onTap: () {
                         showPopup(
                           context,
-                          "Are you sure you want to delete this Order",
+                          "Are you sure you want to delete this order",
                           "",
                         );
                       },

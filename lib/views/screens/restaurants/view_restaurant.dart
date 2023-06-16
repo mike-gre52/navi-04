@@ -122,7 +122,7 @@ class _ViewRestaurantState extends State<ViewRestaurant> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AppHeader(
-            headerText: restaurant.name != null
+            headerText: restaurant.name != null && restaurant.name != ""
                 ? restaurant.name!.length <= 12
                     ? restaurant.name![0].toUpperCase() +
                         restaurant.name!.substring(1)

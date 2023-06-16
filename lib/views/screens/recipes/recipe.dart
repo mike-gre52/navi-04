@@ -54,6 +54,12 @@ class _RecipeScreenState extends State<RecipeScreen> {
       setState(() {});
     }
 
+    updateImage(String newUrl) {
+      setState(() {
+        recipe.imageUrl = newUrl;
+      });
+    }
+
     void onSubmit() async {
       if (imageController.image != null) {
         Reference ref = firebaseStorage
@@ -75,7 +81,6 @@ class _RecipeScreenState extends State<RecipeScreen> {
 
     return Scaffold(
       //backgroundColor: appBlue,
-
       body: Container(
         //margin: const EdgeInsets.only(top: 75),
         color: appBlue,
@@ -103,6 +108,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
                           builder: (context) => RecipePopup(
                             recipe: recipe,
                             updateUI: updateUI,
+                            updateImage: updateImage,
                           ),
                         );
                       },
@@ -133,12 +139,14 @@ class _RecipeScreenState extends State<RecipeScreen> {
                               onSubmit,
                             );
                           },
-                          child: Center(
-                            child: Icon(
-                              CupertinoIcons.photo,
-                              size: height40,
-                            ),
-                          ),
+                          child: recipe.isImport != null && !recipe.isImport!
+                              ? Center(
+                                  child: Icon(
+                                    CupertinoIcons.photo,
+                                    size: height40,
+                                  ),
+                                )
+                              : Container(),
                         );
                       },
                     ),
@@ -147,7 +155,6 @@ class _RecipeScreenState extends State<RecipeScreen> {
               ),
               SliverToBoxAdapter(
                 child: Container(
-                  //height: 2000,
                   child: RecipeTabController(
                     recipe: recipe,
                   ),
@@ -190,15 +197,10 @@ class _RecipeScreenState extends State<RecipeScreen> {
                     )
                   : SliverToBoxAdapter(
                       child: Container(
-                        height: height30,
+                        color: paperBackground,
+                        height: 30,
                       ),
-                    ),
-              SliverToBoxAdapter(
-                child: Container(
-                  color: paperBackground,
-                  height: 30,
-                ),
-              )
+                    )
             ],
           ),
         ),

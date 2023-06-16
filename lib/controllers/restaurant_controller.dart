@@ -11,7 +11,7 @@ import '../models/restaurant.dart';
 class RestaurantController extends GetxController {
   static RestaurantController instance = Get.find();
 
-  Filter _filterData = Filter(
+  RestaurantFilter _filterData = RestaurantFilter(
     maxTime: 0,
     minRating: 1,
     maxPrice: 3,
@@ -21,15 +21,15 @@ class RestaurantController extends GetxController {
     useTime: false,
   );
 
-  Filter setfilter(Filter newFilter) {
+  RestaurantFilter setfilter(RestaurantFilter newFilter) {
     _filterData = newFilter;
     return newFilter;
   }
 
-  Filter get filter => _filterData;
+  RestaurantFilter get filter => _filterData;
 
   List<Restaurant> filterRestaurants(
-      List<Restaurant> restaurants, Filter filterData) {
+      List<Restaurant> restaurants, RestaurantFilter filterData) {
     List<Restaurant> filteredList = [];
     List<Restaurant> nullList = [];
     if (filterData.useFilter) {
@@ -176,9 +176,9 @@ class RestaurantController extends GetxController {
     }
   }
 
-  addOrder(Restaurant restaurant, Order order) {
+  addOrder(Restaurant restaurant, RestaurantOrder order) {
     print("in add order 1");
-    List<Order> orders = restaurant.orders;
+    List<RestaurantOrder> orders = restaurant.orders;
     orders.add(order);
     print("in add order 2");
     firestore
@@ -186,11 +186,12 @@ class RestaurantController extends GetxController {
         .doc(globalGroupId)
         .collection('restaurants')
         .doc(restaurant.id)
-        .update({"orders": Order.orderToJson(orders)});
+        .update({"orders": RestaurantOrder.orderToJson(orders)});
     print("in add order 3");
   }
 
-  editOrder(Restaurant restaurant, Order oldOrder, Order newOrder) {
+  editOrder(Restaurant restaurant, RestaurantOrder oldOrder,
+      RestaurantOrder newOrder) {
     deleteOrder(restaurant, oldOrder);
     addOrder(restaurant, newOrder);
   }
@@ -213,8 +214,24 @@ class RestaurantController extends GetxController {
     }
   }
 
-  deleteOrder(Restaurant restaurant, Order order) {
-    List<Order> orders = restaurant.orders;
+  void deleteRestaurant(Restaurant restaurant) {
+    try {
+      firestore
+          .collection('groups')
+          .doc(globalGroupId)
+          .collection('restaurants')
+          .doc(restaurant.id)
+          .delete();
+    } catch (e) {
+      Get.snackbar(
+        'Error Deleting Restaurant',
+        '$e',
+      );
+    }
+  }
+
+  void deleteOrder(Restaurant restaurant, RestaurantOrder order) {
+    List<RestaurantOrder> orders = restaurant.orders;
     orders.remove(order);
     try {
       firestore
@@ -222,7 +239,7 @@ class RestaurantController extends GetxController {
           .doc(globalGroupId)
           .collection('restaurants')
           .doc(restaurant.id)
-          .update({"orders": Order.orderToJson(orders)});
+          .update({"orders": RestaurantOrder.orderToJson(orders)});
     } catch (e) {
       Get.snackbar(
         'Error Deleting Order',
@@ -232,12 +249,19 @@ class RestaurantController extends GetxController {
   }
 
   toggleRestaurantFavorite(String restaurantId, bool isFavorite) {
-    firestore
-        .collection('groups')
-        .doc(globalGroupId)
-        .collection('restaurants')
-        .doc(restaurantId)
-        .update({'isFavorite': !isFavorite});
+    try {
+      firestore
+          .collection('groups')
+          .doc(globalGroupId)
+          .collection('restaurants')
+          .doc(restaurantId)
+          .update({'isFavorite': !isFavorite});
+    } catch (e) {
+      Get.snackbar(
+        'Error Accessing Server',
+        '$e',
+      );
+    }
   }
 
   updateRestaurantUrl(String restaurantId, String url) {

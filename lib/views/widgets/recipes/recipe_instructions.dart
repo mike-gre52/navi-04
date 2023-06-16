@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:whats_for_dinner/models/recipe.dart';
+import 'package:whats_for_dinner/utils/colors.dart';
 
 class RecipeInstructionList extends StatelessWidget {
   List<Instruction> instructions;
@@ -71,7 +72,7 @@ class RecipeInstruction extends StatelessWidget {
         children: [
           Flexible(
             child: Text(
-              '$stepNumber) $instruction',
+              '$stepNumber) ${instruction.trim()}',
               style: TextStyle(fontSize: fontSize16),
             ),
           ),
