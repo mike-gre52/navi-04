@@ -58,6 +58,7 @@ class OrderCell extends StatelessWidget {
     double screenWidth = mediaQuery.size.width;
     double screenHeight = mediaQuery.size.height;
     double height15 = screenHeight / 59.733;
+    double height25 = screenHeight / 35.84;
     double width10 = screenWidth / 41.4;
     double fontSize16 = screenHeight / 56;
     double fontSize20 = screenHeight / 44.8;
@@ -77,20 +78,24 @@ class OrderCell extends StatelessWidget {
                   fontSize: fontSize20,
                   color: black,
                   fontWeight: FontWeight.w600,
-                  height: 0.7,
+                  height: 0.8,
                 ),
               ),
-              Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Get.toNamed(RouteHelper.getAddOrderScreen(),
-                          arguments: [restaurant, onSubmit, order, true]);
-                    },
-                    child: const Icon(Icons.edit_rounded),
-                  ),
-                  SizedBox(width: width10),
-                  GestureDetector(
+              Container(
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Get.toNamed(RouteHelper.getAddOrderScreen(),
+                            arguments: [restaurant, onSubmit, order, true]);
+                      },
+                      child: Icon(
+                        Icons.edit_rounded,
+                        size: height25,
+                      ),
+                    ),
+                    SizedBox(width: width10),
+                    GestureDetector(
                       onTap: () {
                         showPopup(
                           context,
@@ -98,8 +103,13 @@ class OrderCell extends StatelessWidget {
                           "",
                         );
                       },
-                      child: const Icon(Icons.close_rounded)),
-                ],
+                      child: Icon(
+                        Icons.close_rounded,
+                        size: height25,
+                      ),
+                    ),
+                  ],
+                ),
               )
             ],
           ),

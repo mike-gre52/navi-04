@@ -35,6 +35,28 @@ class _JoinGroupScreenState extends State<JoinGroupScreen> {
     _groupIdController.dispose();
   }
 
+  bool isLoading = false;
+  void toggleIsLoading() {
+    setState(() {
+      isLoading = !isLoading;
+    });
+  }
+
+  Future<bool> joinGroup(User user) async {
+    final newMember = Member(
+      name: user.name,
+      id: firebaseAuth.currentUser!.uid,
+      color: user.color,
+    );
+    bool didJoin = await groupController.addGroupMember(
+      _groupIdController.text,
+      newMember,
+    );
+    return didJoin;
+  }
+
+  Function onCreateGroup = Get.arguments as Function;
+
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
@@ -42,9 +64,13 @@ class _JoinGroupScreenState extends State<JoinGroupScreen> {
     double screenWidth = mediaQuery.size.width;
     double height5 = screenHeight / 179.2;
     double height10 = screenHeight / 89.6;
+    double height15 = screenHeight / 59.733;
+    double height25 = screenHeight / 35.84;
     double height30 = screenHeight / 29.86;
     double height40 = screenHeight / 22.4;
+    double height50 = screenHeight / 17.92;
     double height65 = screenHeight / 13.784;
+    double height100 = screenHeight / 8.96;
     double height200 = screenHeight / 4.48;
     double height250 = screenHeight / 3.584;
     double fontSize35 = screenHeight / 25.6;
@@ -60,21 +86,6 @@ class _JoinGroupScreenState extends State<JoinGroupScreen> {
     double fontSize20 = screenHeight / 44.8;
     double fontSize22 = screenHeight / 40.727;
 
-    joinGroup(User user) async {
-      final newMember = Member(
-        name: user.name,
-        id: firebaseAuth.currentUser!.uid,
-        color: user.color,
-      );
-      await groupController.addGroupMember(
-        _groupIdController.text,
-        newMember,
-      );
-    }
-
-    Function onCreateGroup = Get.arguments as Function;
-
-    print("creating group runnning function");
     return Scaffold(
       body: Stack(
         children: [
@@ -84,7 +95,36 @@ class _JoinGroupScreenState extends State<JoinGroupScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
-                  height: height200,
+                  height: height50,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Icon(
+                      Icons.close_rounded,
+                      size: height25,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: height100,
+                ),
+                isLoading
+                    ? Align(
+                        alignment: Alignment.center,
+                        child: CupertinoActivityIndicator(
+                          color: royalYellow,
+                          radius: height15,
+                        ),
+                      )
+                    : Container(
+                        height: height30,
+                      ),
+                SizedBox(
+                  height: height10,
                 ),
                 Text(
                   'Join Group',
@@ -121,11 +161,16 @@ class _JoinGroupScreenState extends State<JoinGroupScreen> {
                 ),
                 GestureDetector(
                   onTap: () async {
+                    toggleIsLoading();
                     User user = await userController.getUserDataSnapshot();
-                    await joinGroup(user);
+                    bool didJoin = await joinGroup(user);
                     if (true) {}
-                    Navigator.pop(context);
-                    onCreateGroup();
+                    toggleIsLoading();
+                    //toggleIsLoading();
+                    if (didJoin) {
+                      onCreateGroup();
+                      Navigator.pop(context);
+                    }
                   },
                   child: Container(
                     height: height40,

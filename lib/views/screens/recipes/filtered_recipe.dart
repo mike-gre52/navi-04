@@ -9,6 +9,7 @@ import 'package:whats_for_dinner/utils/constants.dart';
 import 'package:whats_for_dinner/utils/helper.dart';
 import 'package:whats_for_dinner/views/screens/recipes/recipe_navigator.dart';
 import 'package:whats_for_dinner/views/widgets/app/app_header.dart';
+import 'package:whats_for_dinner/views/widgets/app/banner_add.dart';
 import 'package:whats_for_dinner/views/widgets/app/create_or_join_banner.dart';
 import 'package:whats_for_dinner/views/widgets/recipes/blue_folder.dart';
 import 'package:whats_for_dinner/views/widgets/recipes/recipe_cell.dart';
@@ -16,18 +17,43 @@ import 'package:whats_for_dinner/views/widgets/recipes/recipe_link_cell.dart';
 
 import '../../../routes/routes.dart';
 
-class RecipesScreen extends StatefulWidget {
+class FilteredRecipeScreen extends StatefulWidget {
   Function setScreen;
-  RecipesScreen({
+  String category;
+  FilteredRecipeScreen({
     Key? key,
     required this.setScreen,
+    required this.category,
   }) : super(key: key);
 
   @override
-  State<RecipesScreen> createState() => _RecipesScreenState();
+  State<FilteredRecipeScreen> createState() => _FilteredRecipeScreenState();
 }
 
-class _RecipesScreenState extends State<RecipesScreen> {
+class _FilteredRecipeScreenState extends State<FilteredRecipeScreen> {
+  updateUI() {
+    setState(() {});
+  }
+
+  late List<Recipe> recipes;
+  bool haveRecipesLoaded = false;
+
+  getRecipes() async {
+    recipes = await recipeController.getRecipeQuery(widget.category);
+    print(recipes);
+    setState(() {
+      haveRecipesLoaded = true;
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    getRecipes();
+  }
+
   Widget buildRecipeCell(Recipe recipe) {
     if (recipe.isLink != null) {
       return recipe.isLink!
@@ -62,10 +88,6 @@ class _RecipesScreenState extends State<RecipesScreen> {
     }
   }
 
-  updateUI() {
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
@@ -78,6 +100,7 @@ class _RecipesScreenState extends State<RecipesScreen> {
     double height40 = screenHeight / 22.4;
     double height55 = screenHeight / 16.945;
     double height70 = screenHeight / 13.314;
+    double height100 = screenHeight / 8.96;
     double height200 = screenHeight / 4.48;
     double height250 = screenHeight / 3.584;
 
@@ -85,18 +108,15 @@ class _RecipesScreenState extends State<RecipesScreen> {
     double width20 = screenWidth / 20.7;
     double width30 = screenWidth / 13.8;
     double width100 = screenWidth / 4.3;
-
+    double width200 = screenWidth / 2.07;
     double fontSize28 = screenHeight / 33.285;
     double fontSize16 = screenHeight / 58.25;
     double fontSize18 = screenHeight / 51.777;
     double fontSize20 = screenHeight / 44.8;
 
-    return StreamBuilder<List<Recipe>>(
-      stream: recipeController.getRecipes(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          final recipes = snapshot.data!;
-          return Expanded(
+    double iconSize24 = screenHeight / 37.333;
+    return haveRecipesLoaded
+        ? Expanded(
             child: Container(
               margin:
                   EdgeInsets.only(left: width20, right: width20, top: height5),
@@ -108,9 +128,8 @@ class _RecipesScreenState extends State<RecipesScreen> {
                 },
               ),
             ),
-          );
-        } else {
-          return Expanded(
+          )
+        : Expanded(
             child: Center(
               child: CupertinoActivityIndicator(
                 radius: height15,
@@ -119,8 +138,5 @@ class _RecipesScreenState extends State<RecipesScreen> {
               ),
             ),
           );
-        }
-      },
-    );
   }
 }

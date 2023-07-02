@@ -4,27 +4,42 @@ class Group {
   String groupName;
   String groupId;
   List members;
+  List<String> categories;
 
   Group({
     required this.groupName,
     required this.groupId,
     required this.members,
+    required this.categories,
   });
 
   Group.static({
     this.groupName = '',
     this.groupId = '',
     this.members = const [],
+    this.categories = const [],
   });
+
+  static categoriesJsonToString(Map<String, dynamic> json) {
+    List<String> categories = [];
+    if (json["categories"] != null) {
+      List jsonCategories = json["categories"];
+      for (dynamic categorie in jsonCategories) {
+        categories.add(categorie.toString());
+      }
+    }
+    return categories;
+  }
 
   Group fromJson(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
 
     final group = Group(
-        groupName: snapshot['groupName'],
-        groupId: snapshot['groupId'],
-        members: snapshot['members']);
-
+      groupName: snapshot['groupName'],
+      groupId: snapshot['groupId'],
+      members: snapshot['members'],
+      categories: categoriesJsonToString(snapshot),
+    );
     return group;
   }
 
@@ -33,6 +48,7 @@ class Group {
     data['groupName'] = this.groupName;
     data['groupId'] = this.groupId;
     data['members'] = this.members;
+    data['categories'] = this.categories;
     return data;
   }
 }

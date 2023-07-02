@@ -49,6 +49,7 @@ class _ListScreenState extends State<ListScreen> {
 
   late BannerAd _bottomBannerAd;
   bool _isBottomBanerAdLoaded = false;
+  int numItemsChecked = 0;
 
   void _createBottomBannerAd() {
     _bottomBannerAd = BannerAd(
@@ -76,10 +77,12 @@ class _ListScreenState extends State<ListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(numItemsChecked);
     MediaQueryData mediaQuery = MediaQuery.of(context);
     double screenHeight = mediaQuery.size.height;
     double screenWidth = mediaQuery.size.width;
     double height5 = screenHeight / 179.2;
+
     double height10 = screenHeight / 89.6;
     double height20 = screenHeight / 44.8;
     double height35 = screenHeight / 25.6;
@@ -87,6 +90,7 @@ class _ListScreenState extends State<ListScreen> {
     double height60 = screenHeight / 14.933;
     double width75 = screenWidth / 5.52;
     double width275 = screenWidth / 1.505;
+    double width5 = screenWidth / 82.8;
     double width15 = screenWidth / 27.6;
     double fontSize18 = screenHeight / 49.777;
     double fontSize20 = screenHeight / 44.8;
@@ -125,7 +129,7 @@ class _ListScreenState extends State<ListScreen> {
                       size: height35,
                     ),
                   ),
-                  SizedBox(width: height10),
+                  SizedBox(width: width5),
                   Text(
                     'Back',
                     style: TextStyle(

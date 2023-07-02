@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:whats_for_dinner/main.dart';
+import 'package:whats_for_dinner/models/group.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/helper.dart';
 import 'package:whats_for_dinner/views/screens/auth/sign_in.dart';
@@ -45,6 +46,14 @@ class AuthController extends GetxController {
         globalColor = data['color'];
         inGroup = data["inGroup"];
         isPremium = data["isPremium"];
+      },
+      onError: (e) => print("Error getting document: $e"),
+    );
+    final groupRef = firestore.collection('groups').doc(globalGroupId);
+    await groupRef.get().then(
+      (DocumentSnapshot doc) {
+        final data = doc.data() as Map<String, dynamic>;
+        categories = Group.categoriesJsonToString(data);
       },
       onError: (e) => print("Error getting document: $e"),
     );

@@ -20,13 +20,13 @@ class JoinGroup extends StatefulWidget {
   bool inGroup = false;
   String username;
   String userColor;
-  Function onSubmit;
+  Function onJoinedGroup;
   JoinGroup({
     Key? key,
     required this.inGroup,
     required this.username,
     required this.userColor,
-    required this.onSubmit,
+    required this.onJoinedGroup,
   }) : super(key: key);
 
   @override
@@ -91,11 +91,15 @@ class _JoinGroupState extends State<JoinGroup> {
                     id: firebaseAuth.currentUser!.uid,
                     color: widget.userColor,
                   );
-                  await groupController.addGroupMember(
-                    _groupIdController.text,
-                    newMember,
-                  );
-                  widget.onSubmit();
+                  if (_groupIdController.text.trim() != "") {
+                    bool didJoinGroup = await groupController.addGroupMember(
+                      _groupIdController.text,
+                      newMember,
+                    );
+                    if (didJoinGroup) {
+                      widget.onJoinedGroup();
+                    }
+                  }
                 },
                 child: CircleCheckButton(),
               ),
@@ -119,9 +123,8 @@ class _JoinGroupState extends State<JoinGroup> {
               ),
               GestureDetector(
                 onTap: () {
-                  print("create group");
                   Get.toNamed(RouteHelper.createGroup,
-                      arguments: [widget.onSubmit]);
+                      arguments: [widget.onJoinedGroup]);
                 },
                 child: Text(
                   'Click Here',

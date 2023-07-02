@@ -41,11 +41,12 @@ class Item {
   bool? isChecked;
   String? imageUrl;
 
-  Item(
-      {required this.name,
-      required this.id,
-      required this.isChecked,
-      required this.imageUrl});
+  Item({
+    required this.name,
+    required this.id,
+    required this.isChecked,
+    required this.imageUrl,
+  });
 
   Item.static({
     this.name = '',

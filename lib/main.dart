@@ -40,6 +40,7 @@ late String globalGroupId;
 late String globalColor;
 late bool inGroup;
 late bool isPremium;
+late List<String> categories;
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);

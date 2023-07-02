@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +44,14 @@ class _EditListItemScreenState extends State<EditListItemScreen> {
   }
 
   final data = Get.arguments as List;
+
+  bool isImageLoaded = false;
+
+  imageLoaded() {
+    setState(() {
+      isImageLoaded = true;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -113,6 +123,14 @@ class _EditListItemScreenState extends State<EditListItemScreen> {
       );
     }
 
+    onDeleteImage() {
+      setState(() {
+        imageJustUploaded = false;
+        isImageUploaded = false;
+        item.imageUrl = "";
+      });
+    }
+
     void onSubmit() async {
       if (imageController.image != null) {
         setState(() {
@@ -122,6 +140,18 @@ class _EditListItemScreenState extends State<EditListItemScreen> {
             await imageController.uploadToStorage(imageController.image!, ref);
         listController.updateListImageUrl(item, listId, imageUrl);
       }
+    }
+
+    if (item.imageUrl != null && item.imageUrl != "") {
+      var _image = NetworkImage(item.imageUrl!);
+      _image.resolve(ImageConfiguration()).addListener(
+        ImageStreamListener(
+          (info, call) {
+            imageLoaded();
+            // do something
+          },
+        ),
+      );
     }
 
     MediaQueryData mediaQuery = MediaQuery.of(context);
@@ -204,24 +234,74 @@ class _EditListItemScreenState extends State<EditListItemScreen> {
             ),
             SizedBox(height: height25),
             isImageUploaded && item.imageUrl != null
-                ? ClipRRect(
-                    borderRadius: BorderRadius.circular(height10),
-                    child: Image.network(
-                      item.imageUrl!,
-                      height: height350,
-                      width: screenWidth,
-                      fit: BoxFit.cover,
-                    ),
-                  )
-                : imageJustUploaded
-                    ? ClipRRect(
+                ? Stack(
+                    children: [
+                      ClipRRect(
                         borderRadius: BorderRadius.circular(height10),
-                        child: Image.file(
-                          imageController.image!,
+                        child: Image.network(
+                          item.imageUrl!,
                           height: height350,
-                          width: double.maxFinite,
+                          width: screenWidth,
                           fit: BoxFit.cover,
                         ),
+                      ),
+                      isImageLoaded
+                          ? Positioned(
+                              bottom: 10,
+                              right: 10,
+                              child: GestureDetector(
+                                onTap: () {
+                                  _showDialog(
+                                      context, item, listId, onDeleteImage);
+                                },
+                                child: buildBlur(
+                                  borderRadius: BorderRadius.circular(5),
+                                  child: Container(
+                                    color: Colors.white.withOpacity(0.2),
+                                    child: const Icon(
+                                      Icons.close_rounded,
+                                      size: 32,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          : Container(),
+                    ],
+                  )
+                : imageJustUploaded
+                    ? Stack(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(height10),
+                            child: Image.file(
+                              imageController.image!,
+                              height: height350,
+                              width: double.maxFinite,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 10,
+                            right: 10,
+                            child: GestureDetector(
+                              onTap: () {
+                                _showDialog(
+                                    context, item, listId, onDeleteImage);
+                              },
+                              child: buildBlur(
+                                borderRadius: BorderRadius.circular(5),
+                                child: Container(
+                                  color: Colors.white.withOpacity(0.2),
+                                  child: const Icon(
+                                    Icons.close_rounded,
+                                    size: 32,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
                       )
                     : GestureDetector(
                         onTap: () {
@@ -252,4 +332,48 @@ class _EditListItemScreenState extends State<EditListItemScreen> {
       ),
     ));
   }
+}
+
+Widget buildBlur({
+  required Widget child,
+  BorderRadius? borderRadius,
+  double sigmaX = 5,
+  double sigmaY = 5,
+}) =>
+    ClipRRect(
+      borderRadius: borderRadius ?? BorderRadius.zero,
+      child: BackdropFilter(
+        filter: ImageFilter.blur(
+          sigmaX: 5,
+          sigmaY: 5,
+        ),
+        child: child,
+      ),
+    );
+
+_showDialog(BuildContext context, Item item, String listId, Function onDelete) {
+  showDialog(
+    context: context,
+    builder: (_) => CupertinoAlertDialog(
+      title: const Text('Are you sure you want to delete the uploaded image?'),
+      actions: [
+        CupertinoDialogAction(
+          child: const Text('Cancel'),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        CupertinoDialogAction(
+          child: const Text('Yes'),
+          onPressed: () {
+            Navigator.pop(context);
+            listController.updateListImageUrl(item, listId, "");
+            listController.deleteListItemImage(item, listId);
+            onDelete();
+          },
+        ),
+      ],
+    ),
+    barrierDismissible: true,
+  );
 }

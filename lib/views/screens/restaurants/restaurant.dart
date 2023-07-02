@@ -106,7 +106,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
     double height25 = screenHeight / 35.84;
     double height30 = screenHeight / 29.86;
     double height35 = screenHeight / 25.6;
-    double height400 = screenHeight / 2.24;
+    double height385 = screenHeight / 2.327;
     double height450 = screenHeight / 1.991;
     double width5 = screenWidth / 82.8;
     double width10 = screenWidth / 41.4;
@@ -344,8 +344,9 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                 SizedBox(height: height5),
                 SingleChildScrollView(
                   child: Container(
+                    //color: Colors.amberAccent,
                     width: double.maxFinite,
-                    height: height400,
+                    height: height385,
                     child: ListView(
                       padding: const EdgeInsets.all(0),
                       //crossAxisAlignment: CrossAxisAlignment.start,

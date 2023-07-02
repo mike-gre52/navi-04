@@ -18,6 +18,7 @@ Color darkGrey = const Color.fromRGBO(115, 115, 115, 1.0);
 Color lightYellow = const Color.fromRGBO(237, 207, 71, 1.0);
 Color lightGreen = const Color.fromRGBO(124, 227, 111, 1.0);
 Color lightBlue = const Color.fromRGBO(86, 170, 209, 1.0);
+Color veryLightBlue = const Color.fromRGBO(156, 196, 214, 1.0);
 
 //Group Member Colors
 Color color1 = const Color.fromRGBO(192, 32, 70, 1.0);

@@ -7,7 +7,11 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:whats_for_dinner/utils/ad_helper.dart';
 
 class BannerAdWidget extends StatefulWidget {
-  const BannerAdWidget({super.key});
+  bool addMargin;
+  BannerAdWidget({
+    super.key,
+    this.addMargin = false,
+  });
 
   @override
   State<BannerAdWidget> createState() => _BannerAdWidgetState();
@@ -18,7 +22,7 @@ class _BannerAdWidgetState extends State<BannerAdWidget>
   @override
   void initState() {
     super.initState();
-    // WidgetsBinding.instance.addObserver(this);
+    //WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       _createBottomBannerAd();
     });
@@ -61,7 +65,7 @@ class _BannerAdWidgetState extends State<BannerAdWidget>
     _bottomBannerAd.load();
   }
 
-/*
+  /*
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     // TODO: implement didChangeAppLifecycleState
@@ -70,10 +74,10 @@ class _BannerAdWidgetState extends State<BannerAdWidget>
     if (state != AppLifecycleState.resumed) {
       // in background
       //print("stop ad");
-      inForeground = false;
+      //inForeground = false;
     }
     if (state == AppLifecycleState.resumed) {
-      inForeground = true;
+      //inForeground = true;
       //print("restart ad");
       //reloadAd();
     }
@@ -90,7 +94,8 @@ class _BannerAdWidgetState extends State<BannerAdWidget>
   @override
   Widget build(BuildContext context) {
     return _isBottomBanerAdLoaded
-        ? SizedBox(
+        ? Container(
+            margin: EdgeInsets.only(bottom: widget.addMargin ? 10 : 0),
             width: _bottomBannerAd.size.width.toDouble(),
             height: _bottomBannerAd.size.height.toDouble(),
             child: AdWidget(ad: _bottomBannerAd),

@@ -82,6 +82,7 @@ class _RecipeTabControllerState extends State<RecipeTabController>
     double height100 = screenHeight / 8.96;
     double height125 = screenHeight / 7.168;
     double height150 = screenHeight / 5.973;
+    double height165 = screenHeight / 5.43;
     double height200 = screenHeight / 4.48;
     double height600 = screenHeight / 1.493;
     double width30 = screenWidth / 13.8;
@@ -97,61 +98,63 @@ class _RecipeTabControllerState extends State<RecipeTabController>
       child: Column(
         children: [
           Container(
-            height: isPremium ? height100 : height150,
+            height: isPremium ? height100 : height165,
             width: double.maxFinite,
             decoration: BoxDecoration(
                 border: Border(
                   top: BorderSide(width: 2, color: royalYellow),
                 ),
                 color: const Color.fromRGBO(250, 250, 250, 1.0)),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                widget.recipe.cookTime == -1 ||
-                        widget.recipe.prepTime == -1 ||
-                        (widget.recipe.cookTime == null &&
-                            widget.recipe.prepTime == null &&
-                            widget.recipe.totalTime != null)
-                    ? TotalTime(
-                        recipe: widget.recipe,
-                        setTotalTime: setTotalTime,
-                        setServings: setServings,
-                      )
-                    : SplitTime(
-                        recipe: widget.recipe,
-                        setPrepTime: setPrepTime,
-                        setCookTime: setCookTime,
-                        setServings: setServings,
-                      ),
-                TabBar(
-                  onTap: (value) {
-                    if (value == 0) {
-                      setState(() {
-                        tabIndex = 0;
-                      });
-                    } else {
-                      setState(() {
-                        tabIndex = 1;
-                      });
-                    }
-                  },
-                  labelColor: appBlue,
-                  unselectedLabelColor: black,
-                  indicatorColor: royalYellow,
-                  splashBorderRadius: BorderRadius.circular(0),
-                  controller: _tabController,
-                  tabs: const [
-                    Tab(text: 'Ingredients'),
-                    Tab(text: 'Instructions'),
-                  ],
-                ),
-                isPremium
-                    ? Container()
-                    : Container(
-                        height: height50,
-                        child: BannerAdWidget(),
-                      ),
-              ],
+            child: Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  widget.recipe.cookTime == -1 ||
+                          widget.recipe.prepTime == -1 ||
+                          (widget.recipe.cookTime == null &&
+                              widget.recipe.prepTime == null &&
+                              widget.recipe.totalTime != null)
+                      ? TotalTime(
+                          recipe: widget.recipe,
+                          setTotalTime: setTotalTime,
+                          setServings: setServings,
+                        )
+                      : SplitTime(
+                          recipe: widget.recipe,
+                          setPrepTime: setPrepTime,
+                          setCookTime: setCookTime,
+                          setServings: setServings,
+                        ),
+                  TabBar(
+                    onTap: (value) {
+                      if (value == 0) {
+                        setState(() {
+                          tabIndex = 0;
+                        });
+                      } else {
+                        setState(() {
+                          tabIndex = 1;
+                        });
+                      }
+                    },
+                    labelColor: appBlue,
+                    unselectedLabelColor: black,
+                    indicatorColor: royalYellow,
+                    splashBorderRadius: BorderRadius.circular(0),
+                    controller: _tabController,
+                    tabs: const [
+                      Tab(text: 'Ingredients'),
+                      Tab(text: 'Instructions'),
+                    ],
+                  ),
+                  isPremium
+                      ? Container()
+                      : Container(
+                          height: height50,
+                          child: BannerAdWidget(),
+                        ),
+                ],
+              ),
             ),
           ),
           ConstrainedBox(
@@ -160,9 +163,13 @@ class _RecipeTabControllerState extends State<RecipeTabController>
             ),
             child: Container(
               height: tabIndex == 0
-                  ? widget.recipe.ingredients.length.toDouble() * height45
-                  : RecipeCellHelper.getInstructionHeight(
-                      widget.recipe.instructions, screenHeight, screenWidth),
+                  ? widget.recipe.ingredients.length.toDouble() * height60
+                  : widget.recipe.instructions.isEmpty
+                      ? height600 // no instructions
+                      : RecipeCellHelper.getInstructionHeight(
+                          widget.recipe.instructions,
+                          screenHeight,
+                          screenWidth),
               color: paperBackground,
               width: double.maxFinite,
               child: TabBarView(
@@ -170,7 +177,7 @@ class _RecipeTabControllerState extends State<RecipeTabController>
                 controller: _tabController,
                 children: [
                   RecipeIngredientList(
-                    ingredients: widget.recipe.ingredients,
+                    recipe: widget.recipe,
                     showDelete: false,
                     deleteIngredient: () {},
                   ),
@@ -292,8 +299,10 @@ class RecipeInfo extends StatelessWidget {
               SizedBox(width: 5),
               GestureDetector(
                 onTap: () {
-                  Get.toNamed(RouteHelper.getSingleTextfieldAndSubmitScreen(),
-                      arguments: [appBlue, header, onEdit, Icons.edit_rounded]);
+                  Get.toNamed(
+                    RouteHelper.getSingleTextfieldAndSubmitScreen(),
+                    arguments: [appBlue, header, onEdit, Icons.edit_rounded],
+                  );
                 },
                 child: const Icon(
                   CupertinoIcons.info,
@@ -307,9 +316,10 @@ class RecipeInfo extends StatelessWidget {
             child: Text(
               subheader,
               style: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontSize: fontSize14,
-                  overflow: TextOverflow.ellipsis),
+                fontWeight: FontWeight.w400,
+                fontSize: fontSize14,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
           ),
         ],

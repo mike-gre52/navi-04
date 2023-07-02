@@ -11,6 +11,7 @@ class AppHeader extends StatelessWidget {
   Widget rightAction;
   Function onIconClick;
   bool safeArea;
+  bool smallHeader;
   AppHeader({
     required this.headerText,
     required this.headerColor,
@@ -20,6 +21,7 @@ class AppHeader extends StatelessWidget {
     required this.rightAction,
     required this.onIconClick,
     this.safeArea = false,
+    this.smallHeader = false,
     Key? key,
   }) : super(key: key);
 
@@ -36,6 +38,7 @@ class AppHeader extends StatelessWidget {
     double width50 = screenWidth / 8.28;
     double width250 = screenWidth / 1.656;
     double height120 = screenHeight / 7.466;
+    double fontSize26 = screenHeight / 34.4615;
     double fontSize30 = screenHeight / 29.866;
 
     return Stack(
@@ -72,7 +75,7 @@ class AppHeader extends StatelessWidget {
                 child: Text(
                   headerText,
                   style: TextStyle(
-                    fontSize: fontSize30,
+                    fontSize: smallHeader ? fontSize26 : fontSize30,
                     color: textColor,
                     fontWeight: FontWeight.w600,
                     overflow: TextOverflow.ellipsis,

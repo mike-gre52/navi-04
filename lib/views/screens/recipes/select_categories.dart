@@ -9,19 +9,21 @@ import 'package:whats_for_dinner/routes/routes.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
 import 'package:whats_for_dinner/utils/helper.dart';
+import 'package:whats_for_dinner/views/widgets/app/border_button.dart';
 import 'package:whats_for_dinner/views/widgets/app/gradient_button.dart';
 import 'package:whats_for_dinner/views/widgets/lists/list_ingredient_cell.dart';
 import 'package:whats_for_dinner/views/widgets/recipes/recipe_categories_picker.dart';
 import 'package:whats_for_dinner/views/widgets/recipes/select_recipe_categories.dart';
 
-class ImportedRecipe extends StatefulWidget {
-  ImportedRecipe({Key? key}) : super(key: key);
+class SelectedCategoriesScreen extends StatefulWidget {
+  SelectedCategoriesScreen({Key? key}) : super(key: key);
 
   @override
-  State<ImportedRecipe> createState() => _ImportedRecipeState();
+  State<SelectedCategoriesScreen> createState() =>
+      _SelectedCategoriesScreenState();
 }
 
-class _ImportedRecipeState extends State<ImportedRecipe> {
+class _SelectedCategoriesScreenState extends State<SelectedCategoriesScreen> {
   final recipe = Get.arguments as Recipe;
 
   List<String> ingredientsToAdd = [];
@@ -47,6 +49,15 @@ class _ImportedRecipeState extends State<ImportedRecipe> {
     );
   }
 
+  List<String> selectedCategories = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    selectedCategories = recipe.categories;
+  }
+
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
@@ -58,7 +69,7 @@ class _ImportedRecipeState extends State<ImportedRecipe> {
     double height20 = screenHeight / 48.6;
     double height50 = screenHeight / 17.92;
     double height55 = screenHeight / 16.945;
-    double height100 = screenHeight / 8.96;
+    double height250 = screenHeight / 3.584;
 
     double width30 = screenWidth / 13.8;
     double width100 = screenWidth / 4.3;
@@ -69,7 +80,6 @@ class _ImportedRecipeState extends State<ImportedRecipe> {
     double fontSize20 = screenHeight / 44.8;
 
     String selectedCategory = "";
-    List<String> selectedCategories = [];
 
     void onSelectedItem(int selectedItem) {
       if (selectedItem == 0) {
@@ -98,7 +108,7 @@ class _ImportedRecipeState extends State<ImportedRecipe> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                recipe.name != null ? recipe.name! : "no name",
+                "Select Cateogries:",
                 style: TextStyle(
                   fontSize: fontSize28,
                   fontWeight: FontWeight.w700,
@@ -107,94 +117,28 @@ class _ImportedRecipeState extends State<ImportedRecipe> {
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
               ),
-              Text(
-                recipe.sourceUrl != null
-                    ? trimSourceUrl(recipe.sourceUrl!)
-                    : "",
-                style: TextStyle(
-                  fontSize: fontSize16,
-                  fontWeight: FontWeight.w600,
-                  color: black,
-                ),
-              ),
-              SizedBox(height: height5),
-              Text(
-                'Quick add ingredients to a list:',
-                style: TextStyle(
-                  fontSize: fontSize18,
-                  fontWeight: FontWeight.w600,
-                  color: appBlue,
-                ),
-              ),
-              ConstrainedBox(
-                constraints: BoxConstraints(maxHeight: fortyFivePercent),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children:
-                        recipe.ingredients.map(buildRecipeIngredient).toList(),
-                  ),
-                ),
-              ),
-              SizedBox(height: height20),
-              GestureDetector(
-                onTap: () {
-                  Get.toNamed(RouteHelper.getSelectListFromImportRecipe(),
-                      arguments: ingredientsToAdd);
-                },
-                child: Container(
-                  height: height55,
-                  width: width100,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: appBlue,
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Add',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: fontSize20,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: height5),
-              //RecipeCategoriesPicker(onSelect: onSelectedItem),
-              Text(
-                "Select Categories:",
-                style: TextStyle(
-                  fontSize: fontSize18,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
               Container(
                 height: 3,
-                width: width30,
+                width: width100,
                 color: appBlue,
               ),
               SelectRecipeCategories(
                 updateCategories: updateCategories,
                 selectedCategories: selectedCategories,
-                height: height100,
+                height: height250,
               ),
-              SizedBox(height: height20),
+              SizedBox(height: height5),
               GestureDetector(
                 onTap: () {
                   recipe.categories = selectedCategories;
-                  recipeController.uploadRecipe(recipe);
+                  recipeController.updateRecipeCategories(recipe);
                   Navigator.pop(context);
-                  Get.toNamed(
-                    RouteHelper.getRecipeScreen(),
-                    arguments: recipe,
-                  );
                 },
                 child: Align(
                   alignment: Alignment.center,
-                  child: GradientButton(
-                    buttonText: 'Confirm',
-                    firstColor: lightBlue,
-                    secondColor: appBlue,
+                  child: BorderButton(
+                    buttonColor: appBlue,
+                    buttonText: 'Submit',
                   ),
                 ),
               ),

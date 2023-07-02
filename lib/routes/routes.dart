@@ -21,6 +21,8 @@ import 'package:whats_for_dinner/views/screens/recipes/edit_recipe.dart';
 import 'package:whats_for_dinner/views/screens/recipes/edit_recipe_item.dart';
 import 'package:whats_for_dinner/views/screens/recipes/imported_recipe.dart';
 import 'package:whats_for_dinner/views/screens/recipes/recipe.dart';
+import 'package:whats_for_dinner/views/screens/recipes/recipe_folders.dart';
+import 'package:whats_for_dinner/views/screens/recipes/select_categories.dart';
 import 'package:whats_for_dinner/views/screens/recipes/select_list_from_import.dart';
 import 'package:whats_for_dinner/views/screens/restaurants/add_order_screen.dart';
 import 'package:whats_for_dinner/views/screens/restaurants/add_restaurant.dart';
@@ -33,11 +35,12 @@ import 'package:whats_for_dinner/views/screens/restaurants/restaurants.dart';
 import 'package:whats_for_dinner/views/screens/restaurants/view_restaurant.dart';
 import 'package:whats_for_dinner/views/screens/recipes/add_recipe.dart';
 import 'package:whats_for_dinner/views/widgets/profile/join_group.dart';
-import 'package:whats_for_dinner/views/widgets/recipes/select_list.dart';
+import 'package:whats_for_dinner/views/screens/recipes/select_list.dart';
 
 import '../views/screens/auth/sign_in.dart';
 import '../views/screens/auth/sign_up.dart';
 import '../views/screens/lists/add_to_list_select_recipe_screen.dart';
+import '../views/screens/recipes/filtered_recipe.dart';
 
 class RouteHelper {
   static String home = '/';
@@ -76,6 +79,9 @@ class RouteHelper {
   static String confirmResetPasswordSent = '/confirmResetPasswordSent';
   static String joinGroup = '/joinGroup';
   static String premiumUpgradeScreen = '/premiumUpgradeScreen';
+  static String filteredRecipeScreen = '/filteredRecipeScreen';
+  static String recipeFoldersScreen = '/recipeFoldersScreen';
+  static String selectCategoriesScreen = '/selectCateogriesScreen';
   static String testScreen = '/testScreen';
 
   static String getHomeRoute() => home;
@@ -114,6 +120,9 @@ class RouteHelper {
   static String getConfirmResetPasswordSent() => confirmResetPasswordSent;
   static String getJoinGroup() => joinGroup;
   static String getPremiumUpgradeScreen() => premiumUpgradeScreen;
+  static String getFilteredRecipeScreen() => filteredRecipeScreen;
+  static String getRecipeFoldersScreen() => recipeFoldersScreen;
+  static String getSelectCategoriesScreen() => selectCategoriesScreen;
   static String getTestScreen() => testScreen;
 
   static List<GetPage> routes = [
@@ -281,7 +290,7 @@ class RouteHelper {
     ),
     GetPage(
       name: selectList,
-      page: () => SelectList(),
+      page: () => SelectListScreen(),
       transition: Transition.cupertino,
       transitionDuration: const Duration(milliseconds: 250),
     ),
@@ -327,6 +336,28 @@ class RouteHelper {
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 250),
     ),
+    GetPage(
+      name: selectCategoriesScreen,
+      page: () => SelectedCategoriesScreen(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 250),
+    ),
+    /*
+    GetPage(
+      name: filteredRecipeScreen,
+      page: () => const FilteredRecipeScreen(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 250),
+    ),
+    //
+    //
+    GetPage(
+      name: recipeFoldersScreen,
+      page: () => const RecipeFoldersScreen(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 250),
+    ),
+    */
     GetPage(
       name: testScreen,
       page: () => const Test(),

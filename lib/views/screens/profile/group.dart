@@ -40,6 +40,12 @@ class _GroupScreenState extends State<GroupScreen> {
     _groupNameController.dispose();
   }
 
+  joinedGroup() {
+    setState(() {
+      inGroup = true;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
@@ -146,7 +152,7 @@ class _GroupScreenState extends State<GroupScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    group.groupId,
+                                    globalGroupId,
                                     style: TextStyle(
                                       color: black,
                                       fontSize: fontSize20,
@@ -263,11 +269,7 @@ class _GroupScreenState extends State<GroupScreen> {
                         inGroup: data.inGroup,
                         username: data.name,
                         userColor: data.color,
-                        onSubmit: () {
-                          setState(() {
-                            inGroup = true;
-                          });
-                        },
+                        onJoinedGroup: joinedGroup,
                       ),
                     ),
                   ],

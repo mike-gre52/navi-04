@@ -32,6 +32,7 @@ class ListItem extends StatelessWidget {
     double screenWidth = mediaQuery.size.width; //414
     double height2 = screenHeight / 448;
     double height10 = screenHeight / 89.6;
+    double height20 = screenHeight / 44.8;
     double height25 = screenHeight / 35.84;
     double height30 = screenHeight / 29.86;
     double height40 = screenHeight / 22.4;
@@ -66,6 +67,16 @@ class ListItem extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+                    item.imageUrl != ""
+                        ? Icon(
+                            Icons.image,
+                            size: height20,
+                            color: black,
+                          )
+                        : SizedBox(
+                            width: height20,
+                          ),
+                    const SizedBox(width: 5),
                     showCheckBox
                         ? GestureDetector(
                             onTap: () {

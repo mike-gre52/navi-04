@@ -41,7 +41,7 @@ class ConfirmResetEmailSent extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'An email has been sent to $email. If you do not see it, check your junk mail.',
+                  'An email has been sent to $email. If you do not see it, check your junk mail or try again.',
                   style: TextStyle(
                     color: darkGrey,
                     fontSize: fontSize15,

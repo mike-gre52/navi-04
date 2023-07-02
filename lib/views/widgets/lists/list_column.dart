@@ -22,6 +22,8 @@ class ListColumn extends StatelessWidget {
   Item adItem = Item(name: "ad", id: "", isChecked: true, imageUrl: "");
   bool showAd = false;
 
+  int numCheckedItems = 0;
+
   Widget buildListItem(Item item) {
     //Cell
     adCount++;
@@ -58,8 +60,14 @@ class ListColumn extends StatelessWidget {
     double screenWidth = mediaQuery.size.width;
     double screenHeight = mediaQuery.size.height;
     double height5 = screenHeight / 179.2;
+    double height10 = screenHeight / 89.6;
+    double height15 = screenHeight / 59.733;
     double height50 = screenHeight / 17.92;
+
     double width30 = screenWidth / 13.8;
+
+    double fontWeight18 = screenHeight / 49.777;
+
     adCount = 0;
     return StreamBuilder<List<Item>>(
         stream: isRecentlyDeleted
@@ -69,6 +77,12 @@ class ListColumn extends StatelessWidget {
           adCount = 0;
           if (snapshot.hasData) {
             final listItems = snapshot.data!;
+            numCheckedItems = 0;
+            for (int i = 0; i < listItems.length; i++) {
+              if (listItems[i].isChecked != null && listItems[i].isChecked!) {
+                numCheckedItems++;
+              }
+            }
             if (listItems.length < 6) {
               if (listItems.length == 1) {
                 adSpacer = 1;
@@ -81,21 +95,52 @@ class ListColumn extends StatelessWidget {
               adSpacer = 5;
             }
             return Expanded(
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Container(
-                  margin: EdgeInsets.only(
-                    top: height5,
-                    left: width30,
-                    right: width30,
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text(
+                        "Selected Items: $numCheckedItems",
+                        style: TextStyle(
+                          fontSize: fontWeight18,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Text(
+                        "Total Items: ${listItems.length}",
+                        style: TextStyle(
+                          fontSize: fontWeight18,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      )
+                    ],
                   ),
-                  width: double.infinity,
-                  child: ListView(
-                      keyboardDismissBehavior:
-                          ScrollViewKeyboardDismissBehavior.onDrag,
-                      padding: const EdgeInsets.only(top: 0),
-                      children: listItems.reversed.map(buildListItem).toList()),
-                ),
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        margin: EdgeInsets.only(
+                          top: height5,
+                          left: height10,
+                          right: height10,
+                        ),
+                        width: double.infinity,
+                        child: ListView.builder(
+                          itemCount: listItems.length,
+                          itemBuilder: (context, index) {
+                            return buildListItem(
+                                listItems.reversed.toList()[index]);
+                          },
+                          keyboardDismissBehavior:
+                              ScrollViewKeyboardDismissBehavior.onDrag,
+                          padding: const EdgeInsets.only(top: 0),
+                          //children: listItems.reversed.map(buildListItem).toList(),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             );
           } else {

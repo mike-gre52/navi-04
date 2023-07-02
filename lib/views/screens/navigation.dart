@@ -13,6 +13,9 @@ import 'package:whats_for_dinner/utils/constants.dart';
 import 'package:whats_for_dinner/views/screens/home.dart';
 import 'package:whats_for_dinner/views/screens/lists/lists.dart';
 import 'package:whats_for_dinner/views/screens/profile/group.dart';
+import 'package:whats_for_dinner/views/screens/recipes/recipe.dart';
+import 'package:whats_for_dinner/views/screens/recipes/recipe_folders.dart';
+import 'package:whats_for_dinner/views/screens/recipes/recipe_navigator.dart';
 import 'package:whats_for_dinner/views/screens/recipes/recipes.dart';
 import 'package:whats_for_dinner/views/screens/restaurants/restaurants.dart';
 
@@ -67,6 +70,19 @@ class _NavigationState extends State<Navigation> {
     super.dispose();
   }
 
+  var recipeScreen = recipePage.allRecipes;
+
+  String category = "";
+
+  void setRecipeScreen(var newScreen, String recipeCategory) {
+    setState(() {
+      recipeScreen = newScreen;
+    });
+    if (newScreen == recipePage.filteredRecipes) {
+      category = recipeCategory;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
@@ -78,7 +94,9 @@ class _NavigationState extends State<Navigation> {
     List pages = [
       //const HomeScreen(),
       const ListsScreen(),
-      const RecipesScreen(),
+      RecipeNavigator(
+          screen: recipeScreen, setScreen: setRecipeScreen, category: category),
+      //const RecipesScreen(),
       const ResturantsScreen(),
       GroupScreen(),
     ];

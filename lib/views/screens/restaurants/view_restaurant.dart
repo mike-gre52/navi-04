@@ -53,6 +53,8 @@ class _ViewRestaurantState extends State<ViewRestaurant> {
     } else {
       doesDelivery = false;
     }
+    print("in set delivery status");
+    print(doesDelivery);
   }
 
   void setPriceStatus(value) {
@@ -93,8 +95,9 @@ class _ViewRestaurantState extends State<ViewRestaurant> {
     if (restaurant.restaurantUrl != null) {
       restaurantUrl = restaurant.restaurantUrl!;
     }
-
-    setDeliveryStatus(restaurant.doesDelivery);
+    if (restaurant.doesDelivery != null) {
+      doesDelivery = restaurant.doesDelivery!;
+    }
 
     super.initState();
   }

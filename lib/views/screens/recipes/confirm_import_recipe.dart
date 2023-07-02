@@ -56,6 +56,7 @@ class _ConfirmImportRecipeState extends State<ConfirmImportRecipe> {
       ingredients: recipeIngredients,
       instructions: recipeInstructions,
       sourceUrl: sourceUrl,
+      categories: [],
       isLink: false,
       isImport: true,
     );

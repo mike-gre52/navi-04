@@ -65,6 +65,7 @@ class _RecipePopupState extends State<RecipePopup> {
     double height160 = screenHeight / 5.6;
     double height200 = screenHeight / 4.48;
     double height240 = screenHeight / 3.733;
+    double height280 = screenHeight / 3.2;
     double width100 = screenWidth / 4.14;
 
     void onSubmit() async {
@@ -86,8 +87,8 @@ class _RecipePopupState extends State<RecipePopup> {
 
     return Container(
       height: widget.recipe.isImport != null && !widget.recipe.isImport!
-          ? height240
-          : height200,
+          ? height280
+          : height240,
       child: Column(
         children: [
           Container(
@@ -150,6 +151,16 @@ class _RecipePopupState extends State<RecipePopup> {
                   },
                 )
               : Container(),
+          PopupButton(
+            icon: Icons.category,
+            isRed: false,
+            buttonName: 'Edit Categories',
+            onClick: () {
+              Navigator.pop(context);
+              Get.toNamed(RouteHelper.getSelectCategoriesScreen(),
+                  arguments: widget.recipe);
+            },
+          ),
           PopupButton(
             icon: Icons.delete,
             isRed: true,

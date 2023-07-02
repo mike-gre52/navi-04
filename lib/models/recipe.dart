@@ -13,6 +13,7 @@ class Recipe {
   List<Ingredient> ingredients;
   List<Instruction> instructions;
   String? sourceUrl;
+  List<String> categories;
   bool? isLink;
   bool? isImport;
   Recipe({
@@ -26,6 +27,7 @@ class Recipe {
     required this.ingredients,
     required this.instructions,
     required this.sourceUrl,
+    required this.categories,
     required this.isLink,
     required this.isImport,
   });
@@ -41,6 +43,7 @@ class Recipe {
     this.ingredients = const [],
     this.instructions = const [],
     this.sourceUrl = '',
+    this.categories = const [],
     this.isLink = false,
     this.isImport = false,
   });
@@ -108,10 +111,18 @@ class Recipe {
     return newInstructionList;
   }
 
-  Recipe fromJson(Map<String, dynamic> json) {
-    List<Instruction> newInstructionList = [];
-    //print(json);
+  categoriesJsonToString(Map<String, dynamic> json) {
+    List<String> categories = [];
+    if (json["categories"] != null) {
+      List jsonCategories = json["categories"];
+      for (dynamic categorie in jsonCategories) {
+        categories.add(categorie.toString());
+      }
+    }
+    return categories;
+  }
 
+  Recipe fromJson(Map<String, dynamic> json) {
     return Recipe(
       name: json["name"],
       prepTime: json["prepTime"],
@@ -123,6 +134,7 @@ class Recipe {
       ingredients: ingredientJsonToString(json),
       instructions: instructionJsonToString(json),
       sourceUrl: json['sourceUrl'],
+      categories: categoriesJsonToString(json),
       isLink: json['isLink'],
       isImport: json['isImport'],
     );
@@ -140,6 +152,7 @@ class Recipe {
     data['instructions'] = instructionToJson(this.instructions);
     data['imageUrl'] = this.imageUrl;
     data['sourceUrl'] = this.sourceUrl;
+    data['categories'] = this.categories;
     data['isLink'] = this.isLink;
     data['isImport'] = this.isImport;
 

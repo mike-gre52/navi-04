@@ -23,6 +23,24 @@ class GroupController extends GetxController {
     return data;
   }
 
+  // Future<List<String>> getGroupCategories() async {
+  //   final recipeData =
+  //       firestore.collection('groups').doc(globalGroupId).collection('recipes');
+
+  //   QuerySnapshot<Object?> data = await recipeData.get();
+
+  //   List<Recipe> recipes = [];
+
+  //   data.docs.forEach((element) {
+  //     Map<String, dynamic> data = element.data() as Map<String, dynamic>;
+  //     recipes.add(Recipe.static().fromJson(data));
+  //   });
+  //   recipes.forEach((element) {
+  //     print(element.name);
+  //   });
+  //   return recipes;
+  // }
+
   Stream<List<Member>> getGroupMembers() {
     Stream<List<Member>> data = firestore
         .collection('groups')
@@ -52,13 +70,14 @@ class GroupController extends GetxController {
       'members': FieldValue.arrayRemove([member.toJson()])
     });
     */
-
-    firestore
-        .collection('groups')
-        .doc(globalGroupId)
-        .collection('members')
-        .doc(firebaseAuth.currentUser!.uid)
-        .delete();
+    try {
+      firestore
+          .collection('groups')
+          .doc(globalGroupId)
+          .collection('members')
+          .doc(firebaseAuth.currentUser!.uid)
+          .delete();
+    } catch (e) {}
 
     removeIdFromMembers(group.members);
     setUserGroupId(firebaseAuth.currentUser!.uid);
@@ -128,7 +147,8 @@ class GroupController extends GetxController {
     final group = Group(
         groupName: groupName,
         groupId: newGroupId,
-        members: [firebaseAuth.currentUser!.uid]);
+        members: [firebaseAuth.currentUser!.uid],
+        categories: []);
 
     final member = Member(
       name: username,
@@ -149,7 +169,9 @@ class GroupController extends GetxController {
     setUserInGroupStatusTrue();
   }
 
-  addGroupMember(String groupId, Member member) async {
+  Future<bool> addGroupMember(String groupId, Member member) async {
+    //returns true if the user is succesfully added to the group
+
     //check if group exists----
 
     try {
@@ -163,7 +185,6 @@ class GroupController extends GetxController {
       */
 
       final snap = await firestore.collection('groups').doc(groupId).get();
-      print(snap);
       if (snap.exists) {
         //group id valid
         print('1');
@@ -189,6 +210,7 @@ class GroupController extends GetxController {
             print('hello');
           },
         );
+        return true;
       } else {
         //group id invalid
         Get.snackbar(
@@ -196,6 +218,7 @@ class GroupController extends GetxController {
           'The group Id \'$groupId\' is not valid.',
         );
       }
+      return false;
     } catch (e) {
       print(e);
       Get.snackbar(
@@ -203,6 +226,7 @@ class GroupController extends GetxController {
         'The group Id \'$groupId\' is not valid.',
       );
     }
+    return false;
   }
 
   setFirebaseUserColorInGroup(String newColor) async {

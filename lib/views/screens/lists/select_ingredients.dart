@@ -73,7 +73,8 @@ class _SelectIngredientsState extends State<SelectIngredients> {
         children: [
           Container(
             child: AppHeader(
-              headerText: 'Select Ingredients',
+              headerText: 'Pick Ingredients',
+              smallHeader: true,
               headerColor: color,
               borderColor: royalYellow,
               textColor: Colors.white,
@@ -119,6 +120,7 @@ class _SelectIngredientsState extends State<SelectIngredients> {
                           listController.addListItem(ingrediant, list.id!);
                         });
 
+                        Navigator.pop(context);
                         Navigator.pop(context);
                       },
                       child: GradientButton(

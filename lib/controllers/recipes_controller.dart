@@ -35,6 +35,30 @@ class RecipeController extends GetxController {
     return data;
   }
 
+  Future<List<Recipe>> getRecipeQuery(String category) async {
+    final recipeData = firestore
+        .collection('groups')
+        .doc(globalGroupId)
+        .collection('recipes')
+        .where(
+          "categories",
+          arrayContains: category,
+        );
+
+    QuerySnapshot<Object?> data = await recipeData.get();
+
+    List<Recipe> recipes = [];
+
+    data.docs.forEach((element) {
+      Map<String, dynamic> data = element.data() as Map<String, dynamic>;
+      recipes.add(Recipe.static().fromJson(data));
+    });
+    recipes.forEach((element) {
+      print(element.name);
+    });
+    return recipes;
+  }
+
   void uploadRecipe(Recipe recipe) {
     firestore
         .collection('groups')
@@ -109,6 +133,7 @@ class RecipeController extends GetxController {
       ingredients: [],
       instructions: [],
       sourceUrl: url,
+      categories: [],
       isLink: true,
       isImport: false,
     );
@@ -189,6 +214,22 @@ class RecipeController extends GetxController {
     } catch (e) {
       Get.snackbar(
         'Error editing cookTime',
+        '$e',
+      );
+    }
+  }
+
+  void updateRecipeCategories(Recipe recipe) {
+    try {
+      firestore
+          .collection('groups')
+          .doc(globalGroupId)
+          .collection('recipes')
+          .doc(recipe.id)
+          .update({'categories': recipe.categories});
+    } catch (e) {
+      Get.snackbar(
+        'Error editing totalTime',
         '$e',
       );
     }

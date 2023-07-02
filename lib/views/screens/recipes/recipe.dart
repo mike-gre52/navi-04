@@ -167,10 +167,11 @@ class _RecipeScreenState extends State<RecipeScreen> {
                       child: Container(
                         color: paperBackground,
                         //margin: EdgeInsets.symmetric(horizontal: width30),
-                        height: height30,
+                        height: height70,
                         child: Container(
                           margin: EdgeInsets.only(
                             left: width30,
+                            bottom: height20,
                           ),
                           child: Row(
                             children: [

@@ -35,33 +35,36 @@ class _AddToListSelectRecipeScreenState
     color = data[1] as Color;
   }
 
-  Widget buildRecipeCell(Recipe recipe) {
-    if (recipe.isLink != null) {
-      return recipe.isLink!
-          ? GestureDetector(
-              onTap: (() {
-                Navigator.pop(context);
-                Get.toNamed(RouteHelper.getSelectIngredients(),
-                    arguments: [recipe, list, color]);
-              }),
-              child: SelectRecipeCell(
-                recipe: recipe,
-              ),
-            )
-          : Container();
-    } else {
-      return Container();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    Widget buildRecipeCell(Recipe recipe) {
+      if (recipe.isLink != null) {
+        return !recipe.isLink!
+            ? GestureDetector(
+                onTap: (() {
+                  Get.toNamed(RouteHelper.getSelectIngredients(), arguments: [
+                    recipe,
+                    list,
+                    color,
+                  ]);
+                }),
+                child: SelectRecipeCell(
+                  recipe: recipe,
+                ),
+              )
+            : Container();
+      } else {
+        return Container();
+      }
+    }
+
     MediaQueryData mediaQuery = MediaQuery.of(context);
     double screenHeight = mediaQuery.size.height;
     double screenWidth = mediaQuery.size.width;
     double height5 = screenHeight / 179.2;
     double width20 = screenWidth / 20.7;
     double fontSize20 = screenHeight / 44.8;
+    print("test");
     return Scaffold(
       body: StreamBuilder<List<Recipe>>(
         stream: recipeController.getRecipes(),

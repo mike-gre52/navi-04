@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -9,23 +10,39 @@ import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
 import 'package:whats_for_dinner/views/widgets/app/app_header.dart';
 
-class SelectList extends StatelessWidget {
-  SelectList({Key? key}) : super(key: key);
+class SelectListScreen extends StatelessWidget {
+  SelectListScreen({Key? key}) : super(key: key);
 
   final recipe = Get.arguments as Recipe;
 
   @override
   Widget build(BuildContext context) {
+    onSubmit() {
+      Navigator.pop(context);
+      Navigator.pop(context);
+    }
+
     MediaQueryData mediaQuery = MediaQuery.of(context);
     double screenWidth = mediaQuery.size.width;
     double screenHeight = mediaQuery.size.height;
+    double height30 = screenHeight / 29.866;
+    double height200 = screenHeight / 4.48;
+    double width15 = screenWidth / 27.6;
     double width30 = screenWidth / 13.8;
+    double fontSize18 = screenHeight / 49.777;
     double fontSize20 = screenHeight / 44.8;
+    double fontSize24 = screenHeight / 37.333;
     Widget buildListCell(ListData list) => GestureDetector(
           onTap: () {
-            Navigator.pop(context);
-            Get.toNamed(RouteHelper.selectIngredients,
-                arguments: [recipe, list, appBlue]);
+            //Navigator.pop(context);
+            Get.toNamed(
+              RouteHelper.selectIngredients,
+              arguments: [
+                recipe,
+                list,
+                appBlue,
+              ],
+            );
           },
           child: SmallListCell(
             list: list,
@@ -38,37 +55,83 @@ class SelectList extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final lists = snapshot.data!;
-
-            return Column(
-              children: [
-                AppHeader(
-                  headerText: 'Lists',
-                  headerColor: appBlue,
-                  borderColor: royalYellow,
-                  textColor: Colors.white,
-                  dividerColor: Colors.white,
-                  rightAction: Text(
-                    'Cancel',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: fontSize20,
-                      fontWeight: FontWeight.w600,
+            return SafeArea(
+              child: Column(
+                children: [
+                  /*
+                  AppHeader(
+                    headerText: 'Lists',
+                    headerColor: appBlue,
+                    borderColor: royalYellow,
+                    textColor: Colors.white,
+                    dividerColor: Colors.white,
+                    rightAction: Text(
+                      'Cancel',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: fontSize20,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    onIconClick: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  */
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(left: width15),
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: Icon(
+                          CupertinoIcons.back,
+                          size: height30,
+                        ),
+                      ),
                     ),
                   ),
-                  onIconClick: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                Expanded(
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: width30),
-                    child: ListView(
-                      padding: const EdgeInsets.all(0),
-                      children: lists.map(buildListCell).toList(),
+                  lists.isNotEmpty
+                      ? Container(
+                          margin:
+                              EdgeInsets.only(left: width30, right: width30),
+                          child: Text(
+                            "Select a list to add ingredients to",
+                            style: TextStyle(
+                              fontSize: fontSize24,
+                              fontWeight: FontWeight.w700,
+                              color: appBlue,
+                            ),
+                          ),
+                        )
+                      : Container(),
+                  Expanded(
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: width30),
+                      child: lists.isNotEmpty
+                          ? ListView(
+                              padding: const EdgeInsets.all(0),
+                              children: lists.map(buildListCell).toList(),
+                            )
+                          : Container(
+                              margin: EdgeInsets.only(bottom: height200),
+                              child: Center(
+                                child: Text(
+                                  "You have not created any lists yet. Go to the Lists tab to create one.",
+                                  style: TextStyle(
+                                    fontSize: fontSize18,
+                                    color: appBlue,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ),
                     ),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             );
           } else {
             return Container();

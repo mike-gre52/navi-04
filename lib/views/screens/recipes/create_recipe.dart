@@ -22,6 +22,7 @@ import 'package:whats_for_dinner/views/widgets/restaurants/notes_textfield.dart'
 
 import '../../../models/recipe.dart';
 import '../../widgets/app/app_header.dart';
+import 'create_recipe_ingredient_list.dart';
 
 class CreateRecipeScreen extends StatefulWidget {
   const CreateRecipeScreen({Key? key}) : super(key: key);
@@ -467,7 +468,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                             ),
                             color: backgroundGrey,
                           ),
-                          child: RecipeIngredientList(
+                          child: CreateRecipeIngredientList(
                             ingredients: recipeIngredients,
                             showDelete: true,
                             deleteIngredient: deleteIngredient,
@@ -571,6 +572,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                                     imageUrl: url,
                                     ingredients: recipeIngredients,
                                     instructions: recipeInstructions,
+                                    categories: [],
                                     sourceUrl: '',
                                     isLink: false,
                                     isImport: false,

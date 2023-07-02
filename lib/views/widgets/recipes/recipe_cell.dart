@@ -120,7 +120,7 @@ class RecipeCell extends StatelessWidget {
                           style: TextStyle(
                               fontSize: fontSize22,
                               fontWeight: FontWeight.w600,
-                              height: 1.1,
+                              height: 1.05,
                               overflow: TextOverflow.ellipsis),
                           maxLines: 2,
                         ),

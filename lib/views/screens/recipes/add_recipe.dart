@@ -131,25 +131,25 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
 
                   jsonData = recipeData;
                   sourceUrl = _linkController.text;
-                  print('1');
+                  // print('1');
                   int index = findData(jsonData);
-                  print('2');
+                  // print('2');
                   recipeName = getRecipeName(jsonData, index);
-                  print('3');
+                  // print('3');
                   imageUrl = getRecipeImage(jsonData, index);
-                  print('4');
+                  // print('4');
                   prepTime = getPrepTime(jsonData, index);
-                  print('5');
+                  // print('5');
                   cookTime = getCookTime(jsonData, index);
-                  print('6');
+                  // print('6');
                   totalTime = getTotalTime(jsonData, index);
-                  print('7');
+                  // print('7');
                   recipeYield = getRecipeYield(jsonData, index);
-                  print('8');
+                  // print('8');
                   recipeInstructions = getRecipeInstructions(jsonData, index);
-                  print('9');
+                  // print('9');
                   recipeIngredients = getRecipeIngredients(jsonData, index);
-                  print('10');
+                  // print('10');
                   Recipe recipe = Recipe(
                     name: recipeName,
                     prepTime: prepTime,
@@ -162,11 +162,10 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                     ingredients: recipeIngredients,
                     instructions: recipeInstructions,
                     sourceUrl: sourceUrl,
+                    categories: [],
                     isLink: false,
                     isImport: true,
                   );
-
-                  recipeController.uploadRecipe(recipe);
 
                   // prompt add ingredients screen.......
                   Navigator.pop(context);
