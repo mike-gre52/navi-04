@@ -11,7 +11,7 @@ import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
 import 'package:whats_for_dinner/utils/helper.dart';
 import 'package:whats_for_dinner/utils/recipe_cell_helper.dart';
-import 'package:whats_for_dinner/views/widgets/app/banner_add.dart';
+import 'package:whats_for_dinner/views/widgets/app/banner_ad_widget.dart';
 import 'package:whats_for_dinner/views/widgets/recipes/recipe_ingredients.dart';
 import 'package:whats_for_dinner/views/widgets/recipes/recipe_instructions.dart';
 

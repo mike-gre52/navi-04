@@ -10,7 +10,7 @@ import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
 import 'package:whats_for_dinner/utils/helper.dart';
 import 'package:whats_for_dinner/views/widgets/app/app_header.dart';
-import 'package:whats_for_dinner/views/widgets/app/banner_add.dart';
+import 'package:whats_for_dinner/views/widgets/app/banner_ad_widget.dart';
 import 'package:whats_for_dinner/views/widgets/app/custom_textfield.dart';
 import 'package:whats_for_dinner/views/widgets/restaurants/notes_textfield.dart';
 import 'package:whats_for_dinner/views/widgets/restaurants/delivery_segmented_control.dart';

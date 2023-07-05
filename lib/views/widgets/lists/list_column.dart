@@ -4,7 +4,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:whats_for_dinner/models/list.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
-import 'package:whats_for_dinner/views/widgets/app/banner_add.dart';
+import 'package:whats_for_dinner/views/widgets/app/banner_ad_widget.dart';
 import 'package:whats_for_dinner/views/widgets/lists/list_item.dart';
 
 class ListColumn extends StatelessWidget {

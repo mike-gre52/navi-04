@@ -219,6 +219,38 @@ class RecipeController extends GetxController {
     }
   }
 
+  deleteRecipeCategory(String category) async {
+    List<Recipe> recipes = await getRecipeQuery(category);
+
+    //removes each category tag for each recipe within the category
+    for (Recipe recipe in recipes) {
+      removeRecipeCategoryFromRecipe(recipe, category);
+    }
+
+    //removes category from group category tab
+    deleteRecipeCategoryFromGroup(category);
+  }
+
+  void removeRecipeCategoryFromRecipe(Recipe recipe, String category) {
+    try {
+      firestore
+          .collection('groups')
+          .doc(globalGroupId)
+          .collection('recipes')
+          .doc(recipe.id)
+          .update(
+        {
+          'categories': FieldValue.arrayRemove([category]),
+        },
+      );
+    } catch (e) {
+      Get.snackbar(
+        'Error editing totalTime',
+        '$e',
+      );
+    }
+  }
+
   void updateRecipeCategories(Recipe recipe) {
     try {
       firestore
@@ -227,6 +259,34 @@ class RecipeController extends GetxController {
           .collection('recipes')
           .doc(recipe.id)
           .update({'categories': recipe.categories});
+    } catch (e) {
+      Get.snackbar(
+        'Error editing totalTime',
+        '$e',
+      );
+    }
+  }
+
+  bool addRecipeCategory(String category) {
+    try {
+      firestore.collection('groups').doc(globalGroupId).update({
+        'categories': FieldValue.arrayUnion([category]),
+      });
+      return true;
+    } catch (e) {
+      Get.snackbar(
+        'Error editing totalTime',
+        '$e',
+      );
+      return false;
+    }
+  }
+
+  void deleteRecipeCategoryFromGroup(String category) {
+    try {
+      firestore.collection('groups').doc(globalGroupId).update({
+        'categories': FieldValue.arrayRemove([category]),
+      });
     } catch (e) {
       Get.snackbar(
         'Error editing totalTime',

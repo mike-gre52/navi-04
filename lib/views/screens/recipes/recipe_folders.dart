@@ -28,6 +28,38 @@ class RecipeFoldersScreen extends StatefulWidget {
 }
 
 class _RecipeFoldersScreenState extends State<RecipeFoldersScreen> {
+  void updateCategories(category) {
+    recipeController.deleteRecipeCategory(category);
+    setState(() {
+      categories.remove(category);
+    });
+  }
+
+  _showDialog(BuildContext context, String category) {
+    showDialog(
+        context: context,
+        builder: (_) => CupertinoAlertDialog(
+              title:
+                  Text('Are you sure you want to delete the $category folder'),
+              content: const Text(''),
+              actions: [
+                CupertinoDialogAction(
+                  child: const Text('Yes'),
+                  onPressed: () {
+                    updateCategories(category);
+                    Navigator.pop(context);
+                  },
+                ),
+                CupertinoDialogAction(
+                  child: const Text('No'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ));
+  }
+
   Widget buildRecipeCell(String category, screenHeight) {
     double height10 = screenHeight / 89.6;
     double height80 = screenHeight / 11.2;
@@ -51,15 +83,33 @@ class _RecipeFoldersScreenState extends State<RecipeFoldersScreen> {
           borderRadius: BorderRadius.circular(25),
         ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            GestureDetector(
+              onTap: () {
+                _showDialog(context, category);
+              },
+              child: Align(
+                alignment: Alignment.topRight,
+                child: Container(
+                  margin: EdgeInsets.only(
+                    right: height10,
+                    top: height10,
+                  ),
+                  child: const Icon(Icons.close_rounded),
+                ),
+              ),
+            ),
             const BlueFolder(),
             SizedBox(height: height10),
-            Text(
-              category,
-              style: TextStyle(
-                fontSize: fontSize18,
-                fontWeight: FontWeight.w600,
+            Container(
+              margin: EdgeInsets.only(bottom: 20),
+              child: Text(
+                category,
+                style: TextStyle(
+                  fontSize: fontSize18,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ],

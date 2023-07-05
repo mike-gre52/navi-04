@@ -9,7 +9,7 @@ import 'package:whats_for_dinner/utils/constants.dart';
 import 'package:whats_for_dinner/utils/helper.dart';
 import 'package:whats_for_dinner/views/screens/recipes/recipe_navigator.dart';
 import 'package:whats_for_dinner/views/widgets/app/app_header.dart';
-import 'package:whats_for_dinner/views/widgets/app/banner_add.dart';
+import 'package:whats_for_dinner/views/widgets/app/banner_ad_widget.dart';
 import 'package:whats_for_dinner/views/widgets/app/create_or_join_banner.dart';
 import 'package:whats_for_dinner/views/widgets/recipes/blue_folder.dart';
 import 'package:whats_for_dinner/views/widgets/recipes/recipe_cell.dart';

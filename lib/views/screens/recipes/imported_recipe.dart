@@ -59,6 +59,7 @@ class _ImportedRecipeState extends State<ImportedRecipe> {
     double height50 = screenHeight / 17.92;
     double height55 = screenHeight / 16.945;
     double height100 = screenHeight / 8.96;
+    double height350 = screenHeight / 2.56;
 
     double width30 = screenWidth / 13.8;
     double width100 = screenWidth / 4.3;
@@ -67,6 +68,8 @@ class _ImportedRecipeState extends State<ImportedRecipe> {
     double fontSize16 = screenHeight / 58.25;
     double fontSize18 = screenHeight / 51.777;
     double fontSize20 = screenHeight / 44.8;
+
+    double iconSize28 = screenHeight / 32;
 
     String selectedCategory = "";
     List<String> selectedCategories = [];
@@ -88,6 +91,15 @@ class _ImportedRecipeState extends State<ImportedRecipe> {
         selectedCategories.add(newCategory);
       }
       print(selectedCategories);
+    }
+
+    void onSubmitAddCategory(String category) {
+      bool didAdd = recipeController.addRecipeCategory(category);
+      if (didAdd) {
+        setState(() {
+          categories.add(category);
+        });
+      }
     }
 
     return Scaffold(
@@ -127,7 +139,9 @@ class _ImportedRecipeState extends State<ImportedRecipe> {
                 ),
               ),
               ConstrainedBox(
-                constraints: BoxConstraints(maxHeight: fortyFivePercent),
+                constraints: BoxConstraints(
+                  maxHeight: height350,
+                ),
                 child: SingleChildScrollView(
                   child: Column(
                     children:
@@ -161,12 +175,34 @@ class _ImportedRecipeState extends State<ImportedRecipe> {
               ),
               SizedBox(height: height5),
               //RecipeCategoriesPicker(onSelect: onSelectedItem),
-              Text(
-                "Select Categories:",
-                style: TextStyle(
-                  fontSize: fontSize18,
-                  fontWeight: FontWeight.w600,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Select Folders:",
+                    style: TextStyle(
+                      fontSize: fontSize18,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Get.toNamed(
+                          RouteHelper.getSingleTextfieldAndSubmitScreen(),
+                          arguments: [
+                            appBlue,
+                            "Add Recipe Folder",
+                            onSubmitAddCategory,
+                            Icons.add_rounded,
+                          ]);
+                    },
+                    child: Icon(
+                      Icons.add_circle_outline_rounded,
+                      size: iconSize28,
+                      color: appBlue,
+                    ),
+                  ),
+                ],
               ),
               Container(
                 height: 3,
@@ -177,8 +213,9 @@ class _ImportedRecipeState extends State<ImportedRecipe> {
                 updateCategories: updateCategories,
                 selectedCategories: selectedCategories,
                 height: height100,
+                onAddCategory: () {},
               ),
-              SizedBox(height: height20),
+
               GestureDetector(
                 onTap: () {
                   recipe.categories = selectedCategories;

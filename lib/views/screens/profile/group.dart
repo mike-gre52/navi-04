@@ -138,7 +138,9 @@ class _GroupScreenState extends State<GroupScreen> {
                             Header(
                                 headerText: 'Group Code',
                                 dividerColor: royalYellow),
-                            SizedBox(height: height10),
+                            SizedBox(
+                              height: height10,
+                            ),
                             Container(
                               padding: EdgeInsets.symmetric(
                                   horizontal: width10, vertical: height5),

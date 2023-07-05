@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:whats_for_dinner/main.dart';
 import 'package:whats_for_dinner/utils/ad_helper.dart';
 
 class BannerAdWidget extends StatefulWidget {
@@ -23,9 +24,12 @@ class _BannerAdWidgetState extends State<BannerAdWidget>
   void initState() {
     super.initState();
     //WidgetsBinding.instance.addObserver(this);
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      _createBottomBannerAd();
-    });
+    if (!isPremium) {
+      print("Loading ad");
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        _createBottomBannerAd();
+      });
+    }
 
     //reloadAd();
   }
@@ -87,19 +91,26 @@ class _BannerAdWidgetState extends State<BannerAdWidget>
   @override
   void dispose() {
     super.dispose();
-    _bottomBannerAd.dispose();
-    WidgetsBinding.instance.removeObserver(this);
+    if (!isPremium) {
+      _bottomBannerAd.dispose();
+    }
+
+    //WidgetsBinding.instance.removeObserver(this);
   }
 
   @override
   Widget build(BuildContext context) {
-    return _isBottomBanerAdLoaded
-        ? Container(
-            margin: EdgeInsets.only(bottom: widget.addMargin ? 10 : 0),
-            width: _bottomBannerAd.size.width.toDouble(),
-            height: _bottomBannerAd.size.height.toDouble(),
-            child: AdWidget(ad: _bottomBannerAd),
-          )
+    return !isPremium
+        ? _isBottomBanerAdLoaded
+            ? Container(
+                margin: EdgeInsets.only(bottom: widget.addMargin ? 10 : 0),
+                width: _bottomBannerAd.size.width.toDouble(),
+                height: _bottomBannerAd.size.height.toDouble(),
+                child: AdWidget(ad: _bottomBannerAd),
+              )
+            : Container(
+                height: 0,
+              )
         : Container(
             height: 0,
           );

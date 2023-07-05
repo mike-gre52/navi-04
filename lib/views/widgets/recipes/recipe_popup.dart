@@ -152,13 +152,15 @@ class _RecipePopupState extends State<RecipePopup> {
                 )
               : Container(),
           PopupButton(
-            icon: Icons.category,
+            icon: Icons.folder_rounded,
             isRed: false,
-            buttonName: 'Edit Categories',
+            buttonName: 'Edit Folders:',
             onClick: () {
               Navigator.pop(context);
-              Get.toNamed(RouteHelper.getSelectCategoriesScreen(),
-                  arguments: widget.recipe);
+              Get.toNamed(
+                RouteHelper.getSelectCategoriesScreen(),
+                arguments: widget.recipe,
+              );
             },
           ),
           PopupButton(

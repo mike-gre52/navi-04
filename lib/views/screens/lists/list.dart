@@ -151,7 +151,7 @@ class _ListScreenState extends State<ListScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   CustomTextfield(
-                    icon: Icons.add,
+                    icon: Icons.list_rounded,
                     placeholderText: 'Add item',
                     controller: _itemController,
                     borderColor: appGreen,

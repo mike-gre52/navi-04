@@ -18,6 +18,7 @@ import 'package:whats_for_dinner/views/screens/recipes/recipe_folders.dart';
 import 'package:whats_for_dinner/views/screens/recipes/recipe_navigator.dart';
 import 'package:whats_for_dinner/views/screens/recipes/recipes.dart';
 import 'package:whats_for_dinner/views/screens/restaurants/restaurants.dart';
+import 'package:whats_for_dinner/views/widgets/app/banner_ad_widget.dart';
 
 class Navigation extends StatefulWidget {
   const Navigation({Key? key}) : super(key: key);
@@ -34,40 +35,6 @@ class _NavigationState extends State<Navigation> {
     setState(() {
       _selectedIndex = index;
     });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      _createBottomBannerAd();
-    });
-  }
-
-  late BannerAd _bottomBannerAd;
-  bool _isBottomBanerAdLoaded = false;
-
-  void _createBottomBannerAd() {
-    _bottomBannerAd = BannerAd(
-      size: AdSize.banner,
-      adUnitId: AdHelper.bannerAdUnitId,
-      listener: BannerAdListener(onAdLoaded: (_) {
-        setState(() {
-          _isBottomBanerAdLoaded = true;
-        });
-      }, onAdFailedToLoad: (ad, error) {
-        //print('Ad failed to load');
-        ad.dispose();
-      }),
-      request: const AdRequest(),
-    );
-    _bottomBannerAd.load();
-  }
-
-  @override
-  void dispose() {
-    _bottomBannerAd.dispose();
-    super.dispose();
   }
 
   var recipeScreen = recipePage.allRecipes;
@@ -112,13 +79,7 @@ class _NavigationState extends State<Navigation> {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            _isBottomBanerAdLoaded
-                ? Container(
-                    height: _bottomBannerAd.size.height.toDouble(),
-                    width: double.maxFinite,
-                    child: AdWidget(ad: _bottomBannerAd),
-                  )
-                : Container(),
+            BannerAdWidget(),
             Container(
               decoration: BoxDecoration(
                 border: Border(

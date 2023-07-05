@@ -58,6 +58,21 @@ class _SelectedCategoriesScreenState extends State<SelectedCategoriesScreen> {
     selectedCategories = recipe.categories;
   }
 
+  void onSubmitAddCategory(String category) {
+    bool didAdd = recipeController.addRecipeCategory(category);
+    print("test");
+    if (didAdd) {
+      setState(() {
+        categories.add(category);
+        print("update");
+      });
+    }
+  }
+
+  void onSelectRecipeAddCategory() {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
@@ -66,6 +81,7 @@ class _SelectedCategoriesScreenState extends State<SelectedCategoriesScreen> {
     double fortyFivePercent = screenHeight * .45;
 
     double height5 = screenHeight / 186.4;
+    double height15 = screenHeight / 59.733;
     double height20 = screenHeight / 48.6;
     double height50 = screenHeight / 17.92;
     double height55 = screenHeight / 16.945;
@@ -78,6 +94,8 @@ class _SelectedCategoriesScreenState extends State<SelectedCategoriesScreen> {
     double fontSize16 = screenHeight / 58.25;
     double fontSize18 = screenHeight / 51.777;
     double fontSize20 = screenHeight / 44.8;
+
+    double iconSize32 = screenHeight / 28;
 
     String selectedCategory = "";
 
@@ -97,7 +115,6 @@ class _SelectedCategoriesScreenState extends State<SelectedCategoriesScreen> {
       } else {
         selectedCategories.add(newCategory);
       }
-      print(selectedCategories);
     }
 
     return Scaffold(
@@ -107,15 +124,54 @@ class _SelectedCategoriesScreenState extends State<SelectedCategoriesScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "Select Cateogries:",
-                style: TextStyle(
-                  fontSize: fontSize28,
-                  fontWeight: FontWeight.w700,
-                  color: appBlue,
+              GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: Icon(
+                    Icons.close_rounded,
+                    size: iconSize32,
+                  ),
                 ),
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
+              ),
+              SizedBox(
+                height: height15,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Select Folders:",
+                    style: TextStyle(
+                      fontSize: fontSize28,
+                      fontWeight: FontWeight.w700,
+                      color: appBlue,
+                    ),
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  categories.isNotEmpty
+                      ? GestureDetector(
+                          onTap: () {
+                            Get.toNamed(
+                              RouteHelper.getSingleTextfieldAndSubmitScreen(),
+                              arguments: [
+                                appBlue,
+                                "Add Recipe Folder",
+                                onSubmitAddCategory,
+                                Icons.folder_rounded,
+                              ],
+                            );
+                          },
+                          child: Icon(
+                            Icons.add_rounded,
+                            size: iconSize32,
+                          ),
+                        )
+                      : Container(),
+                ],
               ),
               Container(
                 height: 3,
@@ -126,6 +182,7 @@ class _SelectedCategoriesScreenState extends State<SelectedCategoriesScreen> {
                 updateCategories: updateCategories,
                 selectedCategories: selectedCategories,
                 height: height250,
+                onAddCategory: onSelectRecipeAddCategory,
               ),
               SizedBox(height: height5),
               GestureDetector(

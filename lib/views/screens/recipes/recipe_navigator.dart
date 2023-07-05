@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:whats_for_dinner/main.dart';
 import 'package:whats_for_dinner/routes/routes.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
+import 'package:whats_for_dinner/utils/constants.dart';
 import 'package:whats_for_dinner/views/screens/recipes/filtered_recipe.dart';
 import 'package:whats_for_dinner/views/screens/recipes/recipe_folders.dart';
 import 'package:whats_for_dinner/views/screens/recipes/recipes.dart';
@@ -39,6 +40,15 @@ class _RecipeNavigatorState extends State<RecipeNavigator> {
     setState(() {});
   }
 
+  void onSubmitAddCategory(String category) {
+    bool didAdd = recipeController.addRecipeCategory(category);
+    if (didAdd) {
+      setState(() {
+        categories.add(category);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,7 +68,10 @@ class _RecipeNavigatorState extends State<RecipeNavigator> {
                   rightAction: widget.screen == recipePage.allRecipes
                       ? AllRecipesNavigation(setScreen: widget.setScreen)
                       : widget.screen == recipePage.recipeFolders
-                          ? RecipeFoldersNavigation(setScreen: widget.setScreen)
+                          ? RecipeFoldersNavigation(
+                              setScreen: widget.setScreen,
+                              onCreateCategory: onSubmitAddCategory,
+                            )
                           : FilteredRecipeNavigation(
                               setScreen: widget.setScreen),
                   onIconClick: () {
@@ -163,25 +176,56 @@ class AllRecipesNavigation extends StatelessWidget {
 
 class RecipeFoldersNavigation extends StatelessWidget {
   Function setScreen;
-  RecipeFoldersNavigation({super.key, required this.setScreen});
+  Function onCreateCategory;
+  RecipeFoldersNavigation({
+    super.key,
+    required this.setScreen,
+    required this.onCreateCategory,
+  });
 
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
     double screenHeight = mediaQuery.size.height;
+
+    double screenWidth = mediaQuery.size.width;
+    double width10 = screenWidth / 41.4;
     double fontSize20 = screenHeight / 44.8;
-    return GestureDetector(
-      onTap: () {
-        setScreen(recipePage.allRecipes, "");
-      },
-      child: Text(
-        'View All',
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: fontSize20,
-          fontWeight: FontWeight.w600,
+    double iconSize32 = screenHeight / 28;
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        GestureDetector(
+          onTap: () {
+            setScreen(recipePage.allRecipes, "");
+          },
+          child: Text(
+            'All',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: fontSize20,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
         ),
-      ),
+        SizedBox(width: width10),
+        GestureDetector(
+          onTap: () {
+            Get.toNamed(RouteHelper.getSingleTextfieldAndSubmitScreen(),
+                arguments: [
+                  appBlue,
+                  "Add Recipe Folder",
+                  onCreateCategory,
+                  Icons.folder_rounded,
+                ]);
+          },
+          child: Icon(
+            Icons.add_rounded,
+            size: iconSize32,
+            color: Colors.white,
+          ),
+        ),
+      ],
     );
   }
 }

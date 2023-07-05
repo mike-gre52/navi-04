@@ -2,33 +2,53 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:get/get.dart';
 import 'package:whats_for_dinner/main.dart';
+import 'package:whats_for_dinner/routes/routes.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
+import 'package:whats_for_dinner/utils/constants.dart';
 
-class SelectRecipeCategories extends StatelessWidget {
+class SelectRecipeCategories extends StatefulWidget {
   Function updateCategories;
   List<String> selectedCategories;
+  Function onAddCategory;
   double height;
   SelectRecipeCategories({
     super.key,
     required this.updateCategories,
     required this.selectedCategories,
+    required this.onAddCategory,
     required this.height,
   });
 
+  @override
+  State<SelectRecipeCategories> createState() => _SelectRecipeCategoriesState();
+}
+
+class _SelectRecipeCategoriesState extends State<SelectRecipeCategories> {
   Widget buildListItem(String category) {
-    if (selectedCategories.contains(category)) {
+    if (widget.selectedCategories.contains(category)) {
       return CategoryCell(
         category: category,
-        updateCategories: updateCategories,
+        updateCategories: widget.updateCategories,
         isChecked: true,
       );
     } else {
       return CategoryCell(
         category: category,
-        updateCategories: updateCategories,
+        updateCategories: widget.updateCategories,
         isChecked: false,
       );
+    }
+  }
+
+  void onSubmitAddCategory(String category) {
+    bool didAdd = recipeController.addRecipeCategory(category);
+    if (didAdd) {
+      setState(() {
+        categories.add(category);
+      });
+      widget.onAddCategory();
     }
   }
 
@@ -36,15 +56,52 @@ class SelectRecipeCategories extends StatelessWidget {
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
     double screenHeight = mediaQuery.size.height;
+    double height5 = screenHeight / 179.2;
+    double fontSize16 = screenHeight / 56;
 
     return Container(
-      height: height,
-      child: ListView.builder(
-        itemCount: categories.length,
-        itemBuilder: (context, index) => buildListItem(
-          categories[index],
-        ),
-      ),
+      height: widget.height,
+      child: categories.isNotEmpty
+          ? ListView.builder(
+              itemCount: categories.length,
+              itemBuilder: (context, index) => buildListItem(
+                categories[index],
+              ),
+            )
+          : Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "You have no folders created",
+                    style: TextStyle(
+                      fontSize: fontSize16,
+                    ),
+                  ),
+                  SizedBox(height: height5),
+                  GestureDetector(
+                    onTap: () {
+                      Get.toNamed(
+                          RouteHelper.getSingleTextfieldAndSubmitScreen(),
+                          arguments: [
+                            appBlue,
+                            "Add Recipe Folder",
+                            onSubmitAddCategory,
+                            Icons.folder_rounded,
+                          ]);
+                    },
+                    child: Text(
+                      "Click Here",
+                      style: TextStyle(
+                        fontSize: fontSize16,
+                        color: appBlue,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
     );
   }
 }
