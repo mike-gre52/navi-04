@@ -46,17 +46,20 @@ class AuthController extends GetxController {
         globalColor = data['color'];
         inGroup = data["inGroup"];
         isPremium = data["isPremium"];
+        signUpDate = data["signUpDate"];
       },
       onError: (e) => print("Error getting document: $e"),
     );
-    final groupRef = firestore.collection('groups').doc(globalGroupId);
-    await groupRef.get().then(
-      (DocumentSnapshot doc) {
-        final data = doc.data() as Map<String, dynamic>;
-        categories = Group.categoriesJsonToString(data);
-      },
-      onError: (e) => print("Error getting document: $e"),
-    );
+    if (inGroup) {
+      final groupRef = firestore.collection('groups').doc(globalGroupId);
+      await groupRef.get().then(
+        (DocumentSnapshot doc) {
+          final data = doc.data() as Map<String, dynamic>;
+          categories = Group.categoriesJsonToString(data);
+        },
+        onError: (e) => print("Error getting document: $e"),
+      );
+    }
   }
 
   Future<bool> sendPasswordResetEmail(String email) async {
@@ -170,6 +173,7 @@ class AuthController extends GetxController {
           inGroup: false,
           color: pickRandomColor(),
           isPremium: false,
+          signUpDate: Timestamp.now(),
         );
         await firestore
             .collection('users')

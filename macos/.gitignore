@@ -1,6 +1,7 @@
 # Flutter-related
 **/Flutter/ephemeral/
 **/Pods/
+**/lib/utils/hidden_constants.dart
 
 # Xcode-related
 **/dgph

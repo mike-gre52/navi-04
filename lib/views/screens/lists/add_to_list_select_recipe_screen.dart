@@ -64,7 +64,7 @@ class _AddToListSelectRecipeScreenState
     double height5 = screenHeight / 179.2;
     double width20 = screenWidth / 20.7;
     double fontSize20 = screenHeight / 44.8;
-    print("test");
+
     return Scaffold(
       body: StreamBuilder<List<Recipe>>(
         stream: recipeController.getRecipes(),

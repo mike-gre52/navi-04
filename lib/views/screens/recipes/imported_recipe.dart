@@ -179,7 +179,7 @@ class _ImportedRecipeState extends State<ImportedRecipe> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Select Folders:",
+                    "Add to Folders",
                     style: TextStyle(
                       fontSize: fontSize18,
                       fontWeight: FontWeight.w600,

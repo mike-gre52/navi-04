@@ -98,11 +98,12 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                 height: height40,
               ),
               GestureDetector(
-                onTap: () {
+                onTap: () async {
                   if (_groupNameController.text.length > 3) {
-                    onCreateGroup();
-                    groupController.createGroup(_groupNameController.text);
+                    await groupController
+                        .createGroup(_groupNameController.text);
                     //should then dismiss the screen
+                    onCreateGroup();
                     Navigator.pop(context);
                   } else {
                     Get.snackbar(

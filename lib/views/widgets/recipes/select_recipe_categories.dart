@@ -13,6 +13,7 @@ class SelectRecipeCategories extends StatefulWidget {
   List<String> selectedCategories;
   Function onAddCategory;
   double height;
+
   SelectRecipeCategories({
     super.key,
     required this.updateCategories,
@@ -91,7 +92,7 @@ class _SelectRecipeCategoriesState extends State<SelectRecipeCategories> {
                           ]);
                     },
                     child: Text(
-                      "Click Here",
+                      "Tap Here",
                       style: TextStyle(
                         fontSize: fontSize16,
                         color: appBlue,
@@ -147,6 +148,7 @@ class _CategoryCellState extends State<CategoryCell> {
     double fontSize18 = screenHeight / 49.777;
 
     return Container(
+      //width: 300,
       margin: EdgeInsets.symmetric(vertical: height5),
       child: Row(
         children: [
@@ -177,11 +179,18 @@ class _CategoryCellState extends State<CategoryCell> {
             ),
           ),
           SizedBox(width: width10),
-          Text(
-            widget.category,
-            style: TextStyle(
-              fontSize: fontSize16,
-              fontWeight: FontWeight.w500,
+          Expanded(
+            child: Container(
+              margin: EdgeInsets.only(right: width10),
+              child: Text(
+                widget.category,
+                style: TextStyle(
+                  fontSize: fontSize16,
+                  fontWeight: FontWeight.w500,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                maxLines: 1,
+              ),
             ),
           ),
         ],

@@ -69,7 +69,8 @@ class _RecipeTabControllerState extends State<RecipeTabController>
     }
   }
 
-  @override
+  List<int> checkedItems = [];
+
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
@@ -80,6 +81,7 @@ class _RecipeTabControllerState extends State<RecipeTabController>
     double height50 = screenHeight / 17.92;
     double height60 = screenHeight / 14.933;
     double height100 = screenHeight / 8.96;
+    double height115 = screenHeight / 7.7913;
     double height125 = screenHeight / 7.168;
     double height150 = screenHeight / 5.973;
     double height165 = screenHeight / 5.43;
@@ -93,12 +95,25 @@ class _RecipeTabControllerState extends State<RecipeTabController>
 
     //listens for when the tab controller is changed
 
+    void editCheckedItem(bool removal, int index) {
+      if (removal) {
+        setState(() {
+          checkedItems.remove(index);
+        });
+      } else {
+        setState(() {
+          checkedItems.add(index);
+        });
+      }
+      print(checkedItems);
+    }
+
     return Container(
       width: double.maxFinite,
       child: Column(
         children: [
           Container(
-            height: isPremium ? height100 : height165,
+            height: isPremium ? height115 : height165,
             width: double.maxFinite,
             decoration: BoxDecoration(
                 border: Border(
@@ -128,13 +143,13 @@ class _RecipeTabControllerState extends State<RecipeTabController>
                   TabBar(
                     onTap: (value) {
                       if (value == 0) {
-                        setState(() {
-                          tabIndex = 0;
-                        });
+                        // setState(() {
+                        tabIndex = 0;
+                        //  });
                       } else {
-                        setState(() {
-                          tabIndex = 1;
-                        });
+                        //  setState(() {
+                        tabIndex = 1;
+                        //  });
                       }
                     },
                     labelColor: appBlue,
@@ -169,7 +184,8 @@ class _RecipeTabControllerState extends State<RecipeTabController>
                       : RecipeCellHelper.getInstructionHeight(
                           widget.recipe.instructions,
                           screenHeight,
-                          screenWidth),
+                          screenWidth,
+                        ),
               color: paperBackground,
               width: double.maxFinite,
               child: TabBarView(
@@ -180,6 +196,8 @@ class _RecipeTabControllerState extends State<RecipeTabController>
                     recipe: widget.recipe,
                     showDelete: false,
                     deleteIngredient: () {},
+                    checkedItems: checkedItems,
+                    editCheckedItems: editCheckedItem,
                   ),
                   RecipeInstructionList(
                     instructions: widget.recipe.instructions,

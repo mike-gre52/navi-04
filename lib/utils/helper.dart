@@ -104,3 +104,59 @@ searchUrl(String link) {
 
   launchUrl(url);
 }
+
+stripPhoneNumber(String phoneNumber) {
+  phoneNumber = phoneNumber.replaceAll("(", "");
+  phoneNumber = phoneNumber.replaceAll(")", "");
+  phoneNumber = phoneNumber.replaceAll("-", "");
+  phoneNumber = phoneNumber.replaceAll(" ", "");
+  return phoneNumber;
+}
+
+bool validatePhoneNumber(String phoneNumber) {
+  String validator = r'(^(?:[+0]9)?[0-9]{5,13}$)';
+  RegExp regex = RegExp(validator);
+  if (regex.hasMatch(phoneNumber)) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+String formatPhoneNumber(String validNumber) {
+  String formattePhoneNumber;
+  switch (validNumber.length) {
+    case 10:
+      //phone number is 10 digits
+      String p1 = validNumber.substring(0, 3);
+      String p2 = validNumber.substring(3, 6);
+      String p3 = validNumber.substring(6);
+      formattePhoneNumber = "($p1) $p2-$p3";
+      return formattePhoneNumber;
+    case 11:
+      //phone number is 11 digits
+      String extension = validNumber.substring(0, 1);
+      String p1 = validNumber.substring(1, 4);
+      String p2 = validNumber.substring(4, 7);
+      String p3 = validNumber.substring(7);
+      return formattePhoneNumber = "+$extension ($p1) $p2-$p3";
+
+    case 12:
+      //phone number is 12 digits
+      String extension = validNumber.substring(0, 2);
+      String p1 = validNumber.substring(2, 5);
+      String p2 = validNumber.substring(5, 8);
+      String p3 = validNumber.substring(8);
+      return formattePhoneNumber = "+$extension ($p1) $p2-$p3";
+
+    case 13:
+      //phone number is 13 digits
+      String extension = validNumber.substring(0, 3);
+      String p1 = validNumber.substring(3, 6);
+      String p2 = validNumber.substring(6, 9);
+      String p3 = validNumber.substring(9);
+      return formattePhoneNumber = "+$extension ($p1) $p2-$p3";
+    default:
+      return validNumber;
+  }
+}

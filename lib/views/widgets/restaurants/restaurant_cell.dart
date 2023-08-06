@@ -23,6 +23,7 @@ class RestaurantCell extends StatelessWidget {
     MediaQueryData mediaQuery = MediaQuery.of(context);
     double screenWidth = mediaQuery.size.width;
     double screenHeight = mediaQuery.size.height;
+    double height5 = screenHeight / 179.2;
     double height10 = screenHeight / 89.6;
     double height35 = screenHeight / 25.6;
     double height60 = screenHeight / 14.933;
@@ -43,7 +44,8 @@ class RestaurantCell extends StatelessWidget {
         Get.toNamed(RouteHelper.getRestaurant(), arguments: restaurant);
       },
       child: Container(
-        margin: EdgeInsets.only(top: height10, left: width10, right: width10),
+        margin: EdgeInsets.only(
+            top: height5, left: width10, right: width10, bottom: height5),
         height: height60,
         width: width380,
         decoration: BoxDecoration(

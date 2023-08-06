@@ -4,7 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
+import 'package:launch_review/launch_review.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:whats_for_dinner/data/local_data.dart';
 import 'package:whats_for_dinner/main.dart';
 import 'package:whats_for_dinner/models/group.dart';
@@ -13,6 +15,7 @@ import 'package:whats_for_dinner/routes/routes.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
 import 'package:whats_for_dinner/views/widgets/app/app_header.dart';
+import 'package:whats_for_dinner/views/widgets/app/app_yes_no_popup.dart';
 import 'package:whats_for_dinner/views/widgets/app/border_button.dart';
 import 'package:whats_for_dinner/views/widgets/app/custom_textfield.dart';
 import 'package:whats_for_dinner/views/widgets/app/gradient_button.dart';
@@ -22,6 +25,8 @@ import 'package:whats_for_dinner/views/widgets/home/home_header.dart';
 import 'package:whats_for_dinner/views/widgets/profile/group_members.dart';
 import 'package:whats_for_dinner/views/widgets/profile/join_group.dart';
 import 'package:whats_for_dinner/views/widgets/profile/select_color.dart';
+
+import '../../widgets/app/rounded_corner_button.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -37,6 +42,71 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void dispose() {
     super.dispose();
     _groupNameController.dispose();
+  }
+
+  _showRateAppDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) => CupertinoAlertDialog(
+        title: const Text('Are you enjoying the app?'),
+        actions: [
+          CupertinoDialogAction(
+            child: const Text('Yes'),
+            onPressed: () {
+              Navigator.pop(context);
+              LaunchReview.launch(iOSAppId: "1639923197");
+            },
+          ),
+          CupertinoDialogAction(
+            child: const Text('No'),
+            onPressed: () {
+              Navigator.pop(context);
+              launchEmail();
+            },
+          ),
+        ],
+      ),
+      barrierDismissible: true,
+    );
+  }
+
+  launchEmail() async {
+    String? encodeQueryParameters(Map<String, String> params) {
+      return params.entries
+          .map((MapEntry<String, String> e) =>
+              '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+          .join('&');
+    }
+
+    final Uri emailLaunchUri = Uri(
+      scheme: 'mailto',
+      path: 'souchefapp.help@gmail.com',
+      query: encodeQueryParameters(<String, String>{
+        'Subject': 'Souchef App Help',
+      }),
+    );
+    if (await canLaunchUrl(emailLaunchUri)) {
+      launchUrl(emailLaunchUri);
+    }
+  }
+
+  _signOutDialog(BuildContext context) {
+    void _onRightAction() {
+      Navigator.pop(context);
+      authController.signOut();
+    }
+
+    showDialog(
+      context: context,
+      builder: (_) => AppYesNoPopup(
+        header: 'Are you sure you want to sign out?',
+        subHeader: "",
+        leftActionButton: "Yes",
+        rightActionButton: "No",
+        leftActionFunction: _onRightAction,
+      ),
+      barrierDismissible: true,
+    );
   }
 
   @override
@@ -106,25 +176,54 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         SizedBox(height: height10),
                         ProfileRow(name: data.email, icon: CupertinoIcons.mail),
                         SizedBox(height: height20),
-                        CurrentPlan(),
-                        /*
-                        ShaderMask(
-                          shaderCallback: (bounds) => LinearGradient(
-                            colors: [royalYellow, lightYellow],
-                          ).createShader(bounds),
-                          child: Text(
-                            'Premium Plan coming soon!',
-                            style: TextStyle(
-                              fontSize: fontSize18,
-                              color: Colors.white,
+                        const CurrentPlan(),
+                        SizedBox(height: height20),
+                        Align(
+                          alignment: Alignment.center,
+                          child: ShaderMask(
+                            shaderCallback: (bounds) => LinearGradient(
+                              colors: [royalYellow, lightYellow],
+                            ).createShader(bounds),
+                            child: Text(
+                              'Premium Plan coming soon!',
+                              style: TextStyle(
+                                fontSize: fontSize22,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ),
-                        */
+                        SizedBox(height: height20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                Share.share(
+                                    " $appUrl " +
+                                        " Download the Souchef Planner App!",
+                                    subject: "Download Souchef");
+                              },
+                              child: const RoundedCornerButton(
+                                icon: Icons.share_rounded,
+                                text: "Share",
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () async {
+                                _showRateAppDialog(context);
+                              },
+                              child: const RoundedCornerButton(
+                                icon: Icons.star_rounded,
+                                text: "Rate",
+                              ),
+                            ),
+                          ],
+                        ),
                         Expanded(child: Container()),
                         GestureDetector(
                           onTap: () {
-                            authController.signOut();
+                            _signOutDialog(context);
                           },
                           child: Text(
                             "Sign Out",
@@ -166,7 +265,7 @@ class CurrentPlan extends StatelessWidget {
     double width40 = screenWidth / 10.35;
     double width100 = screenWidth / 4.14;
     double height10 = screenHeight / 89.6;
-    double height60 = screenHeight / 14.933;
+    double height50 = screenHeight / 17.92;
     double fontSize20 = screenHeight / 44.8;
     double fontSize22 = screenHeight / 40.727;
 
@@ -203,13 +302,13 @@ class CurrentPlan extends StatelessWidget {
                     ),
                   ),
                   SizedBox(width: width40),
+                  /*
                   GestureDetector(
                     onTap: () {
-                      //
                       Get.toNamed(RouteHelper.getPremiumUpgradeScreen());
                     },
                     child: Container(
-                      height: height60,
+                      height: height50,
                       width: width100,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(
@@ -234,6 +333,7 @@ class CurrentPlan extends StatelessWidget {
                       ),
                     ),
                   ),
+                  */
                 ],
               ),
       ],

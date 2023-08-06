@@ -9,11 +9,13 @@ class CreateOrJoinBanner extends StatelessWidget {
   final Function onCreateGroup;
   final Color color;
   final String item;
+  final Function onClickHere;
   const CreateOrJoinBanner({
     Key? key,
     required this.onCreateGroup,
     required this.color,
     required this.item,
+    required this.onClickHere,
   }) : super(key: key);
 
   @override
@@ -25,13 +27,16 @@ class CreateOrJoinBanner extends StatelessWidget {
     double height5 = screenHeight / 179.2;
     double height10 = screenHeight / 89.6;
     double height15 = screenHeight / 59.733;
-    double height250 = screenHeight / 3.584;
+    double height20 = screenHeight / 44.8;
+
+    double height350 = screenHeight / 2.56;
     double height100 = screenHeight / 8.96;
     double width225 = screenWidth / 1.925;
     double fontSize20 = screenHeight / 44.8;
+    double fontSize22 = screenHeight / 40.727;
 
     return Container(
-      height: height250,
+      height: height350,
       width: width225,
       child: Column(
         children: [
@@ -60,10 +65,15 @@ class CreateOrJoinBanner extends StatelessWidget {
               );
             },
             child: Container(
-              padding: EdgeInsets.all(height10),
+              padding: EdgeInsets.symmetric(
+                  vertical: height10, horizontal: height20),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(height10),
                 color: royalYellow,
+                border: Border.all(
+                  width: 3,
+                  color: royalYellow,
+                ),
               ),
               child: Text(
                 "Join Group",
@@ -77,6 +87,34 @@ class CreateOrJoinBanner extends StatelessWidget {
               ),
             ),
           ),
+          SizedBox(height: height15),
+          Text(
+            'Want to start a group?',
+            style: TextStyle(
+              fontSize: fontSize20,
+              fontWeight: FontWeight.w300,
+              color: black,
+            ),
+          ),
+          SizedBox(
+            width: height10,
+          ),
+          GestureDetector(
+            onTap: () {
+              Get.toNamed(
+                RouteHelper.createGroup,
+                arguments: [onClickHere],
+              );
+            },
+            child: Text(
+              'Tap Here',
+              style: TextStyle(
+                fontSize: fontSize22,
+                fontWeight: FontWeight.w800,
+                color: royalYellow,
+              ),
+            ),
+          )
         ],
       ),
     );

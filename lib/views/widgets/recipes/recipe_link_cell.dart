@@ -9,10 +9,13 @@ import 'package:whats_for_dinner/views/widgets/recipes/recipes_popup.dart';
 
 class RecipeLinkCell extends StatelessWidget {
   Recipe recipe;
-
+  String category;
+  bool inFolder;
   RecipeLinkCell({
     Key? key,
     required this.recipe,
+    required this.category,
+    required this.inFolder,
   }) : super(key: key);
 
   @override
@@ -90,7 +93,11 @@ class RecipeLinkCell extends StatelessWidget {
                       top: Radius.circular(height20),
                     ),
                   ),
-                  builder: (context) => RecipesPopup(recipe: recipe),
+                  builder: (context) => RecipesPopup(
+                    recipe: recipe,
+                    inFolder: inFolder,
+                    category: category,
+                  ),
                 );
               },
               child: Container(

@@ -38,6 +38,7 @@ class _FilteredRecipeScreenState extends State<FilteredRecipeScreen> {
   late List<Recipe> recipes;
   bool haveRecipesLoaded = false;
 
+  /*
   getRecipes() async {
     recipes = await recipeController.getRecipeQuery(widget.category);
     print(recipes);
@@ -45,13 +46,14 @@ class _FilteredRecipeScreenState extends State<FilteredRecipeScreen> {
       haveRecipesLoaded = true;
     });
   }
+  */
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-    getRecipes();
+    //getRecipes();
   }
 
   Widget buildRecipeCell(Recipe recipe) {
@@ -65,6 +67,8 @@ class _FilteredRecipeScreenState extends State<FilteredRecipeScreen> {
               }),
               child: RecipeLinkCell(
                 recipe: recipe,
+                inFolder: true,
+                category: widget.category,
               ),
             )
           : GestureDetector(
@@ -74,6 +78,8 @@ class _FilteredRecipeScreenState extends State<FilteredRecipeScreen> {
               }),
               child: RecipeCell(
                 recipe: recipe,
+                inFolder: true,
+                category: widget.category,
               ),
             );
     } else {
@@ -115,28 +121,45 @@ class _FilteredRecipeScreenState extends State<FilteredRecipeScreen> {
     double fontSize20 = screenHeight / 44.8;
 
     double iconSize24 = screenHeight / 37.333;
-    return haveRecipesLoaded
-        ? Expanded(
-            child: Container(
-              margin:
-                  EdgeInsets.only(left: width20, right: width20, top: height5),
-              child: ListView.builder(
-                padding: const EdgeInsets.all(0),
-                itemCount: recipes.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return buildRecipeCell(recipes[index]);
-                },
+    return StreamBuilder<List<Recipe>>(
+        stream: recipeController.getRecipesInFolder(widget.category),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final recipes = snapshot.data!;
+            return Expanded(
+              child: Container(
+                margin: EdgeInsets.only(
+                    left: width20, right: width20, top: height5),
+                child: recipes.isNotEmpty
+                    ? ListView.builder(
+                        padding: const EdgeInsets.all(0),
+                        itemCount: recipes.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return buildRecipeCell(recipes[index]);
+                        },
+                      )
+                    : Center(
+                        child: Text(
+                          "The Folder is Empty",
+                          style: TextStyle(
+                            fontSize: fontSize18,
+                            color: appBlue,
+                          ),
+                        ),
+                      ),
               ),
-            ),
-          )
-        : Expanded(
-            child: Center(
-              child: CupertinoActivityIndicator(
-                radius: height15,
-                color: appBlue,
-                animating: true,
+            );
+          } else {
+            return Expanded(
+              child: Center(
+                child: CupertinoActivityIndicator(
+                  radius: height15,
+                  color: appBlue,
+                  animating: true,
+                ),
               ),
-            ),
-          );
+            );
+          }
+        });
   }
 }

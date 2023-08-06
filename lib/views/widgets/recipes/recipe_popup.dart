@@ -8,6 +8,7 @@ import 'package:whats_for_dinner/models/list.dart';
 import 'package:whats_for_dinner/models/recipe.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
+import 'package:whats_for_dinner/views/widgets/app/app_yes_no_popup.dart';
 
 import '../../../routes/routes.dart';
 
@@ -27,30 +28,22 @@ class RecipePopup extends StatefulWidget {
 }
 
 class _RecipePopupState extends State<RecipePopup> {
+  void onDialogAction() {
+    Navigator.pop(context);
+    Navigator.pop(context);
+    Navigator.pop(context);
+    recipeController.deleteRecipe(widget.recipe);
+  }
+
   _showDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder: (_) => CupertinoAlertDialog(
-        title: const Text('Are you sure you want to delete this Recipe?'),
-        content: const Text('All data will be lost'),
-        actions: [
-          CupertinoDialogAction(
-            child: const Text('Cancel'),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          CupertinoDialogAction(
-            child: const Text('Yes'),
-            onPressed: () {
-              Navigator.pop(context);
-              Navigator.pop(context);
-              Navigator.pop(context);
-              recipeController.deleteRecipe(widget.recipe);
-            },
-          ),
-        ],
-      ),
+      builder: (_) => AppYesNoPopup(
+          header: 'Are you sure you want to delete this Recipe?',
+          subHeader: 'All data will be lost',
+          leftActionButton: "Yes",
+          rightActionButton: 'Cancel',
+          leftActionFunction: onDialogAction),
       barrierDismissible: true,
     );
   }
@@ -166,7 +159,7 @@ class _RecipePopupState extends State<RecipePopup> {
           PopupButton(
             icon: Icons.delete,
             isRed: true,
-            buttonName: 'Delete List',
+            buttonName: 'Delete Recipe',
             onClick: () {
               _showDialog(context);
             },

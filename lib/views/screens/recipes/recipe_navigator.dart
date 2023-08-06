@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -8,6 +9,7 @@ import 'package:whats_for_dinner/routes/routes.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
 import 'package:whats_for_dinner/views/screens/recipes/filtered_recipe.dart';
+import 'package:whats_for_dinner/views/screens/recipes/folder_bottom_popup.dart';
 import 'package:whats_for_dinner/views/screens/recipes/recipe_folders.dart';
 import 'package:whats_for_dinner/views/screens/recipes/recipes.dart';
 import 'package:whats_for_dinner/views/screens/restaurants/filter_restaurants.dart';
@@ -49,6 +51,17 @@ class _RecipeNavigatorState extends State<RecipeNavigator> {
     }
   }
 
+  void onSubmitEditFolderName(String newFolderName) async {
+    await recipeController.renameCategory(widget.category, newFolderName);
+    int categoryIndex = categories.indexOf(widget.category);
+    categories[categoryIndex] = newFolderName;
+    setState(() {
+      widget.category = newFolderName;
+    });
+
+    //
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,7 +86,10 @@ class _RecipeNavigatorState extends State<RecipeNavigator> {
                               onCreateCategory: onSubmitAddCategory,
                             )
                           : FilteredRecipeNavigation(
-                              setScreen: widget.setScreen),
+                              setScreen: widget.setScreen,
+                              category: widget.category,
+                              onSubmitEditRecipeScreen: onSubmitEditFolderName,
+                            ),
                   onIconClick: () {
                     //recipeController.getRecipeQuery();
                   },
@@ -105,21 +121,13 @@ class _RecipeNavigatorState extends State<RecipeNavigator> {
                       onCreateGroup: updateUI,
                       color: appBlue,
                       item: "recipe",
+                      onClickHere: updateUI,
                     ),
                   ),
                 ),
               ],
             ),
     );
-    switch (widget.screen) {
-      case recipePage.allRecipes:
-        return RecipesScreen(setScreen: widget.setScreen);
-      case recipePage.recipeFolders:
-        return RecipeFoldersScreen(setScreen: widget.setScreen);
-      default:
-        return FilteredRecipeScreen(
-            setScreen: widget.setScreen, category: widget.category);
-    }
 
 /*
     return screen == recipePage.allRecipes
@@ -190,8 +198,8 @@ class RecipeFoldersNavigation extends StatelessWidget {
 
     double screenWidth = mediaQuery.size.width;
     double width10 = screenWidth / 41.4;
-    double fontSize20 = screenHeight / 44.8;
-    double iconSize32 = screenHeight / 28;
+    double fontSize24 = screenHeight / 37.333;
+    double iconSize40 = screenHeight / 22.4;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
@@ -203,7 +211,7 @@ class RecipeFoldersNavigation extends StatelessWidget {
             'All',
             style: TextStyle(
               color: Colors.white,
-              fontSize: fontSize20,
+              fontSize: fontSize24,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -221,7 +229,7 @@ class RecipeFoldersNavigation extends StatelessWidget {
           },
           child: Icon(
             Icons.add_rounded,
-            size: iconSize32,
+            size: iconSize40,
             color: Colors.white,
           ),
         ),
@@ -230,20 +238,36 @@ class RecipeFoldersNavigation extends StatelessWidget {
   }
 }
 
-class FilteredRecipeNavigation extends StatelessWidget {
+class FilteredRecipeNavigation extends StatefulWidget {
   Function setScreen;
+  String category;
+  Function onSubmitEditRecipeScreen;
   FilteredRecipeNavigation({
     super.key,
     required this.setScreen,
+    required this.category,
+    required this.onSubmitEditRecipeScreen,
   });
+
+  @override
+  State<FilteredRecipeNavigation> createState() =>
+      _FilteredRecipeNavigationState();
+}
+
+class _FilteredRecipeNavigationState extends State<FilteredRecipeNavigation> {
+  void onSubmitDelete() {
+    widget.setScreen(recipePage.recipeFolders, "");
+  }
 
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
     double screenHeight = mediaQuery.size.height;
     double screenWidth = mediaQuery.size.width;
+    double height35 = screenHeight / 25.6;
     double height40 = screenHeight / 22.4;
-    double width10 = screenWidth / 41.4;
+
+    double width5 = screenWidth / 82.8;
 
     double fontSize20 = screenHeight / 44.8;
 
@@ -252,7 +276,31 @@ class FilteredRecipeNavigation extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: () {
-            setScreen(recipePage.recipeFolders, "");
+            showModalBottomSheet(
+              context: context,
+              //isScrollControlled: true,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(20),
+                ),
+              ),
+              builder: (context) => FolderBottomPopup(
+                category: widget.category,
+                onSubmitEditFolderName: widget.onSubmitEditRecipeScreen,
+                onSubmitDelete: onSubmitDelete,
+              ),
+            );
+          },
+          child: Icon(
+            Icons.more_vert,
+            color: Colors.white,
+            size: height35,
+          ),
+        ),
+        SizedBox(width: width5),
+        GestureDetector(
+          onTap: () {
+            widget.setScreen(recipePage.recipeFolders, "");
           },
           child: Text(
             'Back',

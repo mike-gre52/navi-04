@@ -18,6 +18,7 @@ import 'package:whats_for_dinner/views/widgets/app/gradient_button.dart';
 import 'package:whats_for_dinner/views/widgets/app/text_header.dart';
 import 'package:whats_for_dinner/views/widgets/recipes/recipe_ingredients.dart';
 import 'package:whats_for_dinner/views/widgets/recipes/recipe_instructions.dart';
+import 'package:whats_for_dinner/views/widgets/recipes/select_recipe_categories.dart';
 import 'package:whats_for_dinner/views/widgets/restaurants/notes_textfield.dart';
 
 import '../../../models/recipe.dart';
@@ -52,11 +53,22 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
   bool showAmountError = false;
   bool isformValid = true;
   bool isLoading = false;
+  List<String> recipeCategories = [];
 
   void setImageStatus() {
     setState(() {
       isImageSelected = true;
     });
+  }
+
+  void updateCategories(String newCategory) {
+    if (recipeCategories.contains(newCategory)) {
+      //remove category
+      recipeCategories.remove(newCategory);
+    } else {
+      //add category
+      recipeCategories.add(newCategory);
+    }
   }
 
   void checkTimeInput(input) {
@@ -195,6 +207,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
     double height75 = screenHeight / 11.946;
     double height150 = screenHeight / 5.973;
     double height200 = screenHeight / 4.48;
+    double height300 = screenHeight / 4.48;
     double width25 = screenWidth / 16.56;
     double width35 = screenWidth / 11.828;
     double width75 = screenWidth / 5.52;
@@ -522,7 +535,43 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                               showDelete: true,
                               deleteInstruction: deleteInstruction,
                             )),
-                        SizedBox(height: height20),
+                        SizedBox(height: height5),
+                        //Select Folder
+                        Container(
+                          margin:
+                              EdgeInsets.only(left: width35, right: width35),
+                          child: Column(
+                            children: [
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  "Select Folders: ",
+                                  style: TextStyle(
+                                    fontSize: fontSize20,
+                                    fontWeight: FontWeight.w600,
+                                    color: appBlue,
+                                  ),
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Container(
+                                  height: 3,
+                                  width: width35,
+                                  color: appBlue,
+                                ),
+                              ),
+                              SelectRecipeCategories(
+                                updateCategories: updateCategories,
+                                selectedCategories: recipeCategories,
+                                onAddCategory: () {},
+                                height: height300,
+                              ),
+                            ],
+                          ),
+                        ),
+                        //Loading Widget
+                        SizedBox(height: height25),
                         Container(
                           height: height20,
                           child: isLoading
@@ -533,9 +582,8 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                                 )
                               : null,
                         ),
-
-                        SizedBox(height: height20),
                         //Submit Button
+                        SizedBox(height: height25),
                         Column(
                           children: [
                             GestureDetector(
@@ -572,7 +620,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                                     imageUrl: url,
                                     ingredients: recipeIngredients,
                                     instructions: recipeInstructions,
-                                    categories: [],
+                                    categories: recipeCategories,
                                     sourceUrl: '',
                                     isLink: false,
                                     isImport: false,
@@ -614,7 +662,8 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                                   ),
                           ],
                         ),
-                        SizedBox(height: height30),
+
+                        //SizedBox(height: height30),
                       ],
                     ),
                   )

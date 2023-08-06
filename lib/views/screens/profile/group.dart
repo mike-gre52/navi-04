@@ -12,10 +12,12 @@ import 'package:whats_for_dinner/routes/routes.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
 import 'package:whats_for_dinner/utils/helper.dart';
+import 'package:whats_for_dinner/views/widgets/app/app_yes_no_popup.dart';
 import 'package:whats_for_dinner/views/widgets/app/border_button.dart';
 import 'package:whats_for_dinner/views/widgets/app/custom_textfield.dart';
 import 'package:whats_for_dinner/views/widgets/app/gradient_button.dart';
 import 'package:whats_for_dinner/views/widgets/app/header.dart';
+import 'package:whats_for_dinner/views/widgets/app/rounded_corner_button.dart';
 import 'package:whats_for_dinner/views/widgets/profile/circle_check_button.dart';
 import 'package:whats_for_dinner/views/widgets/profile/group_members.dart';
 import 'package:whats_for_dinner/views/widgets/profile/join_group.dart';
@@ -46,6 +48,28 @@ class _GroupScreenState extends State<GroupScreen> {
     });
   }
 
+  _leaveGroupDialog(BuildContext context, Group group) {
+    void _onRightAction() {
+      groupController.leaveGroup(group);
+      setState(() {
+        inGroup = false;
+      });
+      Navigator.pop(context);
+    }
+
+    showDialog(
+      context: context,
+      builder: (_) => AppYesNoPopup(
+        header: 'Are you sure you want to leave the group?',
+        subHeader: "",
+        leftActionButton: "Yes",
+        rightActionButton: "No",
+        leftActionFunction: _onRightAction,
+      ),
+      barrierDismissible: true,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
@@ -54,6 +78,7 @@ class _GroupScreenState extends State<GroupScreen> {
     double height5 = screenHeight / 179.2;
     double height10 = screenHeight / 89.6;
     double height20 = screenHeight / 44.8;
+    double height30 = screenHeight / 29.866;
     double height40 = screenHeight / 22.4;
     double width10 = screenWidth / 41.4;
     double width30 = screenWidth / 13.8;
@@ -84,7 +109,10 @@ class _GroupScreenState extends State<GroupScreen> {
                         dividerColor: royalYellow,
                         rightAction: Container(
                           margin: EdgeInsets.only(bottom: height10),
-                          child: const Icon(Icons.settings),
+                          child: Icon(
+                            CupertinoIcons.person_fill,
+                            size: height30,
+                          ),
                         ),
                         onIconClick: () {
                           Get.toNamed(RouteHelper.getProfileRoute());
@@ -113,9 +141,10 @@ class _GroupScreenState extends State<GroupScreen> {
                                   child: Text(
                                     'All members',
                                     style: TextStyle(
-                                        fontSize: fontSize16,
-                                        fontWeight: FontWeight.w400,
-                                        color: royalYellow),
+                                      fontSize: fontSize16,
+                                      fontWeight: FontWeight.w400,
+                                      color: royalYellow,
+                                    ),
                                   ),
                                 )
                               ],
@@ -136,8 +165,9 @@ class _GroupScreenState extends State<GroupScreen> {
                             ),
                             SizedBox(height: height20),
                             Header(
-                                headerText: 'Group Code',
-                                dividerColor: royalYellow),
+                              headerText: 'Group Code',
+                              dividerColor: royalYellow,
+                            ),
                             SizedBox(
                               height: height10,
                             ),
@@ -165,7 +195,6 @@ class _GroupScreenState extends State<GroupScreen> {
                                     onTap: (() {
                                       Clipboard.setData(
                                           ClipboardData(text: group.groupId));
-
                                       Get.snackbar(
                                         "",
                                         "",
@@ -175,8 +204,9 @@ class _GroupScreenState extends State<GroupScreen> {
                                           child: Text(
                                             "Group code copied",
                                             style: TextStyle(
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: fontSize18),
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: fontSize18,
+                                            ),
                                           ),
                                         ),
                                       );
@@ -200,10 +230,8 @@ class _GroupScreenState extends State<GroupScreen> {
                             GestureDetector(
                               onTap: () {
                                 //Invite Member
-                                Share.share(
-                                    " $appUrl " +
-                                        "Download Souchef and join our group with the code: \n\n${group.groupId}",
-                                    subject: "Souchef");
+                                Share.share(" $appUrl " + "${group.groupId}",
+                                    subject: "Download Souchef");
                               },
                               child: GradientButton(
                                 buttonText: 'Invite',
@@ -215,11 +243,7 @@ class _GroupScreenState extends State<GroupScreen> {
                             SizedBox(height: height40),
                             GestureDetector(
                               onTap: () {
-                                //Leave Group
-                                groupController.leaveGroup(group);
-                                setState(() {
-                                  inGroup = false;
-                                });
+                                _leaveGroupDialog(context, group);
                               },
                               child: Text(
                                 "Leave Group",
@@ -255,18 +279,20 @@ class _GroupScreenState extends State<GroupScreen> {
                       dividerColor: royalYellow,
                       rightAction: Container(
                         margin: EdgeInsets.only(bottom: height10),
-                        child: const Icon(Icons.settings),
+                        child: Icon(
+                          CupertinoIcons.person_fill,
+                          size: height30,
+                        ),
                       ),
                       onIconClick: () {
                         Get.toNamed(RouteHelper.getProfileRoute());
                       },
                     ),
-                    SizedBox(
-                      height: height20,
-                    ),
                     Container(
                       margin: EdgeInsets.symmetric(
-                          horizontal: width30, vertical: height5),
+                        horizontal: width30,
+                        //vertical: height5,
+                      ),
                       child: JoinGroup(
                         inGroup: data.inGroup,
                         username: data.name,
@@ -282,110 +308,3 @@ class _GroupScreenState extends State<GroupScreen> {
             });
   }
 }
-    /* 
-    return Scaffold(
-      body: StreamBuilder<User>(
-        stream: userController.getUserData(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            final data = snapshot.data!;
-            _nameController.text = data.name;
-            return Column(
-              children: [
-                AppHeader(
-                  headerText: 'Profile',
-                  headerColor: Colors.white,
-                  borderColor: royalYellow,
-                  textColor: black,
-                  dividerColor: royalYellow,
-                  rightAction: Container(),
-                  onIconClick: () {},
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Expanded(
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 30, vertical: 5),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ProfileRow(name: data.name, icon: Icons.person_rounded),
-                        const SizedBox(height: 10),
-                        ProfileRow(name: data.email, icon: CupertinoIcons.mail),
-                        const SizedBox(height: 18),
-                        JoinGroup(
-                          inGroup: data.inGroup,
-                          username: data.name,
-                          userColor: data.color,
-                        ),
-                        const SizedBox(
-                          height: 30,
-                        ),
-                        Expanded(child: Container()),
-                        GestureDetector(
-                          onTap: () {
-                            authController.signOut();
-                          },
-                          child: Text(
-                            "Sign Out",
-                            style: TextStyle(color: darkRed, fontSize: 22),
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.center,
-                          child: Text(
-                            "v1.0.18",
-                            style: TextStyle(color: darkGrey, fontSize: 12),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-              ],
-            );
-          } else {
-            return Container();
-          }
-        },
-      ),
-    );
-  }
-}
-
-class ProfileRow extends StatelessWidget {
-  String name;
-  IconData icon;
-  ProfileRow({
-    Key? key,
-    required this.name,
-    required this.icon,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(
-          icon,
-          size: 28,
-          color: royalYellow,
-        ),
-        const SizedBox(width: 20),
-        Text(
-          name,
-          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w200),
-        )
-      ],
-    );
-  }
-}
-
- //ProfileRow(name: data.name, icon: Icons.person_rounded),
- //const SizedBox(height: 10),
- //ProfileRow(name: data.email, icon: CupertinoIcons.mail),
- //const SizedBox(height: 18),
-
-
-*/

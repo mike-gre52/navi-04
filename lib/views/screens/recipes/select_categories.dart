@@ -60,7 +60,6 @@ class _SelectedCategoriesScreenState extends State<SelectedCategoriesScreen> {
 
   void onSubmitAddCategory(String category) {
     bool didAdd = recipeController.addRecipeCategory(category);
-    print("test");
     if (didAdd) {
       setState(() {
         categories.add(category);
@@ -85,7 +84,7 @@ class _SelectedCategoriesScreenState extends State<SelectedCategoriesScreen> {
     double height20 = screenHeight / 48.6;
     double height50 = screenHeight / 17.92;
     double height55 = screenHeight / 16.945;
-    double height250 = screenHeight / 3.584;
+    double height300 = screenHeight / 2.986;
 
     double width30 = screenWidth / 13.8;
     double width100 = screenWidth / 4.3;
@@ -181,7 +180,7 @@ class _SelectedCategoriesScreenState extends State<SelectedCategoriesScreen> {
               SelectRecipeCategories(
                 updateCategories: updateCategories,
                 selectedCategories: selectedCategories,
-                height: height250,
+                height: height300,
                 onAddCategory: onSelectRecipeAddCategory,
               ),
               SizedBox(height: height5),

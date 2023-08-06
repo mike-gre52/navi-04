@@ -22,7 +22,7 @@ class ListColumn extends StatelessWidget {
   Item adItem = Item(name: "ad", id: "", isChecked: true, imageUrl: "");
   bool showAd = false;
 
-  int numCheckedItems = 0;
+  int numUncheckedItems = 0;
 
   Widget buildListItem(Item item) {
     //Cell
@@ -77,10 +77,13 @@ class ListColumn extends StatelessWidget {
           adCount = 0;
           if (snapshot.hasData) {
             final listItems = snapshot.data!;
-            numCheckedItems = 0;
-            for (int i = 0; i < listItems.length; i++) {
-              if (listItems[i].isChecked != null && listItems[i].isChecked!) {
-                numCheckedItems++;
+            if (!isRecentlyDeleted) {
+              numUncheckedItems = 0;
+              for (int i = 0; i < listItems.length; i++) {
+                if (listItems[i].isChecked != null &&
+                    !listItems[i].isChecked!) {
+                  numUncheckedItems++;
+                }
               }
             }
             if (listItems.length < 6) {
@@ -97,25 +100,27 @@ class ListColumn extends StatelessWidget {
             return Expanded(
               child: Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text(
-                        "Selected Items: $numCheckedItems",
-                        style: TextStyle(
-                          fontSize: fontWeight18,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Text(
-                        "Total Items: ${listItems.length}",
-                        style: TextStyle(
-                          fontSize: fontWeight18,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      )
-                    ],
-                  ),
+                  !isRecentlyDeleted
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Text(
+                              "Items Left: $numUncheckedItems",
+                              style: TextStyle(
+                                fontSize: fontWeight18,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            Text(
+                              "Total Items: ${listItems.length}",
+                              style: TextStyle(
+                                fontSize: fontWeight18,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            )
+                          ],
+                        )
+                      : Container(),
                   Expanded(
                     child: Align(
                       alignment: Alignment.centerLeft,

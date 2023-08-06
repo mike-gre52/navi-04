@@ -18,7 +18,6 @@ class AddOrderScreen extends StatefulWidget {
 
 class _AddOrderScreenState extends State<AddOrderScreen> {
   final TextEditingController _nameTextController = TextEditingController();
-  final TextEditingController _orderTextController = TextEditingController();
 
   bool imageJustUploaded = false;
 
@@ -28,16 +27,15 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
   void dispose() {
     super.dispose();
     _nameTextController.dispose();
-    _orderTextController.dispose();
   }
 
   final data = Get.arguments as List;
 
   late Restaurant restaurant;
   late Function onSubmit;
-  late RestaurantOrder newOrder;
+  late String newOrder;
   late bool isUpdate;
-  late RestaurantOrder copyOrder;
+  late String copyOrder;
   @override
   void initState() {
     // TODO: implement initState
@@ -46,10 +44,9 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
     onSubmit = data[1];
     newOrder = data[2];
     isUpdate = data[3];
-    _nameTextController.text = newOrder.name;
-    _orderTextController.text = newOrder.item;
+    _nameTextController.text = newOrder;
     if (isUpdate) {
-      copyOrder = RestaurantOrder(name: newOrder.name, item: newOrder.item);
+      copyOrder = _nameTextController.text;
     }
   }
 
@@ -78,65 +75,74 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Name',
-                      style: TextStyle(
-                        fontSize: fontSize18,
-                        color: black,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: (() {
-                      Navigator.pop(context);
-                    }),
-                    child: Text(
-                      'Cancel',
-                      style: TextStyle(
-                        fontSize: fontSize18,
-                        color: black,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
+                  isUpdate
+                      ? GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'Cancel',
+                              style: TextStyle(
+                                fontSize: fontSize18,
+                                color: black,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        )
+                      : Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Dish',
+                            style: TextStyle(
+                              fontSize: fontSize18,
+                              color: black,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                  isUpdate
+                      ? GestureDetector(
+                          onTap: (() {
+                            restaurantController.deleteOrder(
+                                restaurant, newOrder);
+                            Navigator.pop(context);
+                            onSubmit();
+                          }),
+                          child: Text(
+                            'Delete',
+                            style: TextStyle(
+                              fontSize: fontSize18,
+                              color: red,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        )
+                      : GestureDetector(
+                          onTap: (() {
+                            Navigator.pop(context);
+                          }),
+                          child: Text(
+                            'Cancel',
+                            style: TextStyle(
+                              fontSize: fontSize18,
+                              color: black,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
                 ],
               ),
             ),
-            Container(
-              alignment: Alignment.centerLeft,
-              child: CustomTextfield(
-                icon: Icons.person,
-                placeholderText: 'Name',
-                controller: _nameTextController,
-                borderColor: appRed,
-                textfieldWidth: width200,
-                textfieldHeight: height60,
-                borderRadius: height10,
-                onSubmit: (_) {},
-                onChanged: (_) {},
-              ),
-            ),
             SizedBox(height: height15),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Order',
-                style: TextStyle(
-                  fontSize: fontSize18,
-                  color: black,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
             Container(
               alignment: Alignment.centerLeft,
               child: CustomTextfield(
                 icon: Icons.restaurant_menu_rounded,
-                placeholderText: 'Order',
-                controller: _orderTextController,
+                placeholderText: 'Dish name',
+                controller: _nameTextController,
                 borderColor: appRed,
                 textfieldWidth: double.maxFinite,
                 textfieldHeight: height60,
@@ -148,21 +154,18 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
             SizedBox(height: height25),
             GestureDetector(
               onTap: () async {
-                if (isUpdate) {
-                  if (_nameTextController.text.trim() != "" &&
-                      _orderTextController.text.trim() != "") {
-                    copyOrder.item = _orderTextController.text;
-                    copyOrder.name = _nameTextController.text;
+                if (_nameTextController.text.trim() != "") {
+                  //updating current order item
+                  if (isUpdate) {
+                    copyOrder = _nameTextController.text;
                     await restaurantController.editOrder(
                         restaurant, newOrder, copyOrder);
                     Navigator.pop(context);
                     onSubmit();
                   }
-                } else {
-                  if (_nameTextController.text.trim() != "" &&
-                      _orderTextController.text.trim() != "") {
-                    newOrder.item = _orderTextController.text;
-                    newOrder.name = _nameTextController.text;
+                  //creating new order item
+                  else {
+                    newOrder = _nameTextController.text;
                     await restaurantController.addOrder(restaurant, newOrder);
                     Navigator.pop(context);
                     onSubmit();

@@ -11,6 +11,7 @@ import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
 import 'package:whats_for_dinner/views/widgets/app/app_header.dart';
 import 'package:whats_for_dinner/views/widgets/app/create_or_join_banner.dart';
+import 'package:whats_for_dinner/views/widgets/app/empty_add_button.dart';
 import 'package:whats_for_dinner/views/widgets/restaurants/restaurant_cell.dart';
 import '../../../controllers/restaurant_controller.dart';
 
@@ -51,26 +52,31 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
   int sortTime = 0;
   int sortCost = 0;
   late RestaurantFilter filter;
+  bool usingFilterPage = false;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    print('reset filter');
     filter = RestaurantFilter(
       maxTime: 0,
       minRating: isTopRatedSelected ? 4 : 1,
       maxPrice: 1,
       onlyDelivery: isDeliverySelected,
       onlyFavorite: isFavoriteSelected,
-      useFilter: true,
+      useFilter: false,
       useTime: false,
     );
+    restaurantController.setfilter(filter);
   }
 
   setFilterState(RestaurantFilter updatedFilter) {
     filter = updatedFilter;
     setState(() {
+      usingFilterPage = true;
+      isFavoriteSelected = filter.onlyFavorite;
+      isDeliverySelected = filter.onlyDelivery;
+      isTopRatedSelected = filter.minRating > 3;
       restaurantController.setfilter(filter);
     });
   }
@@ -79,9 +85,15 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
     double screenHeight = mediaQuery.size.height;
+    double screenWidth = mediaQuery.size.width;
     double height15 = screenHeight / 59.733;
     double height40 = screenHeight / 22.4;
     double height50 = screenHeight / 17.92;
+
+    double width30 = screenWidth / 13.8;
+    double width200 = screenWidth / 2.07;
+
+    double fontSize18 = screenHeight / 49.7778;
 
     return Scaffold(
       body: inGroup
@@ -120,6 +132,7 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
 
                   List<CustomChip> chips = [
                     CustomChip(
+                      isSelected: usingFilterPage,
                       chipText: '',
                       chipIcon: CupertinoIcons.slider_horizontal_3,
                       onClick: () {
@@ -273,6 +286,7 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
                       chipIcon: Icons.clear,
                       onClick: () {
                         setState(() {
+                          usingFilterPage = false;
                           isDeliverySelected = false;
                           isFavoriteSelected = false;
                           isTopRatedSelected = false;
@@ -323,17 +337,53 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
                           children: chips,
                         ),
                       ),
-                      Expanded(
-                        child: Container(
-                          margin: EdgeInsets.symmetric(),
-                          child: ListView(
-                            padding: EdgeInsets.all(0),
-                            children: filteredRestaurants
-                                .map(buildRestaurantTile)
-                                .toList(),
-                          ),
-                        ),
-                      ),
+                      restaurants.isNotEmpty
+                          ? filteredRestaurants.isEmpty
+                              ? Container(
+                                  margin: EdgeInsets.symmetric(
+                                      horizontal: width30, vertical: height15),
+                                  child: Text(
+                                    "There are no restaurants with the applied filters",
+                                    style: TextStyle(
+                                        fontSize: fontSize18, color: appRed),
+                                  ),
+                                )
+                              : Expanded(
+                                  child: Container(
+                                    child: ListView(
+                                      padding: EdgeInsets.all(0),
+                                      children: filteredRestaurants
+                                          .map(buildRestaurantTile)
+                                          .toList(),
+                                    ),
+                                  ),
+                                )
+                          : Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "You have not added any Restaurants",
+                                    style: TextStyle(
+                                      fontSize: fontSize18,
+                                      fontWeight: FontWeight.w400,
+                                      color: appRed,
+                                    ),
+                                  ),
+                                  SizedBox(height: height15),
+                                  GestureDetector(
+                                    onTap: () {
+                                      addRestaurantIconButton();
+                                    },
+                                    child: EmptyAddButton(
+                                      color: appRed,
+                                      name: "Add Restaurants",
+                                      width: width200,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
                     ],
                   );
                 } else {
@@ -366,6 +416,7 @@ class _ResturantsScreenState extends State<ResturantsScreen> {
                       onCreateGroup: updateUI,
                       color: appRed,
                       item: "restaurant",
+                      onClickHere: updateUI,
                     ),
                   ),
                 ),

@@ -197,7 +197,7 @@ class _EditListItemScreenState extends State<EditListItemScreen> {
                       Navigator.pop(context);
                     }),
                     child: Text(
-                      'Cancel',
+                      'Back',
                       style: TextStyle(
                         fontSize: fontSize18,
                         color: black,
@@ -233,104 +233,158 @@ class _EditListItemScreenState extends State<EditListItemScreen> {
               ),
             ),
             SizedBox(height: height25),
-            isImageUploaded && item.imageUrl != null
-                ? Stack(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(height10),
-                        child: Image.network(
-                          item.imageUrl!,
-                          height: height350,
-                          width: screenWidth,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      isImageLoaded
-                          ? Positioned(
-                              bottom: 10,
-                              right: 10,
-                              child: GestureDetector(
-                                onTap: () {
-                                  _showDialog(
-                                      context, item, listId, onDeleteImage);
-                                },
-                                child: buildBlur(
-                                  borderRadius: BorderRadius.circular(5),
-                                  child: Container(
-                                    color: Colors.white.withOpacity(0.2),
-                                    child: const Icon(
-                                      Icons.close_rounded,
-                                      size: 32,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            )
-                          : Container(),
-                    ],
+            isPremium
+                ? ItemImage(
+                    item: item,
+                    isImageUploaded: isImageUploaded,
+                    listId: listId,
+                    isImageLoaded: isImageLoaded,
+                    onDeleteImage: onDeleteImage,
+                    imageJustUploaded: imageJustUploaded,
+                    onSubmit: onSubmit,
+                    imageController: imageController,
+                    showActionSheet: _showActionSheet,
                   )
-                : imageJustUploaded
-                    ? Stack(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(height10),
-                            child: Image.file(
-                              imageController.image!,
-                              height: height350,
-                              width: double.maxFinite,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          Positioned(
-                            bottom: 10,
-                            right: 10,
-                            child: GestureDetector(
-                              onTap: () {
-                                _showDialog(
-                                    context, item, listId, onDeleteImage);
-                              },
-                              child: buildBlur(
-                                borderRadius: BorderRadius.circular(5),
-                                child: Container(
-                                  color: Colors.white.withOpacity(0.2),
-                                  child: const Icon(
-                                    Icons.close_rounded,
-                                    size: 32,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
-                      )
-                    : GestureDetector(
-                        onTap: () {
-                          _showActionSheet(
-                            context,
-                            imageController,
-                            onSubmit,
-                          );
-                        },
-                        child: Container(
-                          height: height350,
-                          width: double.maxFinite,
-                          decoration: BoxDecoration(
-                            color: lightGrey,
-                            borderRadius: BorderRadius.circular(height10),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Icon(Icons.photo),
-                              Text('Add Image'),
-                            ],
-                          ),
-                        ),
-                      )
+                : Container(),
           ],
         ),
       ),
     ));
+  }
+}
+
+class ItemImage extends StatelessWidget {
+  Item item;
+  bool isImageUploaded;
+  String listId;
+  bool isImageLoaded;
+  Function onDeleteImage;
+  bool imageJustUploaded;
+  Function onSubmit;
+  ImageController imageController;
+  Function showActionSheet;
+
+  ItemImage({
+    super.key,
+    required this.item,
+    required this.isImageUploaded,
+    required this.listId,
+    required this.isImageLoaded,
+    required this.onDeleteImage,
+    required this.imageJustUploaded,
+    required this.onSubmit,
+    required this.imageController,
+    required this.showActionSheet,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenHeight = mediaQuery.size.height;
+    double screenWidth = mediaQuery.size.width;
+    double height10 = screenHeight / 89.6;
+    double height15 = screenHeight / 59.733;
+    double height25 = screenHeight / 35.84;
+    double height30 = screenHeight / 29.86;
+    double height65 = screenHeight / 13.784;
+    double height350 = screenHeight / 2.56;
+    double width10 = screenWidth / 41.4;
+    double width30 = screenWidth / 13.8;
+    double fontSize18 = screenHeight / 49.777;
+
+    double imageBoxWidth = double.maxFinite;
+    return isImageUploaded && item.imageUrl != null
+        ? Stack(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(height10),
+                child: Image.network(
+                  item.imageUrl!,
+                  height: height350,
+                  width: screenWidth,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              isImageLoaded
+                  ? Positioned(
+                      bottom: 10,
+                      right: 10,
+                      child: GestureDetector(
+                        onTap: () {
+                          _showDialog(context, item, listId, onDeleteImage);
+                        },
+                        child: buildBlur(
+                          borderRadius: BorderRadius.circular(5),
+                          child: Container(
+                            color: Colors.white.withOpacity(0.2),
+                            child: const Icon(
+                              Icons.close_rounded,
+                              size: 32,
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  : Container(),
+            ],
+          )
+        : imageJustUploaded
+            ? Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(height10),
+                    child: Image.file(
+                      imageController.image!,
+                      height: height350,
+                      width: double.maxFinite,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 10,
+                    right: 10,
+                    child: GestureDetector(
+                      onTap: () {
+                        _showDialog(context, item, listId, onDeleteImage);
+                      },
+                      child: buildBlur(
+                        borderRadius: BorderRadius.circular(5),
+                        child: Container(
+                          color: Colors.white.withOpacity(0.2),
+                          child: const Icon(
+                            Icons.close_rounded,
+                            size: 32,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              )
+            : GestureDetector(
+                onTap: () {
+                  showActionSheet(
+                    context,
+                    imageController,
+                    onSubmit,
+                  );
+                },
+                child: Container(
+                  height: height350,
+                  width: double.maxFinite,
+                  decoration: BoxDecoration(
+                    color: lightGrey,
+                    borderRadius: BorderRadius.circular(height10),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(Icons.photo),
+                      Text('Add Image'),
+                    ],
+                  ),
+                ),
+              );
   }
 }
 

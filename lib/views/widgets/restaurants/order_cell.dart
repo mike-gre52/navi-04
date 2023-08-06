@@ -11,7 +11,7 @@ import 'package:whats_for_dinner/utils/helper.dart';
 
 class OrderCell extends StatelessWidget {
   Restaurant restaurant;
-  RestaurantOrder order;
+  String order;
   Function onSubmit;
 
   OrderCell({
@@ -57,23 +57,28 @@ class OrderCell extends StatelessWidget {
     MediaQueryData mediaQuery = MediaQuery.of(context);
     double screenWidth = mediaQuery.size.width;
     double screenHeight = mediaQuery.size.height;
+    double height5 = screenHeight / 179.2;
     double height15 = screenHeight / 59.733;
     double height25 = screenHeight / 35.84;
-    double width10 = screenWidth / 41.4;
+    double width5 = screenWidth / 82.8;
     double fontSize16 = screenHeight / 56;
     double fontSize20 = screenHeight / 44.8;
 
     return Container(
-      margin: EdgeInsets.only(top: height15),
+      margin: EdgeInsets.only(
+        top: height5,
+        left: height5,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              /*
               Text(
-                order.name,
+                order.name != null ? order.name! : "",
                 style: TextStyle(
                   fontSize: fontSize20,
                   color: black,
@@ -81,20 +86,42 @@ class OrderCell extends StatelessWidget {
                   height: 0.8,
                 ),
               ),
+              */
+              Expanded(
+                child: Container(
+                  child: Text(
+                    "-  $order",
+                    style: TextStyle(
+                      fontSize: fontSize16,
+                      color: black.withOpacity(0.9),
+                      fontWeight: FontWeight.w400,
+                      height: 1,
+                    ),
+                  ),
+                ),
+              ),
               Container(
                 child: Row(
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Get.toNamed(RouteHelper.getAddOrderScreen(),
-                            arguments: [restaurant, onSubmit, order, true]);
+                        Get.toNamed(
+                          RouteHelper.getAddOrderScreen(),
+                          arguments: [
+                            restaurant,
+                            onSubmit,
+                            order,
+                            true,
+                          ],
+                        );
                       },
                       child: Icon(
                         Icons.edit_rounded,
-                        size: height25,
+                        size: height15,
                       ),
                     ),
-                    SizedBox(width: width10),
+                    SizedBox(width: width5),
+                    /*
                     GestureDetector(
                       onTap: () {
                         showPopup(
@@ -108,18 +135,11 @@ class OrderCell extends StatelessWidget {
                         size: height25,
                       ),
                     ),
+                    */
                   ],
                 ),
               )
             ],
-          ),
-          Text(
-            order.item,
-            style: TextStyle(
-              fontSize: fontSize16,
-              color: darkGrey,
-              fontWeight: FontWeight.w400,
-            ),
           ),
         ],
       ),

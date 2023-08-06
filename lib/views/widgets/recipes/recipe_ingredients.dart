@@ -7,15 +7,24 @@ import 'package:whats_for_dinner/utils/colors.dart';
 class RecipeIngredientList extends StatelessWidget {
   Recipe recipe;
   bool showDelete;
+  List<int> checkedItems;
   Function deleteIngredient;
+  Function editCheckedItems;
   RecipeIngredientList({
     Key? key,
     required this.recipe,
     required this.showDelete,
     required this.deleteIngredient,
+    required this.checkedItems,
+    required this.editCheckedItems,
   }) : super(key: key);
 
   int counter = 0;
+
+  bool isThisIngredientChecked(int index) {
+    return checkedItems.contains(index);
+  }
+
   Widget buildRecipeIngredient(Ingredient ingredient) {
     counter++;
     return RecipeIngredient(
@@ -24,6 +33,8 @@ class RecipeIngredientList extends StatelessWidget {
       ingredient: ingredient.name,
       showDelete: showDelete,
       deleteIngredient: deleteIngredient,
+      isChecked: isThisIngredientChecked(counter - 1),
+      editCheckedItems: editCheckedItems,
     );
   }
 
@@ -46,6 +57,8 @@ class RecipeIngredient extends StatefulWidget {
   String ingredient;
   bool showDelete;
   Function deleteIngredient;
+  bool isChecked;
+  Function editCheckedItems;
   RecipeIngredient({
     Key? key,
     required this.recipe,
@@ -53,6 +66,8 @@ class RecipeIngredient extends StatefulWidget {
     required this.ingredient,
     required this.showDelete,
     required this.deleteIngredient,
+    required this.isChecked,
+    required this.editCheckedItems,
   }) : super(key: key);
 
   @override
@@ -60,16 +75,21 @@ class RecipeIngredient extends StatefulWidget {
 }
 
 class _RecipeIngredientState extends State<RecipeIngredient> {
-  bool isChecked = false;
-
   void toggleIsChecked() {
-    setState(() {
-      isChecked = !isChecked;
-    });
+    if (widget.isChecked) {
+      //calls the editCheckedItems function which takes two parameters
+      //one boolean which if true removes the index
+      //stepnumber - 1 must be used because the stepnumber is one higher than the index
+      widget.editCheckedItems(true, widget.stepNumber - 1);
+    } else {
+      //adds the index to the list of selected items
+      widget.editCheckedItems(false, widget.stepNumber - 1);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    print("building recipe item");
     MediaQueryData mediaQuery = MediaQuery.of(context);
     double screenHeight = mediaQuery.size.height;
     double screenWidth = mediaQuery.size.width;
@@ -98,9 +118,9 @@ class _RecipeIngredientState extends State<RecipeIngredient> {
               decoration: BoxDecoration(
                 border: Border.all(width: 2, color: appBlue),
                 borderRadius: BorderRadius.circular(5),
-                color: isChecked ? appBlue : Colors.transparent,
+                color: widget.isChecked ? appBlue : Colors.transparent,
               ),
-              child: isChecked
+              child: widget.isChecked
                   ? Center(
                       child: Icon(
                         Icons.check,

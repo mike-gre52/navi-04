@@ -60,9 +60,16 @@ class _RecipeFoldersScreenState extends State<RecipeFoldersScreen> {
             ));
   }
 
-  Widget buildRecipeCell(String category, screenHeight) {
+  Widget buildRecipeCell(
+    String category,
+    double screenHeight,
+    double screenWidth,
+  ) {
     double height10 = screenHeight / 89.6;
     double height80 = screenHeight / 11.2;
+
+    double width10 = screenWidth / 41.4;
+
     double fontSize18 = screenHeight / 49.777;
     return GestureDetector(
       onTap: () {
@@ -101,11 +108,16 @@ class _RecipeFoldersScreenState extends State<RecipeFoldersScreen> {
               ),
             ),
             const BlueFolder(),
-            SizedBox(height: height10),
             Container(
-              margin: EdgeInsets.only(bottom: 20),
+              margin: EdgeInsets.only(
+                right: width10,
+                left: width10,
+                bottom: height10,
+              ),
               child: Text(
                 category,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   fontSize: fontSize18,
                   fontWeight: FontWeight.w600,
@@ -162,7 +174,8 @@ class _RecipeFoldersScreenState extends State<RecipeFoldersScreen> {
           padding: const EdgeInsets.all(0),
           itemCount: categories.length,
           itemBuilder: (BuildContext context, int index) {
-            return buildRecipeCell(categories[index], screenHeight);
+            return buildRecipeCell(
+                categories[index], screenHeight, screenWidth);
           },
         ),
       ),

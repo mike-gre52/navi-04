@@ -51,7 +51,18 @@ class GroupMembers extends StatelessWidget {
               ),
             );
           } else {
-            return Container();
+            return Container(
+              height: height60,
+              child: Center(
+                child: Text(
+                  "Cannot Fetch Group Members",
+                  style: TextStyle(
+                    color: black,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            );
           }
         });
   }

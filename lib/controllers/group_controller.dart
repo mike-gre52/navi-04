@@ -42,6 +42,7 @@ class GroupController extends GetxController {
   // }
 
   Stream<List<Member>> getGroupMembers() {
+    //print("inside get Group Members $globalGroupId");
     Stream<List<Member>> data = firestore
         .collection('groups')
         .doc(globalGroupId)
@@ -51,6 +52,7 @@ class GroupController extends GetxController {
       (snapshot) {
         List<Member> members =
             snapshot.docs.map((doc) => Member.fromJson(doc.data())).toList();
+        print(members[0].name);
         return members;
       },
     );
@@ -60,6 +62,7 @@ class GroupController extends GetxController {
   void leaveGroup(Group group) {
     final username = globalUsername;
     final color = globalColor;
+    categories = [];
     /*
     final member = Member(
       name: username,
@@ -117,10 +120,15 @@ class GroupController extends GetxController {
   }
 
   addIdToMembers(String groupId) {
-    print('adding');
     firestore.collection('groups').doc(groupId).update({
       'members': FieldValue.arrayUnion([firebaseAuth.currentUser!.uid])
     });
+  }
+
+  void setUserRecipeCategories() async {
+    List<String> fetchedCategories =
+        await recipeController.getRecipeCategories();
+    categories = fetchedCategories;
   }
 
   String generateUniqueId() {
@@ -135,6 +143,19 @@ class GroupController extends GetxController {
       }
     }
     return newGroupId;
+  }
+
+  Future<void> createGroupDocInFirebase(Group group) async {
+    await firestore.collection('groups').doc(globalGroupId).set(group.toJson());
+  }
+
+  Future<void> setGroupMembersAfterGroupIsCreated(Member member) async {
+    await firestore
+        .collection('groups')
+        .doc(globalGroupId)
+        .collection('members')
+        .doc(firebaseAuth.currentUser!.uid)
+        .set(member.toJson());
   }
 
   createGroup(String groupName) async {
@@ -157,15 +178,14 @@ class GroupController extends GetxController {
     );
 
     //creates group in group collection
-    firestore.collection('groups').doc(globalGroupId).set(group.toJson());
-    firestore
-        .collection('groups')
-        .doc(globalGroupId)
-        .collection('members')
-        .doc(firebaseAuth.currentUser!.uid)
-        .set(member.toJson());
+    await createGroupDocInFirebase(group);
 
+    //add user to group
+    await setGroupMembersAfterGroupIsCreated(member);
+
+    //print("Old Group ID: $globalGroupId");
     setUserGroupId(globalGroupId);
+    //print("Creating new group: - new group ID : $globalGroupId");
     setUserInGroupStatusTrue();
   }
 
@@ -187,21 +207,19 @@ class GroupController extends GetxController {
       final snap = await firestore.collection('groups').doc(groupId).get();
       if (snap.exists) {
         //group id valid
-        print('1');
         await addIdToMembers(groupId);
-        print('2');
         await firestore
             .collection('groups')
             .doc(groupId)
             .collection('members')
             .doc(firebaseAuth.currentUser!.uid)
             .set(member.toJson());
-        print('3');
         //updates users group id
         setUserGroupId(groupId);
-        print('4');
         setUserInGroupStatusTrue();
-        print('5');
+        //update categories
+        setUserRecipeCategories();
+        print("+++++++++++++++ categories: $categories");
 
         Get.snackbar(
           'Success',

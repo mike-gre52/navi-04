@@ -19,6 +19,7 @@ class ListsController extends GetxController {
   var listInstance = ListData.static();
 
   Stream<List<ListData>> getListData() {
+    print("getting list data $globalGroupId");
     Stream<List<ListData>> data = firestore
         .collection('groups')
         .doc(globalGroupId)
@@ -57,6 +58,22 @@ class ListsController extends GetxController {
         );
 
     return data;
+  }
+
+  Future<int> getListItemCount(String listId) async {
+    try {
+      AggregateQuerySnapshot data = await firestore
+          .collection('groups')
+          .doc(globalGroupId)
+          .collection('lists')
+          .doc(listId) //specific list
+          .collection('items')
+          .count()
+          .get();
+      return data.count;
+    } catch (e) {
+      return 0;
+    }
   }
 
   Future<int> getListLength(listId) async {
@@ -123,6 +140,19 @@ class ListsController extends GetxController {
         .collection('lists')
         .doc(listId) //specific list
         .update({'itemCount': numItems});
+  }
+
+  void editListName(String listId, String newName) {
+    try {
+      firestore
+          .collection('groups')
+          .doc(globalGroupId)
+          .collection('lists')
+          .doc(listId) //specific list
+          .update({'name': newName});
+    } catch (e) {
+      //
+    }
   }
 
   void addListItem(String newItem, String listId) async {

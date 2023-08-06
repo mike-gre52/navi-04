@@ -10,6 +10,7 @@ import 'package:whats_for_dinner/utils/helper.dart';
 import 'package:whats_for_dinner/views/screens/recipes/recipe_navigator.dart';
 import 'package:whats_for_dinner/views/widgets/app/app_header.dart';
 import 'package:whats_for_dinner/views/widgets/app/create_or_join_banner.dart';
+import 'package:whats_for_dinner/views/widgets/app/empty_add_button.dart';
 import 'package:whats_for_dinner/views/widgets/recipes/blue_folder.dart';
 import 'package:whats_for_dinner/views/widgets/recipes/recipe_cell.dart';
 import 'package:whats_for_dinner/views/widgets/recipes/recipe_link_cell.dart';
@@ -39,6 +40,8 @@ class _RecipesScreenState extends State<RecipesScreen> {
               }),
               child: RecipeLinkCell(
                 recipe: recipe,
+                inFolder: false,
+                category: "",
               ),
             )
           : GestureDetector(
@@ -62,10 +65,6 @@ class _RecipesScreenState extends State<RecipesScreen> {
     }
   }
 
-  updateUI() {
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
@@ -85,6 +84,7 @@ class _RecipesScreenState extends State<RecipesScreen> {
     double width20 = screenWidth / 20.7;
     double width30 = screenWidth / 13.8;
     double width100 = screenWidth / 4.3;
+    double width150 = screenWidth / 2.76;
 
     double fontSize28 = screenHeight / 33.285;
     double fontSize16 = screenHeight / 58.25;
@@ -96,19 +96,46 @@ class _RecipesScreenState extends State<RecipesScreen> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final recipes = snapshot.data!;
-          return Expanded(
-            child: Container(
-              margin:
-                  EdgeInsets.only(left: width20, right: width20, top: height5),
-              child: ListView.builder(
-                padding: const EdgeInsets.all(0),
-                itemCount: recipes.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return buildRecipeCell(recipes[index]);
-                },
-              ),
-            ),
-          );
+          return recipes.isNotEmpty
+              ? Expanded(
+                  child: Container(
+                    margin: EdgeInsets.only(
+                        left: width20, right: width20, top: height5),
+                    child: ListView.builder(
+                      padding: const EdgeInsets.all(0),
+                      itemCount: recipes.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return buildRecipeCell(recipes[index]);
+                      },
+                    ),
+                  ),
+                )
+              : Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "You have not added any Recipes",
+                        style: TextStyle(
+                          fontSize: fontSize18,
+                          fontWeight: FontWeight.w400,
+                          color: appBlue,
+                        ),
+                      ),
+                      SizedBox(height: height15),
+                      GestureDetector(
+                        onTap: () {
+                          Get.toNamed(RouteHelper.getAddRecipe());
+                        },
+                        child: EmptyAddButton(
+                          color: appBlue,
+                          name: "Add Recipes",
+                          width: width150,
+                        ),
+                      )
+                    ],
+                  ),
+                );
         } else {
           return Expanded(
             child: Center(

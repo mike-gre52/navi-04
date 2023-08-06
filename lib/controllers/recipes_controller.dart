@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:whats_for_dinner/main.dart';
@@ -35,6 +36,32 @@ class RecipeController extends GetxController {
     return data;
   }
 
+  Stream<List<Recipe>> getRecipesInFolder(String category) {
+    print("dsfdsf");
+    Stream<List<Recipe>> data = firestore
+        .collection('groups')
+        .doc(globalGroupId)
+        .collection('recipes')
+        .where(
+          "categories",
+          arrayContains: category,
+        )
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs.map(
+            (doc) {
+              return Recipe.static().fromJson(
+                doc.data(),
+              );
+            },
+          ).where((recipe) {
+            return recipe.id != null && recipe.id != "";
+          }).toList(),
+        );
+    print(data);
+    return data;
+  }
+
   Future<List<Recipe>> getRecipeQuery(String category) async {
     final recipeData = firestore
         .collection('groups')
@@ -53,9 +80,6 @@ class RecipeController extends GetxController {
       Map<String, dynamic> data = element.data() as Map<String, dynamic>;
       recipes.add(Recipe.static().fromJson(data));
     });
-    recipes.forEach((element) {
-      print(element.name);
-    });
     return recipes;
   }
 
@@ -71,16 +95,19 @@ class RecipeController extends GetxController {
   void deleteRecipeImageFromStorage(Recipe recipe) {
     if (recipe.isLink == true || recipe.isImport == true) {
       return;
-    }
-    try {
-      firebaseStorage
-          .ref()
-          .child(globalGroupId)
-          .child("recipeImages")
-          .child(recipe.id!)
-          .delete();
-    } catch (e) {
-      throw ("Error deleting recipe Image");
+    } else {
+      if (recipe.imageUrl != null && recipe.imageUrl != "") {
+        try {
+          firebaseStorage
+              .ref()
+              .child(globalGroupId)
+              .child("recipeImages")
+              .child(recipe.id!)
+              .delete();
+        } catch (e) {
+          throw ("Error deleting recipe Image");
+        }
+      }
     }
   }
 
@@ -267,17 +294,56 @@ class RecipeController extends GetxController {
     }
   }
 
+  void addRecipesToCategory(List<Recipe> recipes, String category) {
+    for (Recipe recipe in recipes) {
+      recipe.categories.add(category);
+      updateRecipeCategories(recipe);
+    }
+  }
+
+  Future<void> renameCategory(String category, String newCategory) async {
+    if (category != newCategory) {
+      List<Recipe> recipes = await getRecipeQuery(category);
+      deleteRecipeCategory(category);
+      addRecipeCategory(newCategory);
+      for (Recipe recipe in recipes) {
+        recipe.categories.add(newCategory);
+        updateRecipeCategories(recipe);
+      }
+    }
+  }
+
+  Future<List<String>> getRecipeCategories() async {
+    List<String> fetchedCategories = [];
+    final recipeData =
+        firestore.collection('groups').doc(globalGroupId).get().then(
+      (DocumentSnapshot doc) {
+        final data = doc.data() as Map<String, dynamic>;
+        List<dynamic> categoriesData = data["categories"];
+        categoriesData.forEach((category) {
+          fetchedCategories.add(category.toString());
+        });
+      },
+      onError: (e) => print(e),
+    );
+    return fetchedCategories;
+  }
+
   bool addRecipeCategory(String category) {
-    try {
-      firestore.collection('groups').doc(globalGroupId).update({
-        'categories': FieldValue.arrayUnion([category]),
-      });
-      return true;
-    } catch (e) {
-      Get.snackbar(
-        'Error editing totalTime',
-        '$e',
-      );
+    if (!categories.contains(category)) {
+      try {
+        firestore.collection('groups').doc(globalGroupId).update({
+          'categories': FieldValue.arrayUnion([category]),
+        });
+        return true;
+      } catch (e) {
+        Get.snackbar(
+          'Error adding folder',
+          '$e',
+        );
+        return false;
+      }
+    } else {
       return false;
     }
   }

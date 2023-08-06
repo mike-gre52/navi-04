@@ -6,6 +6,7 @@ import 'package:whats_for_dinner/views/screens/auth/confirm_reset_email_sent.dar
 import 'package:whats_for_dinner/views/screens/auth/reset_password.dart';
 import 'package:whats_for_dinner/views/screens/lists/add_list.dart';
 import 'package:whats_for_dinner/views/screens/lists/edit_list_item.dart';
+import 'package:whats_for_dinner/views/screens/app/edit_name.dart';
 import 'package:whats_for_dinner/views/screens/lists/list.dart';
 import 'package:whats_for_dinner/views/screens/lists/recently_deleted.dart';
 import 'package:whats_for_dinner/views/screens/lists/select_ingredients.dart';
@@ -24,6 +25,7 @@ import 'package:whats_for_dinner/views/screens/recipes/recipe.dart';
 import 'package:whats_for_dinner/views/screens/recipes/recipe_folders.dart';
 import 'package:whats_for_dinner/views/screens/recipes/select_categories.dart';
 import 'package:whats_for_dinner/views/screens/recipes/select_list_from_import.dart';
+import 'package:whats_for_dinner/views/screens/recipes/select_recipes_add_to_folder.dart';
 import 'package:whats_for_dinner/views/screens/restaurants/add_order_screen.dart';
 import 'package:whats_for_dinner/views/screens/restaurants/add_restaurant.dart';
 import 'package:whats_for_dinner/views/screens/profile/create_group.dart';
@@ -36,6 +38,7 @@ import 'package:whats_for_dinner/views/screens/restaurants/view_restaurant.dart'
 import 'package:whats_for_dinner/views/screens/recipes/add_recipe.dart';
 import 'package:whats_for_dinner/views/widgets/profile/join_group.dart';
 import 'package:whats_for_dinner/views/screens/recipes/select_list.dart';
+import 'package:whats_for_dinner/views/widgets/recipes/select_recipe_categories.dart';
 
 import '../views/screens/auth/sign_in.dart';
 import '../views/screens/auth/sign_up.dart';
@@ -82,6 +85,8 @@ class RouteHelper {
   static String filteredRecipeScreen = '/filteredRecipeScreen';
   static String recipeFoldersScreen = '/recipeFoldersScreen';
   static String selectCategoriesScreen = '/selectCateogriesScreen';
+  static String editNameScreen = '/editNameScreen';
+  static String selectRecipeAddToFolder = '/selectRecipeAddToFolder';
   static String testScreen = '/testScreen';
 
   static String getHomeRoute() => home;
@@ -123,6 +128,9 @@ class RouteHelper {
   static String getFilteredRecipeScreen() => filteredRecipeScreen;
   static String getRecipeFoldersScreen() => recipeFoldersScreen;
   static String getSelectCategoriesScreen() => selectCategoriesScreen;
+  static String getEditNameScreen() => editNameScreen;
+  static String getSelectRecipesAddToFolder() => selectRecipeAddToFolder;
+
   static String getTestScreen() => testScreen;
 
   static List<GetPage> routes = [
@@ -327,7 +335,7 @@ class RouteHelper {
     GetPage(
       name: joinGroup,
       page: () => const JoinGroupScreen(),
-      transition: Transition.cupertino,
+      transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 250),
     ),
     GetPage(
@@ -339,6 +347,12 @@ class RouteHelper {
     GetPage(
       name: selectCategoriesScreen,
       page: () => SelectedCategoriesScreen(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 250),
+    ),
+    GetPage(
+      name: editNameScreen,
+      page: () => const EditNameScreen(),
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 250),
     ),
@@ -358,6 +372,12 @@ class RouteHelper {
       transitionDuration: const Duration(milliseconds: 250),
     ),
     */
+    GetPage(
+      name: selectRecipeAddToFolder,
+      page: () => SelectRecipesAddToFolderScreen(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 250),
+    ),
     GetPage(
       name: testScreen,
       page: () => const Test(),

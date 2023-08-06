@@ -7,6 +7,7 @@ import 'package:whats_for_dinner/models/restaurant.dart';
 import 'package:whats_for_dinner/routes/routes.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
+import 'package:whats_for_dinner/utils/helper.dart';
 import 'package:whats_for_dinner/views/widgets/app/app_header.dart';
 import 'package:whats_for_dinner/views/widgets/app/custom_textfield.dart';
 import 'package:whats_for_dinner/views/widgets/restaurants/notes_textfield.dart';
@@ -36,6 +37,7 @@ class _ViewRestaurantState extends State<ViewRestaurant> {
   int rating = 1;
   int price = 1;
   String restaurantUrl = "";
+  String phoneNumber = "";
 
   Object _selectedSegment = 0;
 
@@ -76,6 +78,18 @@ class _ViewRestaurantState extends State<ViewRestaurant> {
     });
   }
 
+  addPhoneNumber(String newPhoneNumber) {
+    print(newPhoneNumber);
+    newPhoneNumber = stripPhoneNumber(newPhoneNumber);
+    print(newPhoneNumber);
+    print(validatePhoneNumber(newPhoneNumber));
+    setState(() {
+      if (validatePhoneNumber(newPhoneNumber)) {
+        phoneNumber = newPhoneNumber;
+      }
+    });
+  }
+
   @override
   void initState() {
     restaurant = data[0];
@@ -97,6 +111,9 @@ class _ViewRestaurantState extends State<ViewRestaurant> {
     }
     if (restaurant.doesDelivery != null) {
       doesDelivery = restaurant.doesDelivery!;
+    }
+    if (restaurant.phoneNumber != null) {
+      phoneNumber = restaurant.phoneNumber!;
     }
 
     super.initState();
@@ -149,7 +166,10 @@ class _ViewRestaurantState extends State<ViewRestaurant> {
           ),
           //NEED TO MAKE SURE TIME IS A NUMBER - WILL SET THE KEYBOARD TO NUMPAD BUT STILL NEED TO VERIFY
           Container(
-            margin: EdgeInsets.only(left: width30, top: height30),
+            margin: EdgeInsets.only(
+              left: width30,
+              top: height30,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -181,23 +201,55 @@ class _ViewRestaurantState extends State<ViewRestaurant> {
               ],
             ),
           ),
-          GestureDetector(
-            onTap: () {
-              Get.toNamed(RouteHelper.getSingleTextfieldAndSubmitScreen(),
-                  arguments: [
-                    appRed,
-                    "Paste a Url below:",
-                    addUrl,
-                    CupertinoIcons.link
-                  ]);
-            },
-            child: Container(
-              margin: EdgeInsets.only(left: width30, top: 5),
-              child: Text(
-                restaurantUrl.trim() == "" ? "Add Url" : "Change Url",
-                style: TextStyle(color: appRed, fontWeight: FontWeight.w600),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  Get.toNamed(RouteHelper.getSingleTextfieldAndSubmitScreen(),
+                      arguments: [
+                        appRed,
+                        "Paste a Url below:",
+                        addUrl,
+                        CupertinoIcons.link
+                      ]);
+                },
+                child: Container(
+                  margin: EdgeInsets.only(left: width30, top: 5),
+                  child: Text(
+                    restaurantUrl.trim() == "" ? "Add Url" : "Change Url",
+                    style: TextStyle(
+                      color: appRed,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
               ),
-            ),
+              GestureDetector(
+                onTap: () {
+                  Get.toNamed(RouteHelper.getSingleTextfieldAndSubmitScreen(),
+                      arguments: [
+                        appRed,
+                        "Enter a phone number:",
+                        addPhoneNumber,
+                        CupertinoIcons.link,
+                        TextInputType.phone,
+                      ]);
+                },
+                child: Container(
+                  margin: EdgeInsets.only(right: width30, top: 5),
+                  child: Text(
+                    phoneNumber.trim() == ""
+                        ? "Add Phone Number"
+                        : "Change phone number",
+                    style: TextStyle(
+                      color: appRed,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
           Container(
             margin: EdgeInsets.symmetric(horizontal: width30),
@@ -316,6 +368,7 @@ class _ViewRestaurantState extends State<ViewRestaurant> {
             alignment: Alignment.center,
             child: GestureDetector(
               onTap: () async {
+                print(phoneNumber);
                 Restaurant updatedRestaurant = Restaurant(
                   name: _nameController.text,
                   time: int.parse(_timeController.text),
@@ -325,6 +378,7 @@ class _ViewRestaurantState extends State<ViewRestaurant> {
                   isFavorite: restaurant.isFavorite,
                   id: restaurant.id,
                   restaurantUrl: restaurantUrl,
+                  phoneNumber: phoneNumber,
                   orders: restaurant.orders,
                 );
 

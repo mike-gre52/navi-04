@@ -6,16 +6,21 @@ import 'package:get/get.dart';
 import 'package:whats_for_dinner/models/recipe.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
+import 'package:whats_for_dinner/utils/helper.dart';
 import 'package:whats_for_dinner/views/widgets/recipes/recipes_popup.dart';
 
 import '../../../routes/routes.dart';
 
 class RecipeCell extends StatelessWidget {
   Recipe recipe;
+  bool inFolder;
+  String category;
 
   RecipeCell({
     Key? key,
     required this.recipe,
+    this.inFolder = false,
+    this.category = "",
   }) : super(key: key);
 
   int? getTime() {
@@ -126,64 +131,16 @@ class RecipeCell extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            const Text(
-                              'Time: ',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                height: 0.9,
-                              ),
-                            ),
-                            totalTime != null
-                                ? Text(
-                                    '$totalTime mins',
-                                    style: const TextStyle(height: 1.05),
-                                  )
-                                : Container(
-                                    width: 0,
-                                  ),
-                            SizedBox(width: width5),
-                            GestureDetector(
-                              //edit TotalTime
-                              onTap: () {
-                                Get.toNamed(
-                                    RouteHelper
-                                        .getSingleTextfieldAndSubmitScreen(),
-                                    arguments: [
-                                      appBlue,
-                                      "Total Time",
-                                      onEditTotalTime,
-                                      Icons.edit_rounded
-                                    ]);
-                              },
-                              child: Container(
-                                margin: const EdgeInsets.only(bottom: 1),
-                                child: const Icon(
-                                  CupertinoIcons.info,
-                                  size: 16,
-                                ),
-                              ),
-                            ),
-                            /*
-                            SizedBox(width: width10),
-                            const Text(
-                              'Yield: ',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w700, height: 1.05),
-                            ),
-                            Container(
-                              width: height100,
-                              child: Text(
-                                '${recipe.servings}',
-                                style: const TextStyle(
-                                    height: 1.05,
-                                    overflow: TextOverflow.ellipsis),
-                              ),
-                            ),
-                            */
-                          ],
+                        child: Text(
+                          recipe.isImport != null && recipe.isImport!
+                              ? trimSourceUrl(recipe.sourceUrl != null
+                                  ? recipe.sourceUrl!
+                                  : "")
+                              : "",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            height: 0.9,
+                          ),
                         ),
                       )
                     ],
@@ -201,7 +158,11 @@ class RecipeCell extends StatelessWidget {
                       top: Radius.circular(width20),
                     ),
                   ),
-                  builder: (context) => RecipesPopup(recipe: recipe),
+                  builder: (context) => RecipesPopup(
+                    recipe: recipe,
+                    inFolder: inFolder,
+                    category: category,
+                  ),
                 );
               },
               child: Container(

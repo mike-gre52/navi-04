@@ -34,6 +34,14 @@ class _ResetPasswordState extends State<ResetPassword> {
     _emailController.dispose();
   }
 
+  final email = Get.arguments as String;
+
+  @override
+  void initState() {
+    super.initState();
+    _emailController.text = email;
+  }
+
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);

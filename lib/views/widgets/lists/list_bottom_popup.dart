@@ -7,14 +7,17 @@ import 'package:get/instance_manager.dart';
 import 'package:whats_for_dinner/models/list.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
+import 'package:whats_for_dinner/views/widgets/app/app_yes_no_popup.dart';
 
 import '../../../routes/routes.dart';
 
 class ListBottomPopup extends StatefulWidget {
   ListData list;
+  Function onEditListName;
   ListBottomPopup({
     Key? key,
     required this.list,
+    required this.onEditListName,
   }) : super(key: key);
 
   @override
@@ -22,43 +25,26 @@ class ListBottomPopup extends StatefulWidget {
 }
 
 class _ListBottomPopupState extends State<ListBottomPopup> {
+  void onDiologAction() {
+    Navigator.pop(context);
+    Navigator.pop(context);
+    Navigator.pop(context);
+    listController.deleteList(
+      widget.list.id!,
+      listItems,
+      deletedItems,
+    );
+  }
+
   _showDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder: (_) => CupertinoAlertDialog(
-        title: const Text('Are you sure you want to delete this list?'),
-        content: const Text('All data will be lost'),
-        actions: [
-          CupertinoDialogAction(
-            child: const Text('Cancel'),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          CupertinoDialogAction(
-            child: const Text('Yes'),
-            onPressed: () {
-              /*
-              StreamBuilder<List<Item>>(
-                  stream: listController.getListItems(list.id),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      listItems = snapshot.data!;
-                      listController.clearRecentlyDeleted(list.id, listItems);
-                      return Container();
-                    } else {
-                      return Container();
-                    }
-                  });
-                  */
-              Navigator.pop(context);
-              Navigator.pop(context);
-              Navigator.pop(context);
-              listController.deleteList(
-                  widget.list.id!, listItems, deletedItems);
-            },
-          ),
-        ],
+      builder: (_) => AppYesNoPopup(
+        header: 'Are you sure you want to delete this list?',
+        subHeader: 'All data will be lost',
+        leftActionButton: "Yes",
+        rightActionButton: "No",
+        leftActionFunction: onDiologAction,
       ),
       barrierDismissible: true,
     );
@@ -82,13 +68,20 @@ class _ListBottomPopupState extends State<ListBottomPopup> {
     });
   }
 
+  void onSubmitEditListName(String newName) {
+    if (widget.list.id != null) {
+      listController.editListName(widget.list.id!, newName);
+      widget.onEditListName(newName);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
     double screenWidth = mediaQuery.size.width;
     double screenHeight = mediaQuery.size.height;
     double height5 = screenHeight / 179.2;
-    double height250 = screenHeight / 3.584;
+    double height300 = screenHeight / 2.986;
     double width100 = screenWidth / 4.14;
 
     return StreamBuilder<List<Item>>(
@@ -97,7 +90,7 @@ class _ListBottomPopupState extends State<ListBottomPopup> {
           if (snapshot.hasData) {
             listItems = snapshot.data!;
             return Container(
-              height: height250,
+              height: height300,
               child: Column(
                 children: [
                   Container(
@@ -131,8 +124,10 @@ class _ListBottomPopupState extends State<ListBottomPopup> {
                     icon: CupertinoIcons.arrowshape_turn_up_left,
                     buttonName: 'Recently Deleted',
                     onClick: () {
-                      Get.toNamed(RouteHelper.recentlyDeleted,
-                          arguments: widget.list);
+                      Get.toNamed(
+                        RouteHelper.recentlyDeleted,
+                        arguments: widget.list,
+                      );
                     },
                   ),
                   PopupButton(
@@ -140,8 +135,27 @@ class _ListBottomPopupState extends State<ListBottomPopup> {
                     buttonName: 'Add Recipe Items',
                     onClick: () {
                       Navigator.pop(context);
-                      Get.toNamed(RouteHelper.addToListSelectRecipeScreen,
-                          arguments: [widget.list, appGreen]);
+                      Get.toNamed(
+                        RouteHelper.addToListSelectRecipeScreen,
+                        arguments: [widget.list, appGreen],
+                      );
+                    },
+                  ),
+                  PopupButton(
+                    icon: Icons.edit,
+                    buttonName: 'Edit List Name',
+                    onClick: () {
+                      Navigator.pop(context);
+                      Get.toNamed(
+                        RouteHelper.getEditNameScreen(),
+                        arguments: [
+                          appGreen,
+                          "Edit List Name",
+                          onSubmitEditListName,
+                          Icons.edit,
+                          widget.list.name
+                        ],
+                      );
                     },
                   ),
                   PopupButton(

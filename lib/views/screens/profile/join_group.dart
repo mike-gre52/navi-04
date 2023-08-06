@@ -87,145 +87,140 @@ class _JoinGroupScreenState extends State<JoinGroupScreen> {
     double fontSize22 = screenHeight / 40.727;
 
     return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: width30),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      body: Container(
+        margin: EdgeInsets.symmetric(horizontal: width30),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: height50,
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: Icon(
+                  Icons.close_rounded,
+                  size: height25,
+                ),
+              ),
+            ),
+            SizedBox(
+              height: height100,
+            ),
+            isLoading
+                ? Align(
+                    alignment: Alignment.center,
+                    child: CupertinoActivityIndicator(
+                      color: royalYellow,
+                      radius: height15,
+                    ),
+                  )
+                : Container(
+                    height: height30,
+                  ),
+            SizedBox(
+              height: height10,
+            ),
+            Text(
+              'Join Group',
+              style: TextStyle(
+                color: black,
+                fontSize: fontSize35,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            Text(
+              'Enter a group code if you have one. If not, you can create a group below',
+              style: TextStyle(
+                color: darkGrey,
+                fontSize: fontSize16,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            SizedBox(
+              height: height30,
+            ),
+            CustomTextfield(
+              icon: Icons.group_add_outlined,
+              placeholderText: 'Enter Group Code Here',
+              controller: _groupIdController,
+              borderColor: royalYellow,
+              textfieldWidth: width350,
+              textfieldHeight: height65,
+              borderRadius: height10,
+              onSubmit: (_) {},
+              onChanged: (_) {},
+            ),
+            SizedBox(
+              height: height10,
+            ),
+            GestureDetector(
+              onTap: () async {
+                toggleIsLoading();
+                User user = await userController.getUserDataSnapshot();
+                bool didJoin = await joinGroup(user);
+                if (true) {}
+                if (didJoin) {
+                  onCreateGroup();
+                  Navigator.pop(context);
+                }
+                toggleIsLoading();
+              },
+              child: Container(
+                height: height40,
+                width: width80,
+                decoration: BoxDecoration(
+                  color: royalYellow,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Center(
+                  child: Text(
+                    "Join",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: fontSize18,
+                        fontWeight: FontWeight.w600),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: height30,
+            ),
+            Row(
               children: [
+                Text(
+                  'Want to start a group?',
+                  style: TextStyle(
+                    fontSize: fontSize22,
+                    fontWeight: FontWeight.w300,
+                    color: black,
+                  ),
+                ),
                 SizedBox(
-                  height: height50,
+                  width: height10,
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.pop(context);
+                    Get.toNamed(RouteHelper.createGroup,
+                        arguments: [onCreateGroup]);
                   },
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: Icon(
-                      Icons.close_rounded,
-                      size: height25,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: height100,
-                ),
-                isLoading
-                    ? Align(
-                        alignment: Alignment.center,
-                        child: CupertinoActivityIndicator(
-                          color: royalYellow,
-                          radius: height15,
-                        ),
-                      )
-                    : Container(
-                        height: height30,
-                      ),
-                SizedBox(
-                  height: height10,
-                ),
-                Text(
-                  'Join Group',
-                  style: TextStyle(
-                    color: black,
-                    fontSize: fontSize35,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Text(
-                  'Enter a group code if you have one. If not, you can create a group below',
-                  style: TextStyle(
-                    color: darkGrey,
-                    fontSize: fontSize16,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                SizedBox(
-                  height: height30,
-                ),
-                CustomTextfield(
-                  icon: Icons.group_add_outlined,
-                  placeholderText: 'Enter Group Code Here',
-                  controller: _groupIdController,
-                  borderColor: royalYellow,
-                  textfieldWidth: width350,
-                  textfieldHeight: height65,
-                  borderRadius: height10,
-                  onSubmit: (_) {},
-                  onChanged: (_) {},
-                ),
-                SizedBox(
-                  height: height10,
-                ),
-                GestureDetector(
-                  onTap: () async {
-                    toggleIsLoading();
-                    User user = await userController.getUserDataSnapshot();
-                    bool didJoin = await joinGroup(user);
-                    if (true) {}
-                    toggleIsLoading();
-                    //toggleIsLoading();
-                    if (didJoin) {
-                      onCreateGroup();
-                      Navigator.pop(context);
-                    }
-                  },
-                  child: Container(
-                    height: height40,
-                    width: width80,
-                    decoration: BoxDecoration(
+                  child: Text(
+                    'Tap Here',
+                    style: TextStyle(
+                      fontSize: fontSize22,
+                      fontWeight: FontWeight.w800,
                       color: royalYellow,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Center(
-                      child: Text(
-                        "Join",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: fontSize18,
-                            fontWeight: FontWeight.w600),
-                      ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: height30,
-                ),
-                Row(
-                  children: [
-                    Text(
-                      'Want to start a group?',
-                      style: TextStyle(
-                        fontSize: fontSize22,
-                        fontWeight: FontWeight.w300,
-                        color: black,
-                      ),
-                    ),
-                    SizedBox(
-                      width: height10,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Get.toNamed(RouteHelper.createGroup,
-                            arguments: [onCreateGroup]);
-                      },
-                      child: Text(
-                        'Click Here',
-                        style: TextStyle(
-                          fontSize: fontSize22,
-                          fontWeight: FontWeight.w800,
-                          color: royalYellow,
-                        ),
-                      ),
-                    )
-                  ],
                 )
               ],
-            ),
-          ),
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

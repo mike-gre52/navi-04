@@ -62,7 +62,10 @@ class _NavigationState extends State<Navigation> {
       //const HomeScreen(),
       const ListsScreen(),
       RecipeNavigator(
-          screen: recipeScreen, setScreen: setRecipeScreen, category: category),
+        screen: recipeScreen,
+        setScreen: setRecipeScreen,
+        category: category,
+      ),
       //const RecipesScreen(),
       const ResturantsScreen(),
       GroupScreen(),

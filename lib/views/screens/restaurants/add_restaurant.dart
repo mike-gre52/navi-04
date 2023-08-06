@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
+import 'package:whats_for_dinner/models/restaurant.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
+import 'package:whats_for_dinner/utils/helper.dart';
 import 'package:whats_for_dinner/views/widgets/app/app_header.dart';
 import 'package:whats_for_dinner/views/widgets/app/custom_textfield.dart';
 import 'package:whats_for_dinner/views/widgets/restaurants/notes_textfield.dart';
@@ -22,6 +24,8 @@ class AddRestaurant extends StatefulWidget {
 class _AddRestaurantState extends State<AddRestaurant> {
   TextEditingController _nameController = TextEditingController();
   TextEditingController _timeController = TextEditingController();
+  TextEditingController _websiteController = TextEditingController();
+  TextEditingController _phoneNumberController = TextEditingController();
 
   bool doesDelivery = false;
   int rating = 1;
@@ -29,12 +33,15 @@ class _AddRestaurantState extends State<AddRestaurant> {
 
   Object _selectedSegment = 0;
   bool isInvalidNumber = false;
+  bool isInvalidPhoneNumber = false;
 
   @override
   void dispose() {
     super.dispose();
     _nameController.dispose();
     _timeController.dispose();
+    _websiteController.dispose();
+    _phoneNumberController.dispose();
   }
 
   void setDeliveryStatus(value) {
@@ -77,6 +84,49 @@ class _AddRestaurantState extends State<AddRestaurant> {
     }
   }
 
+  void addRestaurant() {
+    if (_timeController.text.trim() != "" &&
+        _nameController.text.trim() != "" &&
+        validInputs()) {
+      final restaurantId = DateTime.now().toString();
+      Restaurant restaurant = Restaurant(
+        name: _nameController.text,
+        time: int.parse(_timeController.text),
+        rating: rating,
+        price: price,
+        doesDelivery: doesDelivery,
+        isFavorite: false,
+        id: restaurantId,
+        phoneNumber: _phoneNumberController.text,
+        restaurantUrl: _websiteController.text,
+        orders: [],
+      );
+
+      restaurantController.addRestaurant(restaurant);
+      Navigator.pop(context);
+    }
+  }
+
+  onUpdatePhoneNumber(input) {
+    if (input == "") {
+      return;
+    }
+    input = stripPhoneNumber(input);
+    if (validatePhoneNumber(input)) {
+      setState(() {
+        isInvalidPhoneNumber = false;
+      });
+    } else {
+      setState(() {
+        isInvalidPhoneNumber = true;
+      });
+    }
+  }
+
+  validInputs() {
+    return (!isInvalidNumber && !isInvalidPhoneNumber);
+  }
+
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
@@ -101,6 +151,7 @@ class _AddRestaurantState extends State<AddRestaurant> {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -131,7 +182,7 @@ class _AddRestaurantState extends State<AddRestaurant> {
                   Container(
                     margin: EdgeInsets.only(left: height5),
                     child: Text(
-                      'Name',
+                      'Restaurant Name',
                       style: TextStyle(
                         fontSize: fontSize18,
                         color: black,
@@ -168,7 +219,7 @@ class _AddRestaurantState extends State<AddRestaurant> {
                       Container(
                         margin: EdgeInsets.only(left: width5, top: height30),
                         child: Text(
-                          'Time',
+                          'Wait Time',
                           style: TextStyle(
                               fontSize: fontSize18,
                               color: black,
@@ -232,6 +283,95 @@ class _AddRestaurantState extends State<AddRestaurant> {
               ),
             ),
             Container(
+              margin: EdgeInsets.symmetric(horizontal: width30),
+              child: Column(
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      margin: EdgeInsets.only(
+                        left: width5,
+                      ),
+                      child: Text(
+                        'Website (optional)',
+                        style: TextStyle(
+                          fontSize: fontSize18,
+                          color: black,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
+                  CustomTextfield(
+                    icon: Icons.timer,
+                    placeholderText: '',
+                    controller: _websiteController,
+                    borderColor: appRed,
+                    textfieldWidth: double.infinity,
+                    showIcon: false,
+                    textfieldHeight: height50,
+                    borderRadius: height10,
+                    onSubmit: (_) {},
+                    onChanged: (_) {},
+                    keyboard: TextInputType.text,
+                  ),
+                ],
+              ),
+            ),
+            //
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: width30),
+              child: Column(
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      margin: EdgeInsets.only(
+                        left: width5,
+                      ),
+                      child: Text(
+                        'Phone Number (optional)',
+                        style: TextStyle(
+                          fontSize: fontSize18,
+                          color: black,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
+                  CustomTextfield(
+                    icon: Icons.timer,
+                    placeholderText: '',
+                    controller: _phoneNumberController,
+                    borderColor: appRed,
+                    textfieldWidth: double.infinity,
+                    showIcon: false,
+                    textfieldHeight: height50,
+                    borderRadius: height10,
+                    onSubmit: (_) {},
+                    onChanged: onUpdatePhoneNumber,
+                    keyboard: TextInputType.phone,
+                  ),
+                  isInvalidPhoneNumber
+                      ? Container(
+                          height: height20,
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                            'Must be a valid phone number',
+                            style: TextStyle(
+                              color: red,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        )
+                      : Container(
+                          height: height20,
+                        ),
+                ],
+              ),
+            ),
+            //
+            Container(
               margin: EdgeInsets.symmetric(horizontal: height30),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -243,7 +383,7 @@ class _AddRestaurantState extends State<AddRestaurant> {
                       Container(
                         margin: EdgeInsets.only(left: width5, top: height30),
                         child: Text(
-                          'Price',
+                          'Price Range',
                           style: TextStyle(
                               fontSize: fontSize18,
                               color: black,
@@ -262,7 +402,7 @@ class _AddRestaurantState extends State<AddRestaurant> {
                       Container(
                         margin: EdgeInsets.only(left: width5, top: height30),
                         child: Text(
-                          'Delivery',
+                          'Does it Deliver?',
                           style: TextStyle(
                               fontSize: fontSize18,
                               color: black,
@@ -283,19 +423,7 @@ class _AddRestaurantState extends State<AddRestaurant> {
               alignment: Alignment.center,
               child: GestureDetector(
                 onTap: () {
-                  if (_timeController.text.trim() != "" &&
-                      _nameController.text.trim() != "") {
-                    restaurantController.addRestaurant(
-                      _nameController.text,
-                      int.parse(_timeController.text),
-                      rating,
-                      price,
-                      doesDelivery,
-                      false,
-                      "",
-                    );
-                    Navigator.pop(context);
-                  }
+                  addRestaurant();
                 },
                 child: Container(
                   height: height60,

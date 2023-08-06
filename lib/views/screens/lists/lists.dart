@@ -12,6 +12,8 @@ import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
 import 'package:whats_for_dinner/views/widgets/app/app_header.dart';
 import 'package:whats_for_dinner/views/widgets/app/create_or_join_banner.dart';
+import 'package:whats_for_dinner/views/widgets/app/empty_add_button.dart';
+import 'package:whats_for_dinner/views/widgets/lists/alternate_list_cell.dart';
 import 'package:whats_for_dinner/views/widgets/lists/list_cell.dart';
 
 class ListsScreen extends StatefulWidget {
@@ -26,7 +28,7 @@ class _ListsScreenState extends State<ListsScreen> {
         onTap: (() {
           Get.toNamed(RouteHelper.singleList, arguments: list);
         }),
-        child: ListCell(
+        child: AlternateListCell(
           list: list,
         ),
       );
@@ -39,6 +41,12 @@ class _ListsScreenState extends State<ListsScreen> {
     setState(() {});
   }
 
+  void test(List<ListData> lists) {
+    for (ListData list in lists) {
+      print(list.itemCount);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
@@ -46,7 +54,12 @@ class _ListsScreenState extends State<ListsScreen> {
     double screenWidth = mediaQuery.size.width;
     double height15 = screenHeight / 59.733;
     double height40 = screenHeight / 22.4;
+    double height100 = screenHeight / 8.96;
+
+    double fontSize18 = screenHeight / 49.7778;
+
     double width30 = screenWidth / 13.8;
+    double width100 = screenWidth / 4.14;
     return Scaffold(
       body: inGroup
           ? StreamBuilder<List<ListData>>(
@@ -71,15 +84,43 @@ class _ListsScreenState extends State<ListsScreen> {
                           goToAddListFile();
                         },
                       ),
-                      Expanded(
-                        child: Container(
-                          margin: EdgeInsets.symmetric(horizontal: width30),
-                          child: ListView(
-                            padding: const EdgeInsets.all(0),
-                            children: lists.map(buildListCell).toList(),
-                          ),
-                        ),
-                      )
+                      lists.isNotEmpty
+                          ? Expanded(
+                              child: Container(
+                                margin:
+                                    EdgeInsets.symmetric(horizontal: width30),
+                                child: ListView(
+                                  padding: const EdgeInsets.all(0),
+                                  children: lists.map(buildListCell).toList(),
+                                ),
+                              ),
+                            )
+                          : Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "You have not added any Lists",
+                                    style: TextStyle(
+                                      fontSize: fontSize18,
+                                      fontWeight: FontWeight.w400,
+                                      color: appGreen,
+                                    ),
+                                  ),
+                                  SizedBox(height: height15),
+                                  GestureDetector(
+                                    onTap: () {
+                                      goToAddListFile();
+                                    },
+                                    child: EmptyAddButton(
+                                      color: appGreen,
+                                      name: "Add List",
+                                      width: width100,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
                     ],
                   );
                 } else {
@@ -112,6 +153,7 @@ class _ListsScreenState extends State<ListsScreen> {
                       onCreateGroup: updateUI,
                       color: appGreen,
                       item: "list",
+                      onClickHere: updateUI,
                     ),
                   ),
                 ),

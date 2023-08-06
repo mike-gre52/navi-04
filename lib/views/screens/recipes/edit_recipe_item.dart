@@ -174,8 +174,7 @@ class _EditRecipeItemScreenState extends State<EditRecipeItemScreen> {
                 ? Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(
-                        width: width150,
+                      Expanded(
                         child: CustomTextfield(
                           icon: Icons.bookmark_outline,
                           placeholderText: 'Item',

@@ -94,15 +94,9 @@ class _AddListScreenState extends State<AddListScreen> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    if (_listNameController.text.length > 0) {
+                    if (_listNameController.text.trim() != "") {
                       listController.createList(_listNameController.text);
-
                       Navigator.pop(context);
-                    } else {
-                      Get.snackbar(
-                        'Please enter a name',
-                        'The name field cannot be empty',
-                      );
                     }
                   },
                   child: GradientButton(

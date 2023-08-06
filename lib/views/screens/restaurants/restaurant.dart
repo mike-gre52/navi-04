@@ -75,7 +75,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
     super.initState();
   }
 
-  Widget buildOrderCell(RestaurantOrder order) {
+  Widget buildOrderCell(String order) {
     return OrderCell(
       restaurant: restaurant,
       order: order,
@@ -92,6 +92,29 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
     setState(() {
       restaurant.restaurantUrl = url;
     });
+  }
+
+  addPhoneNumber(String phoneNumber) {
+    phoneNumber = stripPhoneNumber(phoneNumber);
+    if (validatePhoneNumber(phoneNumber)) {
+      restaurantController.updateRestaurantPhoneNumber(
+          restaurant.id!, phoneNumber);
+      setState(() {
+        restaurant.phoneNumber = phoneNumber;
+      });
+    } else {
+      //ignore number
+    }
+  }
+
+  void callRestaurant() async {
+    final Uri phoneNumberURI = Uri(
+      scheme: 'tel',
+      path: restaurant.phoneNumber,
+    );
+    if (await canLaunchUrl(phoneNumberURI)) {
+      launchUrl(phoneNumberURI);
+    }
   }
 
   @override
@@ -118,6 +141,8 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
     double fontSize24 = screenHeight / 37.333;
     double fontSize28 = screenHeight / 32;
     double fontSize40 = screenHeight / 22.4;
+
+    double iconSize20 = screenHeight / 44.8;
 
     return Scaffold(
       bottomNavigationBar: BannerAdWidget(),
@@ -176,7 +201,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     ConstrainedBox(
                       constraints: BoxConstraints(maxWidth: screenWidth75),
@@ -211,50 +236,122 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                     )
                   ],
                 ),
-                restaurant.restaurantUrl != null &&
-                        restaurant.restaurantUrl != ""
-                    ? GestureDetector(
-                        onTap: () {
-                          searchUrl(restaurant.restaurantUrl!);
-                        },
-                        child: Container(
-                          margin: EdgeInsets.only(left: width5),
-                          child: Text(
-                            trimSourceUrl(restaurant.restaurantUrl!),
-                            style: TextStyle(
-                                fontSize: fontSize18,
-                                color: darkGrey,
-                                fontWeight: FontWeight.w400),
+                Row(
+                  children: [
+                    restaurant.restaurantUrl != null &&
+                            restaurant.restaurantUrl != ""
+                        ? GestureDetector(
+                            onTap: () {
+                              searchUrl(restaurant.restaurantUrl!);
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(left: width5),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Website",
+                                    style: TextStyle(
+                                      fontSize: fontSize18,
+                                      color: darkGrey,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  SizedBox(width: width5),
+                                  Icon(
+                                    CupertinoIcons.globe,
+                                    color: darkGrey,
+                                    size: iconSize20,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
+                        : GestureDetector(
+                            onTap: () {
+                              Get.toNamed(
+                                  RouteHelper
+                                      .getSingleTextfieldAndSubmitScreen(),
+                                  arguments: [
+                                    appRed,
+                                    "Paste a Url below:",
+                                    addUrl,
+                                    CupertinoIcons.link
+                                  ]);
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(left: width5),
+                              child: Text(
+                                "add url",
+                                style: TextStyle(
+                                  fontSize: fontSize14,
+                                  color: darkGrey,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                      )
-                    : GestureDetector(
-                        onTap: () {
-                          Get.toNamed(
-                              RouteHelper.getSingleTextfieldAndSubmitScreen(),
-                              arguments: [
-                                appRed,
-                                "Paste a Url below:",
-                                addUrl,
-                                CupertinoIcons.link
-                              ]);
-                        },
-                        child: Container(
-                          margin: EdgeInsets.only(left: width5),
-                          child: Text(
-                            "add url",
-                            style: TextStyle(
-                                fontSize: fontSize14,
-                                color: darkGrey,
-                                fontWeight: FontWeight.w400),
+                    SizedBox(width: width25),
+                    restaurant.phoneNumber != null &&
+                            restaurant.phoneNumber != ""
+                        ? GestureDetector(
+                            onTap: () {
+                              callRestaurant();
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(left: width5),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Call",
+                                    style: TextStyle(
+                                      fontSize: fontSize18,
+                                      color: darkGrey,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  SizedBox(width: width5),
+                                  Icon(
+                                    Icons.call,
+                                    color: darkGrey,
+                                    size: iconSize20,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
+                        : GestureDetector(
+                            onTap: () {
+                              Get.toNamed(
+                                  RouteHelper
+                                      .getSingleTextfieldAndSubmitScreen(),
+                                  arguments: [
+                                    appRed,
+                                    "Add a Phone Number",
+                                    addPhoneNumber,
+                                    CupertinoIcons.link,
+                                    TextInputType.phone,
+                                  ]);
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(left: width5),
+                              child: Text(
+                                "add phone number",
+                                style: TextStyle(
+                                    fontSize: fontSize14,
+                                    color: darkGrey,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
+                  ],
+                ),
+                SizedBox(height: height5),
                 SelectRating(
                   rating: restaurant.rating != null ? restaurant.rating! : 1,
                   onTap: newRatingSelected,
                   isTapable: false,
                 ),
+
                 restaurant.time != null
                     ? Container(
                         margin: EdgeInsets.only(top: height5),
@@ -316,7 +413,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Orders",
+                      "Favorite Dishes",
                       style: TextStyle(
                         fontSize: fontSize28,
                         color: black,
@@ -330,7 +427,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                             arguments: [
                               restaurant,
                               reloadAfterOrderAdded,
-                              RestaurantOrder(name: "", item: ""),
+                              "",
                               false,
                             ]);
                       },
@@ -350,7 +447,9 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                     child: ListView(
                       padding: const EdgeInsets.all(0),
                       //crossAxisAlignment: CrossAxisAlignment.start,
-                      children: restaurant.orders.map(buildOrderCell).toList(),
+                      children: restaurant.orders != null
+                          ? restaurant.orders!.map(buildOrderCell).toList()
+                          : [],
                     ),
                   ),
                 )

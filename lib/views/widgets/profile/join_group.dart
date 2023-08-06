@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -10,6 +10,7 @@ import 'package:whats_for_dinner/models/group.dart';
 import 'package:whats_for_dinner/routes/routes.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
+import 'package:whats_for_dinner/models/user.dart';
 import 'package:whats_for_dinner/views/widgets/app/border_button.dart';
 import 'package:whats_for_dinner/views/widgets/app/custom_textfield.dart';
 import 'package:whats_for_dinner/views/widgets/profile/group_member.dart';
@@ -43,19 +44,182 @@ class _JoinGroupState extends State<JoinGroup> {
     _groupIdController.dispose();
   }
 
+  bool isLoading = false;
+  void toggleIsLoading() {
+    setState(() {
+      isLoading = !isLoading;
+    });
+  }
+
+  Future<bool> joinGroup(User user) async {
+    final newMember = Member(
+      name: user.name,
+      id: firebaseAuth.currentUser!.uid,
+      color: user.color,
+    );
+    bool didJoin = await groupController.addGroupMember(
+      _groupIdController.text,
+      newMember,
+    );
+    return didJoin;
+  }
+
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
     double screenHeight = mediaQuery.size.height;
     double screenWidth = mediaQuery.size.width;
+
+    double height5 = screenHeight / 179.2;
     double height10 = screenHeight / 89.6;
     double height15 = screenHeight / 59.733;
-    double height60 = screenHeight / 14.933;
+    double height25 = screenHeight / 35.84;
+    double height30 = screenHeight / 29.86;
+    double height40 = screenHeight / 22.4;
+    double height50 = screenHeight / 17.92;
+    double height65 = screenHeight / 13.784;
+    double height100 = screenHeight / 8.96;
+    double height200 = screenHeight / 4.48;
+    double height250 = screenHeight / 3.584;
+    double fontSize35 = screenHeight / 25.6;
+    double height205 = screenHeight / 4.3707;
     double width10 = screenWidth / 41.4;
-    double width275 = screenWidth / 1.505;
+    double width30 = screenWidth / 13.8;
+    double width80 = screenWidth / 5.175;
+    double width200 = screenWidth / 2.07;
+    double width350 = screenWidth / 1.182;
+    double fontSize14 = screenHeight / 64;
+    double fontSize16 = screenHeight / 56;
+    double fontSize18 = screenHeight / 49.777;
+    double fontSize20 = screenHeight / 44.8;
     double fontSize22 = screenHeight / 40.727;
 
     return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: height10,
+          ),
+          Text(
+            'Join Group',
+            style: TextStyle(
+              color: black,
+              fontSize: fontSize35,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          Text(
+            'Enter a group code if you have one. If not, you can create a group below',
+            style: TextStyle(
+              color: darkGrey,
+              fontSize: fontSize16,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          SizedBox(
+            height: height10,
+          ),
+          isLoading
+              ? Align(
+                  alignment: Alignment.center,
+                  child: CupertinoActivityIndicator(
+                    color: royalYellow,
+                    radius: height15,
+                  ),
+                )
+              : Container(
+                  height: height30,
+                ),
+          SizedBox(
+            height: height10,
+          ),
+          CustomTextfield(
+            icon: Icons.group_add_outlined,
+            placeholderText: 'Enter Group Code Here',
+            controller: _groupIdController,
+            borderColor: royalYellow,
+            textfieldWidth: width350,
+            textfieldHeight: height65,
+            borderRadius: height10,
+            onSubmit: (_) {},
+            onChanged: (_) {},
+          ),
+          SizedBox(
+            height: height10,
+          ),
+          GestureDetector(
+            onTap: () async {
+              if (_groupIdController.text.trim() != "") {
+                toggleIsLoading();
+                User user = await userController.getUserDataSnapshot();
+                bool didJoin = await joinGroup(user);
+                if (true) {}
+                toggleIsLoading();
+                //toggleIsLoading();
+                if (didJoin) {
+                  widget.onJoinedGroup();
+                }
+              }
+            },
+            child: Container(
+              height: height40,
+              width: width80,
+              decoration: BoxDecoration(
+                color: royalYellow,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Center(
+                child: Text(
+                  "Join",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: fontSize18,
+                      fontWeight: FontWeight.w600),
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: height30,
+          ),
+          Row(
+            children: [
+              Text(
+                'Want to start a group?',
+                style: TextStyle(
+                  fontSize: fontSize22,
+                  fontWeight: FontWeight.w300,
+                  color: black,
+                ),
+              ),
+              SizedBox(
+                width: height10,
+              ),
+              GestureDetector(
+                onTap: () {
+                  Get.toNamed(RouteHelper.createGroup,
+                      arguments: [widget.onJoinedGroup]);
+                },
+                child: Text(
+                  'Tap Here',
+                  style: TextStyle(
+                    fontSize: fontSize22,
+                    fontWeight: FontWeight.w800,
+                    color: royalYellow,
+                  ),
+                ),
+              )
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}
+    
+    /*
+    Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -123,8 +287,10 @@ class _JoinGroupState extends State<JoinGroup> {
               ),
               GestureDetector(
                 onTap: () {
-                  Get.toNamed(RouteHelper.createGroup,
-                      arguments: [widget.onJoinedGroup]);
+                  Get.toNamed(
+                    RouteHelper.createGroup,
+                    arguments: [widget.onJoinedGroup],
+                  );
                 },
                 child: Text(
                   'Click Here',
@@ -142,3 +308,4 @@ class _JoinGroupState extends State<JoinGroup> {
     );
   }
 }
+*/

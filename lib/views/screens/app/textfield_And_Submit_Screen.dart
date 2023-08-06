@@ -25,6 +25,7 @@ class _TextfieldAndSubmitScreenState extends State<TextfieldAndSubmitScreen> {
   late final String header;
   late final Function onSubmit;
   late final IconData textfieldIcon;
+  TextInputType keyboard = TextInputType.text;
 
   @override
   void initState() {
@@ -34,6 +35,12 @@ class _TextfieldAndSubmitScreenState extends State<TextfieldAndSubmitScreen> {
     header = data[1];
     onSubmit = data[2];
     textfieldIcon = data[3];
+
+    if (data.length > 4) {
+      keyboard = data[4];
+    } else {
+      keyboard = TextInputType.text;
+    }
   }
 
   @override
@@ -98,6 +105,7 @@ class _TextfieldAndSubmitScreenState extends State<TextfieldAndSubmitScreen> {
               textfieldWidth: double.maxFinite,
               textfieldHeight: height60,
               borderRadius: height10,
+              keyboard: keyboard,
               onSubmit: (_) {},
               onChanged: (_) {},
             ),

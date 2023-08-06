@@ -25,6 +25,16 @@ class _ListCellState extends State<ListCell> {
     listController.updateListName(widget.list, listName);
   }
 
+  int getUncheckedListItemsCount(List<Item> listItems) {
+    int numUncheckedItems = 0;
+    for (int i = 0; i < listItems.length; i++) {
+      if (listItems[i].isChecked != null && !listItems[i].isChecked!) {
+        numUncheckedItems++;
+      }
+    }
+    return numUncheckedItems;
+  }
+
   Widget buildListItem(Item item) => ListItem(
         listId: widget.list.id!,
         showCheckBox: false,
@@ -122,9 +132,10 @@ class _ListCellState extends State<ListCell> {
                                           ]);
                                     },
                                     child: Container(
-                                        margin: EdgeInsets.only(left: width5),
-                                        child: const Icon(
-                                            Icons.edit_note_rounded)),
+                                      margin: EdgeInsets.only(left: width5),
+                                      child:
+                                          const Icon(Icons.edit_note_rounded),
+                                    ),
                                   )
                                 : Container(),
                           ],
@@ -162,7 +173,7 @@ class _ListCellState extends State<ListCell> {
                                               CrossAxisAlignment.center,
                                           children: [
                                             Text(
-                                              '${widget.list.itemCount} items',
+                                              '${getUncheckedListItemsCount(listItems)} unchecked items',
                                               style: TextStyle(
                                                 fontSize: fontSize16,
                                                 fontWeight: FontWeight.w400,

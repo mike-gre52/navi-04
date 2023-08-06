@@ -8,6 +8,7 @@ import 'package:whats_for_dinner/models/list.dart';
 import 'package:whats_for_dinner/models/restaurant.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
+import 'package:whats_for_dinner/views/widgets/app/app_yes_no_popup.dart';
 
 import '../../../routes/routes.dart';
 
@@ -23,29 +24,22 @@ class RestaurantBottomPopup extends StatefulWidget {
 }
 
 class _RestaurantBottomPopupState extends State<RestaurantBottomPopup> {
+  onDialogAction() {
+    Navigator.pop(context);
+    Navigator.pop(context);
+    Navigator.pop(context);
+    restaurantController.deleteRestaurant(widget.restaurant);
+  }
+
   _showDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder: (_) => CupertinoAlertDialog(
-        title: const Text('Are you sure you want to delete the restaurant?'),
-        content: const Text('All data will be lost'),
-        actions: [
-          CupertinoDialogAction(
-            child: const Text('Cancel'),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          CupertinoDialogAction(
-            child: const Text('Yes'),
-            onPressed: () {
-              Navigator.pop(context);
-              Navigator.pop(context);
-              Navigator.pop(context);
-              restaurantController.deleteRestaurant(widget.restaurant);
-            },
-          ),
-        ],
+      builder: (_) => AppYesNoPopup(
+        header: 'Are you sure you want to delete the restaurant?',
+        subHeader: 'All data will be lost',
+        leftActionButton: "Yes",
+        rightActionButton: "Cancel",
+        leftActionFunction: onDialogAction,
       ),
       barrierDismissible: true,
     );

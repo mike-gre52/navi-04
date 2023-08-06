@@ -44,6 +44,7 @@ class _SignInState extends State<SignIn> {
     double screenWidth = mediaQuery.size.width;
     double height5 = screenHeight / 179.2;
     double height10 = screenHeight / 89.6;
+    double height20 = screenHeight / 44.8;
     double height40 = screenHeight / 22.4;
     double height65 = screenHeight / 13.784;
     double height200 = screenHeight / 4.48;
@@ -53,7 +54,7 @@ class _SignInState extends State<SignIn> {
     double fontSize35 = screenHeight / 25.6;
     double height30 = screenHeight / 29.86;
     double height100 = screenHeight / 8.96;
-    double width60percent = mediaQuery.size.width * .60;
+    double width35percent = mediaQuery.size.width * .35;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -70,15 +71,25 @@ class _SignInState extends State<SignIn> {
                 Align(
                   alignment: Alignment.center,
                   child: Image(
-                    width: width60percent,
+                    width: width35percent,
                     image: const AssetImage(
-                      'assets/images/loading_screen.png',
+                      'assets/images/transparent_logo.png',
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: height30,
-                ),
+                isLoading
+                    ? Container(
+                        child: Align(
+                          alignment: Alignment.topCenter,
+                          child: CupertinoActivityIndicator(
+                            color: royalYellow,
+                            radius: height20,
+                          ),
+                        ),
+                      )
+                    : Container(
+                        height: height40,
+                      ),
                 Text(
                   'Login',
                   style: TextStyle(
@@ -100,6 +111,7 @@ class _SignInState extends State<SignIn> {
                   borderRadius: height10,
                   onSubmit: (_) {},
                   onChanged: (_) {},
+                  keyboard: TextInputType.emailAddress,
                 ),
                 SizedBox(
                   height: height40,
@@ -121,7 +133,8 @@ class _SignInState extends State<SignIn> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Get.toNamed(RouteHelper.getResetPassword());
+                    Get.toNamed(RouteHelper.getResetPassword(),
+                        arguments: _emailController.text);
                   },
                   child: Align(
                     alignment: Alignment.centerRight,
@@ -172,18 +185,6 @@ class _SignInState extends State<SignIn> {
               ],
             ),
           ),
-          isLoading
-              ? Container(
-                  margin: EdgeInsets.only(top: height205),
-                  child: Align(
-                    alignment: Alignment.topCenter,
-                    child: CupertinoActivityIndicator(
-                      color: royalYellow,
-                      radius: 20,
-                    ),
-                  ),
-                )
-              : Container(),
         ],
       ),
     );

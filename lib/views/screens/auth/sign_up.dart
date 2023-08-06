@@ -64,7 +64,7 @@ class _SignUpState extends State<SignUp> {
     double height205 = screenHeight / 4.3707;
     double width30 = screenWidth / 13.8;
     double fontSize35 = screenHeight / 25.6;
-    double width60percent = mediaQuery.size.width * .60;
+    double width35percent = mediaQuery.size.width * .35;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -82,15 +82,25 @@ class _SignUpState extends State<SignUp> {
                 Align(
                   alignment: Alignment.center,
                   child: Image(
-                    width: width60percent,
+                    width: width35percent,
                     image: const AssetImage(
-                      'assets/images/loading_screen.png',
+                      'assets/images/transparent_logo.png',
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: height30,
-                ),
+                isLoading
+                    ? Container(
+                        child: Align(
+                          alignment: Alignment.topCenter,
+                          child: CupertinoActivityIndicator(
+                            color: royalYellow,
+                            radius: height20,
+                          ),
+                        ),
+                      )
+                    : Container(
+                        height: height40,
+                      ),
                 Text(
                   'Sign Up',
                   style: TextStyle(
@@ -126,6 +136,7 @@ class _SignUpState extends State<SignUp> {
                   borderRadius: height10,
                   onSubmit: (_) {},
                   onChanged: (_) {},
+                  keyboard: TextInputType.emailAddress,
                 ),
                 SizedBox(
                   height: height20,
@@ -181,18 +192,6 @@ class _SignUpState extends State<SignUp> {
               ],
             ),
           ),
-          isLoading
-              ? Container(
-                  margin: EdgeInsets.only(top: height205),
-                  child: Align(
-                    alignment: Alignment.topCenter,
-                    child: CupertinoActivityIndicator(
-                      color: royalYellow,
-                      radius: height20,
-                    ),
-                  ),
-                )
-              : Container(),
         ],
       ),
     );

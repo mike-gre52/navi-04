@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -33,6 +34,7 @@ Future<void> main() async {
 
 getData() async {
   await authController.getUserData();
+  print(signUpDate);
 }
 
 late String globalUsername;
@@ -41,6 +43,7 @@ late String globalColor;
 late bool inGroup;
 late bool isPremium;
 late List<String> categories;
+late Timestamp signUpDate;
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);

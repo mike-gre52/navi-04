@@ -75,6 +75,12 @@ class _ListScreenState extends State<ListScreen> {
     _bottomBannerAd.dispose();
   }
 
+  void onUpdateListName(String newName) {
+    setState(() {
+      list.name = newName;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     print(numItemsChecked);
@@ -120,7 +126,10 @@ class _ListScreenState extends State<ListScreen> {
                             top: Radius.circular(height20),
                           ),
                         ),
-                        builder: (context) => ListBottomPopup(list: list),
+                        builder: (context) => ListBottomPopup(
+                          list: list,
+                          onEditListName: onUpdateListName,
+                        ),
                       );
                     },
                     child: Icon(

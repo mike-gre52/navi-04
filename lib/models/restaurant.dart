@@ -7,9 +7,10 @@ class Restaurant {
   int? price;
   bool? doesDelivery;
   bool? isFavorite;
+  String? phoneNumber;
   String? id;
   String? restaurantUrl;
-  List<RestaurantOrder> orders;
+  List<String>? orders;
 
   Restaurant({
     required this.name,
@@ -18,6 +19,7 @@ class Restaurant {
     required this.price,
     required this.doesDelivery,
     required this.isFavorite,
+    required this.phoneNumber,
     required this.id,
     required this.restaurantUrl,
     required this.orders,
@@ -32,7 +34,8 @@ class Restaurant {
         "isFavorite": isFavorite,
         "id": id,
         "restaurantUrl": restaurantUrl,
-        "orders": RestaurantOrder.orderToJson(orders),
+        "orders": orders,
+        "phoneNumber": phoneNumber,
       };
 
   static Restaurant fromJson(Map<String, dynamic> json) {
@@ -43,28 +46,39 @@ class Restaurant {
       price: json["price"],
       doesDelivery: json["doesDelivery"],
       isFavorite: json["isFavorite"],
+      phoneNumber: json["phoneNumber"],
       id: json["id"],
       restaurantUrl: json["restaurantUrl"],
-      orders: RestaurantOrder.ordersFromJson(json),
+      orders: OrderItem.orderToJson(json),
     );
   }
 }
 
-class RestaurantOrder {
+class Order {
   String name;
+  List<OrderItem> orderItems;
+
+  Order({
+    required this.name,
+    required this.orderItems,
+  });
+}
+
+class OrderItem {
+  String? name;
   String item;
 
-  RestaurantOrder({
+  OrderItem({
     required this.name,
     required this.item,
   });
 
-  static List<RestaurantOrder> ordersFromJson(Map<String, dynamic> json) {
-    List<RestaurantOrder> orders = [];
+  static List<OrderItem> ordersFromJson(Map<String, dynamic> json) {
+    List<OrderItem> orders = [];
 
     if (json['orders'] != null) {
       json['orders'].forEach((name, item) {
-        final newInstruction = RestaurantOrder(name: name, item: item);
+        final newInstruction = OrderItem(name: name, item: item);
         orders.add(newInstruction);
       });
     }
@@ -72,18 +86,15 @@ class RestaurantOrder {
     return orders;
   }
 
-  static Map<String, dynamic> orderToJson(List<RestaurantOrder> orders) {
-    Map<String, dynamic> jsonData = {};
-    orders.forEach(
-      (i) {
-        if (i.name == "") {
-          jsonData[" "] = i.item;
-        } else {
-          jsonData[i.name] = i.item;
-        }
-      },
-    );
+  static List<String> orderToJson(Map<String, dynamic> json) {
+    List<String> orders = [];
+    if (json["orders"] != null) {
+      List<dynamic> rawList = json["orders"];
+      for (dynamic rawOrder in rawList) {
+        orders.add(rawOrder.toString());
+      }
+    }
 
-    return jsonData;
+    return orders;
   }
 }

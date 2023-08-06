@@ -5,38 +5,37 @@ import 'package:whats_for_dinner/models/list.dart';
 import 'package:whats_for_dinner/models/recipe.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
+import 'package:whats_for_dinner/views/widgets/app/app_yes_no_popup.dart';
 
 import '../../../routes/routes.dart';
 
 class RecipesPopup extends StatelessWidget {
   Recipe recipe;
+  bool inFolder;
+  String category;
+
   RecipesPopup({
     Key? key,
     required this.recipe,
+    required this.inFolder,
+    required this.category,
   }) : super(key: key);
 
   _showDialog(BuildContext context) {
+    void onDialogAction() {
+      Navigator.pop(context);
+      Navigator.pop(context);
+      recipeController.deleteRecipe(recipe);
+    }
+
     showDialog(
       context: context,
-      builder: (_) => CupertinoAlertDialog(
-        title: const Text('Are you sure you want to delete this Recipe?'),
-        content: const Text('All data will be lost'),
-        actions: [
-          CupertinoDialogAction(
-            child: const Text('Cancel'),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          CupertinoDialogAction(
-            child: const Text('Yes'),
-            onPressed: () {
-              Navigator.pop(context);
-              Navigator.pop(context);
-              recipeController.deleteRecipe(recipe);
-            },
-          ),
-        ],
+      builder: (_) => AppYesNoPopup(
+        header: "Are you sure you want to delete this Recipe?",
+        subHeader: "All data will be lost",
+        leftActionButton: "Yes",
+        rightActionButton: "Cancel",
+        leftActionFunction: onDialogAction,
       ),
       barrierDismissible: true,
     );
@@ -81,13 +80,38 @@ class RecipesPopup extends StatelessWidget {
               color: grey,
             ),
           ),
+          inFolder
+              ? PopupButton(
+                  icon: CupertinoIcons.folder_badge_plus,
+                  buttonName: 'Remove from Folder',
+                  isRed: false,
+                  onClick: () {
+                    print("trying to remove");
+                    Navigator.pop(context);
+                    recipeController.removeRecipeCategoryFromRecipe(
+                      recipe,
+                      category,
+                    );
+                  },
+                )
+              : PopupButton(
+                  icon: CupertinoIcons.folder_badge_plus,
+                  buttonName: 'Add to Folder',
+                  isRed: false,
+                  onClick: () {
+                    Navigator.pop(context);
+                    Get.toNamed(
+                      RouteHelper.getSelectCategoriesScreen(),
+                      arguments: recipe,
+                    );
+                  },
+                ),
           PopupButton(
             icon: CupertinoIcons.delete,
             buttonName: 'Delete Recipe',
             isRed: true,
             onClick: () {
               _showDialog(context);
-              //Navigator.pop(context);
             },
           ),
         ],
