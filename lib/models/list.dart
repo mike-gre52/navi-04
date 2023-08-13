@@ -4,25 +4,28 @@ class ListData {
   String? name;
   String? id;
   int? itemCount;
+  bool? shouldRender;
 
   ListData({
     required this.name,
     required this.id,
     required this.itemCount,
+    required this.shouldRender,
   });
 
   ListData.static({
     this.name = '',
     this.id = '',
     this.itemCount = 0,
+    this.shouldRender = true,
   });
 
   ListData fromJson(Map<String, dynamic> json) {
     final listData = ListData(
-      name: json['name'],
-      id: json['id'],
-      itemCount: json['itemCount'],
-    );
+        name: json['name'],
+        id: json['id'],
+        itemCount: json['itemCount'],
+        shouldRender: json["shouldRender"]);
     return listData;
   }
 
@@ -31,6 +34,7 @@ class ListData {
     data['name'] = this.name;
     data['id'] = this.id;
     data['itemCount'] = this.itemCount;
+    data["shouldRender"] = this.shouldRender;
     return data;
   }
 }

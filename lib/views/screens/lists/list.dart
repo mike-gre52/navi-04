@@ -29,12 +29,13 @@ class _ListScreenState extends State<ListScreen> {
 
   final list = Get.arguments as ListData;
 
-  addItem() {
+  addItem() async {
     if (_itemController.text.trim() != "") {
-      listController.addListItem(
+      await listController.addListItem(
         _itemController.text,
-        list.id!,
+        list,
       );
+
       _itemController.clear();
     }
   }
@@ -98,7 +99,7 @@ class _ListScreenState extends State<ListScreen> {
     double width275 = screenWidth / 1.505;
     double width5 = screenWidth / 82.8;
     double width15 = screenWidth / 27.6;
-    double fontSize18 = screenHeight / 49.777;
+    double fontSize18 = screenHeight / 49.7778;
     double fontSize20 = screenHeight / 44.8;
     return Scaffold(
       body: GestureDetector(

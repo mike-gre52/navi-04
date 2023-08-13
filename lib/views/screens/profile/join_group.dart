@@ -57,6 +57,11 @@ class _JoinGroupScreenState extends State<JoinGroupScreen> {
 
   Function onCreateGroup = Get.arguments as Function;
 
+  onInheritedOnCreateGroup() {
+    Navigator.pop(context);
+    onCreateGroup();
+  }
+
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
@@ -205,8 +210,10 @@ class _JoinGroupScreenState extends State<JoinGroupScreen> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Get.toNamed(RouteHelper.createGroup,
-                        arguments: [onCreateGroup]);
+                    Get.toNamed(
+                      RouteHelper.createGroup,
+                      arguments: [onInheritedOnCreateGroup],
+                    );
                   },
                   child: Text(
                     'Tap Here',

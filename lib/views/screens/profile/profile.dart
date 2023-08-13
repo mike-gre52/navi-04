@@ -29,7 +29,9 @@ import 'package:whats_for_dinner/views/widgets/profile/select_color.dart';
 import '../../widgets/app/rounded_corner_button.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  const ProfileScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -201,7 +203,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               onTap: () {
                                 Share.share(
                                     " $appUrl " +
-                                        " Download the Souchef Planner App!",
+                                        " Download the Souchef Meal Planner App!",
                                     subject: "Download Souchef");
                               },
                               child: const RoundedCornerButton(

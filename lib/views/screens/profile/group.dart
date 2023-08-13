@@ -22,12 +22,17 @@ import 'package:whats_for_dinner/views/widgets/profile/circle_check_button.dart'
 import 'package:whats_for_dinner/views/widgets/profile/group_members.dart';
 import 'package:whats_for_dinner/views/widgets/profile/join_group.dart';
 import 'package:whats_for_dinner/views/widgets/profile/select_color.dart';
+import 'package:whats_for_dinner/views/screens/recipes/recipe_navigator.dart';
 
 import '../../../models/user.dart';
 import '../../widgets/app/app_header.dart';
 
 class GroupScreen extends StatefulWidget {
-  GroupScreen({Key? key}) : super(key: key);
+  final Function setRecipeNavigator;
+  GroupScreen({
+    Key? key,
+    required this.setRecipeNavigator,
+  }) : super(key: key);
 
   @override
   State<GroupScreen> createState() => _GroupScreenState();
@@ -51,6 +56,7 @@ class _GroupScreenState extends State<GroupScreen> {
   _leaveGroupDialog(BuildContext context, Group group) {
     void _onRightAction() {
       groupController.leaveGroup(group);
+      widget.setRecipeNavigator(recipePage.allRecipes, "");
       setState(() {
         inGroup = false;
       });

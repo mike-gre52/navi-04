@@ -48,7 +48,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
 
     double fontSize28 = screenHeight / 33.285;
     double fontSize16 = screenHeight / 58.25;
-    double fontSize18 = screenHeight / 51.777;
+    double fontSize18 = screenHeight / 49.778;
     double fontSize20 = screenHeight / 44.8;
     updateUI() {
       setState(() {});

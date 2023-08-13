@@ -116,7 +116,10 @@ class _ListBottomPopupState extends State<ListBottomPopup> {
                     buttonName: 'Clear All',
                     onClick: () {
                       listController.deleteAllListItems(
-                          widget.list.id!, listItems, true);
+                        widget.list.id!,
+                        listItems,
+                        true,
+                      );
                       Navigator.pop(context);
                     },
                   ),
@@ -131,8 +134,8 @@ class _ListBottomPopupState extends State<ListBottomPopup> {
                     },
                   ),
                   PopupButton(
-                    icon: CupertinoIcons.plus_rectangle,
-                    buttonName: 'Add Recipe Items',
+                    icon: CupertinoIcons.plus,
+                    buttonName: 'Add Ingredients From Recipes ',
                     onClick: () {
                       Navigator.pop(context);
                       Get.toNamed(
@@ -142,7 +145,7 @@ class _ListBottomPopupState extends State<ListBottomPopup> {
                     },
                   ),
                   PopupButton(
-                    icon: Icons.edit,
+                    icon: Icons.edit_note_rounded,
                     buttonName: 'Edit List Name',
                     onClick: () {
                       Navigator.pop(context);
@@ -152,7 +155,7 @@ class _ListBottomPopupState extends State<ListBottomPopup> {
                           appGreen,
                           "Edit List Name",
                           onSubmitEditListName,
-                          Icons.edit,
+                          Icons.edit_note_rounded,
                           widget.list.name
                         ],
                       );

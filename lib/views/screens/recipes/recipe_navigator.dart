@@ -52,12 +52,20 @@ class _RecipeNavigatorState extends State<RecipeNavigator> {
   }
 
   void onSubmitEditFolderName(String newFolderName) async {
-    await recipeController.renameCategory(widget.category, newFolderName);
-    int categoryIndex = categories.indexOf(widget.category);
-    categories[categoryIndex] = newFolderName;
-    setState(() {
-      widget.category = newFolderName;
-    });
+    if (!categories.contains(newFolderName)) {
+      await recipeController.renameCategory(widget.category, newFolderName);
+      int categoryIndex = categories.indexOf(widget.category);
+      categories[categoryIndex] = newFolderName;
+      setState(() {
+        //widget.category = newFolderName;
+        widget.setScreen(recipePage.filteredRecipes, newFolderName);
+      });
+    } else {
+      Get.snackbar(
+        'The folder name already exists',
+        'You cannot create a duplicate folder',
+      );
+    }
 
     //
   }

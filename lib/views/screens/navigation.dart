@@ -68,7 +68,9 @@ class _NavigationState extends State<Navigation> {
       ),
       //const RecipesScreen(),
       const ResturantsScreen(),
-      GroupScreen(),
+      GroupScreen(
+        setRecipeNavigator: setRecipeScreen,
+      ),
     ];
 
     return Scaffold(

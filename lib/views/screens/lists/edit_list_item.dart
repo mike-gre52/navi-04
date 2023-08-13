@@ -11,6 +11,7 @@ import 'package:whats_for_dinner/main.dart';
 import 'package:whats_for_dinner/models/list.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
+import 'package:whats_for_dinner/views/widgets/app/app_yes_no_popup.dart';
 import 'package:whats_for_dinner/views/widgets/app/border_button.dart';
 import 'package:whats_for_dinner/views/widgets/app/custom_textfield.dart';
 
@@ -76,7 +77,7 @@ class _EditListItemScreenState extends State<EditListItemScreen> {
         .child('list-$listId')
         .child(item.id);
 
-    void _showActionSheet(
+    void _selectImageDialogue(
       BuildContext context,
       ImageController imageController,
       Function onSubmit,
@@ -134,6 +135,8 @@ class _EditListItemScreenState extends State<EditListItemScreen> {
     void onSubmit() async {
       if (imageController.image != null) {
         setState(() {
+          item.imageUrl = "";
+          isImageUploaded = false;
           imageJustUploaded = true;
         });
         String imageUrl =
@@ -243,7 +246,7 @@ class _EditListItemScreenState extends State<EditListItemScreen> {
                     imageJustUploaded: imageJustUploaded,
                     onSubmit: onSubmit,
                     imageController: imageController,
-                    showActionSheet: _showActionSheet,
+                    selectImageDialogue: _selectImageDialogue,
                   )
                 : Container(),
           ],
@@ -262,7 +265,7 @@ class ItemImage extends StatelessWidget {
   bool imageJustUploaded;
   Function onSubmit;
   ImageController imageController;
-  Function showActionSheet;
+  Function selectImageDialogue;
 
   ItemImage({
     super.key,
@@ -274,7 +277,7 @@ class ItemImage extends StatelessWidget {
     required this.imageJustUploaded,
     required this.onSubmit,
     required this.imageController,
-    required this.showActionSheet,
+    required this.selectImageDialogue,
   });
 
   @override
@@ -290,9 +293,19 @@ class ItemImage extends StatelessWidget {
     double height350 = screenHeight / 2.56;
     double width10 = screenWidth / 41.4;
     double width30 = screenWidth / 13.8;
+
+    double fontSize14 = screenHeight / 49.777;
     double fontSize18 = screenHeight / 49.777;
 
+    double iconSize32 = screenHeight / 28;
+
     double imageBoxWidth = double.maxFinite;
+    print("#########");
+    print(item.imageUrl);
+    print(imageJustUploaded);
+    print(isImageUploaded);
+
+    print("#########");
     return isImageUploaded && item.imageUrl != null
         ? Stack(
             children: [
@@ -303,6 +316,46 @@ class ItemImage extends StatelessWidget {
                   height: height350,
                   width: screenWidth,
                   fit: BoxFit.cover,
+                  //
+                  //
+                  //
+
+                  errorBuilder: (context, error, stackTrace) {
+                    return Center(
+                      child: Column(
+                        children: [
+                          Text(
+                            'Failed to load image',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: black,
+                            ),
+                          ),
+                          SizedBox(height: height10),
+                          GestureDetector(
+                            onTap: () {
+                              selectImageDialogue(
+                                context,
+                                imageController,
+                                onSubmit,
+                              );
+                            },
+                            child: Container(
+                              child: Center(
+                                child: Text(
+                                  "Tap here to change the image",
+                                  style: TextStyle(
+                                    fontSize: fontSize18,
+                                    color: appGreen,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    );
+                  },
                 ),
               ),
               isImageLoaded
@@ -317,9 +370,9 @@ class ItemImage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(5),
                           child: Container(
                             color: Colors.white.withOpacity(0.2),
-                            child: const Icon(
+                            child: Icon(
                               Icons.close_rounded,
-                              size: 32,
+                              size: iconSize32,
                             ),
                           ),
                         ),
@@ -363,7 +416,7 @@ class ItemImage extends StatelessWidget {
               )
             : GestureDetector(
                 onTap: () {
-                  showActionSheet(
+                  selectImageDialogue(
                     context,
                     imageController,
                     onSubmit,
@@ -406,27 +459,21 @@ Widget buildBlur({
     );
 
 _showDialog(BuildContext context, Item item, String listId, Function onDelete) {
+  void onDiologAction() {
+    Navigator.pop(context);
+    listController.updateListImageUrl(item, listId, "");
+    listController.deleteListItemImage(item, listId);
+    onDelete();
+  }
+
   showDialog(
     context: context,
-    builder: (_) => CupertinoAlertDialog(
-      title: const Text('Are you sure you want to delete the uploaded image?'),
-      actions: [
-        CupertinoDialogAction(
-          child: const Text('Cancel'),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        CupertinoDialogAction(
-          child: const Text('Yes'),
-          onPressed: () {
-            Navigator.pop(context);
-            listController.updateListImageUrl(item, listId, "");
-            listController.deleteListItemImage(item, listId);
-            onDelete();
-          },
-        ),
-      ],
+    builder: (_) => AppYesNoPopup(
+      header: 'Are you sure you want to delete the uploaded image?',
+      subHeader: '',
+      leftActionButton: "Yes",
+      rightActionButton: "Cancel",
+      leftActionFunction: onDiologAction,
     ),
     barrierDismissible: true,
   );

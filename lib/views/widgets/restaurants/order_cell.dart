@@ -58,6 +58,7 @@ class OrderCell extends StatelessWidget {
     double screenWidth = mediaQuery.size.width;
     double screenHeight = mediaQuery.size.height;
     double height5 = screenHeight / 179.2;
+    double height10 = screenHeight / 89.6;
     double height15 = screenHeight / 59.733;
     double height25 = screenHeight / 35.84;
     double width5 = screenWidth / 82.8;
@@ -66,7 +67,7 @@ class OrderCell extends StatelessWidget {
 
     return Container(
       margin: EdgeInsets.only(
-        top: height5,
+        top: height10,
         left: height5,
       ),
       child: Column(

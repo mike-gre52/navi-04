@@ -155,47 +155,59 @@ class ListsController extends GetxController {
     }
   }
 
-  void addListItem(String newItem, String listId) async {
-    var itemId = DateTime.now().toString();
-    final item =
-        Item(name: newItem, id: itemId, isChecked: false, imageUrl: '');
+  Future<void> addListItem(String newItem, ListData list) async {
+    int listLength = await getListItemCount(list.id!);
+    if (listLength <= 149) {
+      var itemId = DateTime.now().toString();
+      final item =
+          Item(name: newItem, id: itemId, isChecked: false, imageUrl: '');
 
-    // add item to list collection
-    bool shouldIncrement = false;
-    try {
-      await firestore
-          .collection('groups')
-          .doc(globalGroupId)
-          .collection('lists')
-          .doc(listId) //specific list
-          .collection('items')
-          .doc(itemId) //need to generate unquie id
-          .set(item.toJson()); //will need to build Item
-      shouldIncrement = true;
-    } catch (e) {
-      print(e);
-      shouldIncrement = false;
-    }
-    //update itemCount if item succesfully added
-    if (shouldIncrement) {
-      int numItems = await getListLength(listId);
-      adjustListCounter(listId, numItems);
+      // add item to list collection
+      bool shouldIncrement = false;
+      try {
+        await firestore
+            .collection('groups')
+            .doc(globalGroupId)
+            .collection('lists')
+            .doc(list.id) //specific list
+            .collection('items')
+            .doc(itemId) //need to generate unquie id
+            .set(item.toJson()); //will need to build Item
+        shouldIncrement = true;
+      } catch (e) {
+        print(e);
+        shouldIncrement = false;
+      }
+      //update itemCount if item succesfully added
+      if (shouldIncrement) {
+        int numItems = await getListLength(list.id);
+        adjustListCounter(list.id, numItems);
+      }
+    } else {
+      Get.snackbar(
+        'The list is full',
+        'You have reached the maximum items for a list',
+      );
     }
   }
 
-  void deleteListItem(Item item, String listId, bool showSnackBar,
+  Future<void> deleteListItem(Item item, String listId, bool showSnackBar,
       bool addToRecentlyDeleted) async {
     if (addToRecentlyDeleted) {
       //add to recently deleted
-
-      firestore
-          .collection('groups')
-          .doc(globalGroupId)
-          .collection('lists')
-          .doc(listId) //specific list
-          .collection('recently-deleted')
-          .doc(item.id)
-          .set(item.toJson());
+      item.imageUrl = "";
+      try {
+        firestore
+            .collection('groups')
+            .doc(globalGroupId)
+            .collection('lists')
+            .doc(listId) //specific list
+            .collection('recently-deleted')
+            .doc(item.id)
+            .set(item.toJson());
+      } catch (e) {
+        print("error deleting item");
+      }
     }
 
     //delete last recently deleted if full
@@ -336,7 +348,7 @@ class ListsController extends GetxController {
   Future<void> deleteAllListItems(
       String listId, List<Item> listItems, bool addToRecentlyDeleted) async {
     for (var i = 0; i < listItems.length; i++) {
-      deleteListItem(listItems[i], listId, false, addToRecentlyDeleted);
+      await deleteListItem(listItems[i], listId, false, addToRecentlyDeleted);
     }
   }
 
@@ -375,6 +387,7 @@ class ListsController extends GetxController {
       name: listName,
       id: listId,
       itemCount: 0,
+      shouldRender: true,
     );
 
     firestore
@@ -385,16 +398,33 @@ class ListsController extends GetxController {
         .set(list.toJson());
   }
 
+  Future<void> setListRenderToFalse(String listId) async {
+    try {
+      firestore
+          .collection('groups')
+          .doc(globalGroupId)
+          .collection('lists')
+          .doc(listId) //specific list
+          .update({'shouldRender': false});
+    } catch (e) {
+      print("error updating list render status");
+    }
+  }
+
   Future<void> deleteList(String listId, List<Item> listItems,
       List<Item> recentlyDeletedListItems) async {
+    await setListRenderToFalse(listId);
     await deleteAllListItems(listId, listItems, false);
+    //await Future.delayed(const Duration(milliseconds: 2000));
     await clearRecentlyDeleted(listId, recentlyDeletedListItems);
-    firestore
+    //await Future.delayed(const Duration(milliseconds: 2000));
+    await firestore
         .collection('groups')
         .doc(globalGroupId)
         .collection('lists')
         .doc(listId) //specific list
         .delete();
+    //await Future.delayed(const Duration(milliseconds: 2000));
   }
 
   void editListItemName(String itemId, String listId, String newName) {

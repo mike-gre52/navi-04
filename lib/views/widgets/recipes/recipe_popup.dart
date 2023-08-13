@@ -94,7 +94,7 @@ class _RecipePopupState extends State<RecipePopup> {
             ),
           ),
           PopupButton(
-            icon: CupertinoIcons.plus_rectangle,
+            icon: CupertinoIcons.plus,
             buttonName: 'Add Ingredient to list',
             onClick: () {
               Navigator.pop(context);

@@ -40,12 +40,13 @@ class ImageController {
     isImageSelected = true;
     compressImage();
     onSubmit();
+    print("error test-------");
     //Future<String> url = uploadToStorage(profileImage!);
   }
 
   Future<void> compressImage() async {
-    print("compressed");
-    print("before : " + image!.lengthSync().toString());
+    //print("compressed");
+    //print("before : " + image!.lengthSync().toString());
     if (isImageSelected) {
       var compressedImageFile = await FlutterImageCompress.compressAndGetFile(
           image!.absolute.path, "${image!.path}compressed.jpg",
@@ -55,7 +56,7 @@ class ImageController {
       Rx<File?> compressedImage = Rx<File?>(File(compressedImageFile!.path));
 
       _pickedImage = compressedImage;
-      print("after : " + image!.lengthSync().toString());
+      //print("after : " + image!.lengthSync().toString());
     }
   }
 

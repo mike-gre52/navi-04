@@ -60,6 +60,7 @@ class _SelectedCategoriesScreenState extends State<SelectedCategoriesScreen> {
 
   void onSubmitAddCategory(String category) {
     bool didAdd = recipeController.addRecipeCategory(category);
+
     if (didAdd) {
       setState(() {
         categories.add(category);

@@ -112,9 +112,11 @@ class _TextfieldAndSubmitScreenState extends State<TextfieldAndSubmitScreen> {
             SizedBox(height: height15),
             GestureDetector(
               onTap: () {
-                //Takes a single String parameter(the text in the textfield)
-                onSubmit(_textController.text);
-                Navigator.pop(context);
+                if (_textController.text.trim() != "") {
+                  //Takes a single String parameter(the text in the textfield)
+                  onSubmit(_textController.text);
+                  Navigator.pop(context);
+                }
               },
               child: BorderButton(
                 buttonColor: color,

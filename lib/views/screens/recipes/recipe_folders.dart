@@ -164,20 +164,30 @@ class _RecipeFoldersScreenState extends State<RecipeFoldersScreen> {
           left: width20,
           right: width20,
         ),
-        child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 200,
-            childAspectRatio: 1,
-            crossAxisSpacing: 20,
-            mainAxisSpacing: 20,
-          ),
-          padding: const EdgeInsets.all(0),
-          itemCount: categories.length,
-          itemBuilder: (BuildContext context, int index) {
-            return buildRecipeCell(
-                categories[index], screenHeight, screenWidth);
-          },
-        ),
+        child: categories.isNotEmpty
+            ? GridView.builder(
+                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 200,
+                  childAspectRatio: 1,
+                  crossAxisSpacing: 20,
+                  mainAxisSpacing: 20,
+                ),
+                padding: const EdgeInsets.all(0),
+                itemCount: categories.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return buildRecipeCell(
+                      categories[index], screenHeight, screenWidth);
+                },
+              )
+            : Center(
+                child: Text(
+                  "No Folders Created",
+                  style: TextStyle(
+                    color: appBlue,
+                    fontSize: fontSize16,
+                  ),
+                ),
+              ),
       ),
     );
   }

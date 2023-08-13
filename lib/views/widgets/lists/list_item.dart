@@ -67,7 +67,7 @@ class ListItem extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    item.imageUrl != ""
+                    item.imageUrl != "" && item.imageUrl != null
                         ? Icon(
                             Icons.image,
                             size: height20,

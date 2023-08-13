@@ -92,7 +92,7 @@ class _SelectRecipeCategoriesState extends State<SelectRecipeCategories> {
                           ]);
                     },
                     child: Text(
-                      "Tap Here",
+                      "Click Here",
                       style: TextStyle(
                         fontSize: fontSize16,
                         color: appBlue,

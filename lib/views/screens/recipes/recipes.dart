@@ -10,7 +10,7 @@ import 'package:whats_for_dinner/utils/helper.dart';
 import 'package:whats_for_dinner/views/screens/recipes/recipe_navigator.dart';
 import 'package:whats_for_dinner/views/widgets/app/app_header.dart';
 import 'package:whats_for_dinner/views/widgets/app/create_or_join_banner.dart';
-import 'package:whats_for_dinner/views/widgets/app/empty_add_button.dart';
+import 'package:whats_for_dinner/views/widgets/app/tap_here_rich_text.dart';
 import 'package:whats_for_dinner/views/widgets/recipes/blue_folder.dart';
 import 'package:whats_for_dinner/views/widgets/recipes/recipe_cell.dart';
 import 'package:whats_for_dinner/views/widgets/recipes/recipe_link_cell.dart';
@@ -127,11 +127,7 @@ class _RecipesScreenState extends State<RecipesScreen> {
                         onTap: () {
                           Get.toNamed(RouteHelper.getAddRecipe());
                         },
-                        child: EmptyAddButton(
-                          color: appBlue,
-                          name: "Add Recipes",
-                          width: width150,
-                        ),
+                        child: const TapHereRichText(),
                       )
                     ],
                   ),

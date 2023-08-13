@@ -37,7 +37,6 @@ class RecipeController extends GetxController {
   }
 
   Stream<List<Recipe>> getRecipesInFolder(String category) {
-    print("dsfdsf");
     Stream<List<Recipe>> data = firestore
         .collection('groups')
         .doc(globalGroupId)
@@ -58,7 +57,7 @@ class RecipeController extends GetxController {
             return recipe.id != null && recipe.id != "";
           }).toList(),
         );
-    print(data);
+
     return data;
   }
 

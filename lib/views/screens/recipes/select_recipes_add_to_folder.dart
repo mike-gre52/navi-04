@@ -170,6 +170,7 @@ class _SelectRecipesAddToFolderScreenState
                                         right: width100,
                                         left: width100,
                                         top: height50,
+                                        bottom: height75,
                                       ),
                                       height: height75,
                                       decoration: BoxDecoration(

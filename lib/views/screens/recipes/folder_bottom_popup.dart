@@ -95,7 +95,7 @@ class _FolderBottomPopupState extends State<FolderBottomPopup> {
               Get.toNamed(
                 RouteHelper.getEditNameScreen(),
                 arguments: [
-                  color10,
+                  appBlue,
                   "Edit Folder Name",
                   widget.onSubmitEditFolderName,
                   Icons.edit,

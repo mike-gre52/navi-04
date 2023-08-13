@@ -42,7 +42,7 @@ class SelectListFromImportRecipe extends StatelessWidget {
     Widget buildListCell(ListData list) => GestureDetector(
           onTap: () {
             for (String element in ingredients) {
-              listController.addListItem(element, list.id!);
+              listController.addListItem(element, list);
             }
             Navigator.pop(context);
             showSnackBar("Success",

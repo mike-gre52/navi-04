@@ -36,6 +36,11 @@ class _SelectIngredientsState extends State<SelectIngredients> {
     });
   }
 
+  Future<int> listItemCount() async {
+    int listLength = await listController.getListItemCount(list.id!);
+    return listLength;
+  }
+
   Widget buildRecipeIngredient(Ingredient ingredient) {
     return ListIngredientCell(
       ingredient: ingredient.name,
@@ -115,10 +120,19 @@ class _SelectIngredientsState extends State<SelectIngredients> {
                       maxLines: 2,
                     ),
                     GestureDetector(
-                      onTap: () {
-                        ingredientsToAdd.forEach((ingrediant) {
-                          listController.addListItem(ingrediant, list.id!);
-                        });
+                      onTap: () async {
+                        int listLength = await listItemCount();
+                        print(listLength + ingredientsToAdd.length);
+                        if (listLength + ingredientsToAdd.length <= 150) {
+                          ingredientsToAdd.forEach((ingrediant) {
+                            listController.addListItem(ingrediant, list);
+                          });
+                        } else {
+                          Get.snackbar(
+                            'Too many items',
+                            'The is not enough space to add the ${ingredientsToAdd.length} ingredients selected',
+                          );
+                        }
 
                         Navigator.pop(context);
                         Navigator.pop(context);
