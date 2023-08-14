@@ -64,7 +64,7 @@ class _SignUpState extends State<SignUp> {
     double height205 = screenHeight / 4.3707;
     double width30 = screenWidth / 13.8;
     double fontSize35 = screenHeight / 25.6;
-    double width35percent = mediaQuery.size.width * .35;
+    double width25percent = mediaQuery.size.width * .25;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -77,12 +77,12 @@ class _SignUpState extends State<SignUp> {
               children: [
                 //AddProfileImage(),
                 SizedBox(
-                  height: height100,
+                  height: height65,
                 ),
                 Align(
                   alignment: Alignment.center,
                   child: Image(
-                    width: width35percent,
+                    width: width25percent,
                     image: const AssetImage(
                       'assets/images/transparent_logo.png',
                     ),
@@ -94,12 +94,12 @@ class _SignUpState extends State<SignUp> {
                           alignment: Alignment.topCenter,
                           child: CupertinoActivityIndicator(
                             color: royalYellow,
-                            radius: height20,
+                            radius: height10,
                           ),
                         ),
                       )
                     : Container(
-                        height: height40,
+                        height: height20,
                       ),
                 Text(
                   'Sign Up',
@@ -109,9 +109,7 @@ class _SignUpState extends State<SignUp> {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                SizedBox(
-                  height: height30,
-                ),
+
                 CustomTextfield(
                   icon: Icons.person_outline_rounded,
                   placeholderText: 'Username',
@@ -124,7 +122,7 @@ class _SignUpState extends State<SignUp> {
                   onChanged: (_) {},
                 ),
                 SizedBox(
-                  height: height20,
+                  height: height10,
                 ),
                 CustomTextfield(
                   icon: Icons.mail_outline_rounded,
@@ -139,7 +137,7 @@ class _SignUpState extends State<SignUp> {
                   keyboard: TextInputType.emailAddress,
                 ),
                 SizedBox(
-                  height: height20,
+                  height: height10,
                 ),
                 CustomTextfield(
                   icon: Icons.lock_outline,
@@ -154,7 +152,7 @@ class _SignUpState extends State<SignUp> {
                   onChanged: (_) {},
                 ),
                 SizedBox(
-                  height: height30,
+                  height: height10,
                 ),
                 GestureDetector(
                   onTap: () async {

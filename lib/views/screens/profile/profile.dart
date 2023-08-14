@@ -241,7 +241,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         Align(
                           alignment: Alignment.center,
                           child: Text(
-                            "v1.0.18",
+                            "v1.0.34",
                             style: TextStyle(color: darkGrey, fontSize: 12),
                           ),
                         ),

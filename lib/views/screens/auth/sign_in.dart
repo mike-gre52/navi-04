@@ -54,7 +54,7 @@ class _SignInState extends State<SignIn> {
     double fontSize35 = screenHeight / 25.6;
     double height30 = screenHeight / 29.86;
     double height100 = screenHeight / 8.96;
-    double width35percent = mediaQuery.size.width * .35;
+    double width25percent = mediaQuery.size.width * .25;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -66,12 +66,12 @@ class _SignInState extends State<SignIn> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
-                  height: height100,
+                  height: height65,
                 ),
                 Align(
                   alignment: Alignment.center,
                   child: Image(
-                    width: width35percent,
+                    width: width25percent,
                     image: const AssetImage(
                       'assets/images/transparent_logo.png',
                     ),
@@ -83,12 +83,12 @@ class _SignInState extends State<SignIn> {
                           alignment: Alignment.topCenter,
                           child: CupertinoActivityIndicator(
                             color: royalYellow,
-                            radius: height20,
+                            radius: height10,
                           ),
                         ),
                       )
                     : Container(
-                        height: height40,
+                        height: height20,
                       ),
                 Text(
                   'Login',
@@ -97,9 +97,6 @@ class _SignInState extends State<SignIn> {
                     fontSize: fontSize35,
                     fontWeight: FontWeight.w500,
                   ),
-                ),
-                SizedBox(
-                  height: height40,
                 ),
                 CustomTextfield(
                   icon: Icons.mail_outline_rounded,
@@ -114,7 +111,7 @@ class _SignInState extends State<SignIn> {
                   keyboard: TextInputType.emailAddress,
                 ),
                 SizedBox(
-                  height: height40,
+                  height: height10,
                 ),
                 CustomTextfield(
                   icon: Icons.lock_outline,
