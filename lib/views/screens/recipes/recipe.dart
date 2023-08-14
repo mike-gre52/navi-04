@@ -9,6 +9,7 @@ import 'package:whats_for_dinner/main.dart';
 import 'package:whats_for_dinner/utils/colors.dart';
 import 'package:whats_for_dinner/utils/constants.dart';
 import 'package:whats_for_dinner/utils/helper.dart';
+import 'package:whats_for_dinner/views/widgets/app/app_yes_no_popup.dart';
 import 'package:whats_for_dinner/views/widgets/recipes/recipe_popup.dart';
 
 import '../../../controllers/image_controller.dart';
@@ -58,6 +59,26 @@ class _RecipeScreenState extends State<RecipeScreen> {
       setState(() {
         recipe.imageUrl = newUrl;
       });
+    }
+
+    _showPremiumFeatureDialog(BuildContext context) {
+      print("showiung diolog");
+      showDialog(
+        context: context,
+        builder: (_) => CupertinoAlertDialog(
+          title: Text("Premium Feature"),
+          content: Text(
+              "Adding images to a recipe is a premium feature, which is coming soon!"),
+          actions: [
+            CupertinoDialogAction(
+              child: Text("Ok"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      );
     }
 
     void onSubmit() async {
@@ -133,11 +154,13 @@ class _RecipeScreenState extends State<RecipeScreen> {
                           StackTrace? stackTrace) {
                         return GestureDetector(
                           onTap: () {
-                            _showActionSheet(
-                              context,
-                              imageController,
-                              onSubmit,
-                            );
+                            isPremium
+                                ? _showActionSheet(
+                                    context,
+                                    imageController,
+                                    onSubmit,
+                                  )
+                                : _showPremiumFeatureDialog(context);
                           },
                           child: recipe.isImport != null && !recipe.isImport!
                               ? Center(

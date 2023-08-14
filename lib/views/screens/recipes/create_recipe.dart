@@ -274,77 +274,86 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                         ),
                         SizedBox(height: height10),
                         //Select Image Row
-                        Container(
-                          margin: EdgeInsets.symmetric(horizontal: width25),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  _showActionSheet(
-                                      context, imageController, setImageStatus);
-                                },
-                                child: isImageSelected
-                                    ? Container(
-                                        height: height75,
-                                        width: width75,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(height10),
-                                          color: Colors.grey,
-                                        ),
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(height10),
-                                          child: Image.file(
-                                            imageController.image!,
-                                            height: height150,
-                                            width: width100,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      )
-                                    : Container(
-                                        height: height75,
-                                        width: width75,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: Colors.grey,
-                                        ),
-                                        child: Icon(
-                                          Icons.camera_alt_outlined,
-                                          size: height35,
-                                          color: appBlue,
+
+                        isPremium
+                            ? Container(
+                                margin:
+                                    EdgeInsets.symmetric(horizontal: width25),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        _showActionSheet(context,
+                                            imageController, setImageStatus);
+                                      },
+                                      child: isImageSelected
+                                          ? Container(
+                                              height: height75,
+                                              width: width75,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        height10),
+                                                color: Colors.grey,
+                                              ),
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        height10),
+                                                child: Image.file(
+                                                  imageController.image!,
+                                                  height: height150,
+                                                  width: width100,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                            )
+                                          : Container(
+                                              height: height75,
+                                              width: width75,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                color: Colors.grey,
+                                              ),
+                                              child: Icon(
+                                                Icons.camera_alt_outlined,
+                                                size: height35,
+                                                color: appBlue,
+                                              ),
+                                            ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () async {
+                                        // pick photo
+                                        //_showDialog(context);
+                                        _showActionSheet(context,
+                                            imageController, setImageStatus);
+                                      },
+                                      child: RichText(
+                                        text: TextSpan(
+                                          style: TextStyle(
+                                              fontSize: fontSize20,
+                                              color: Colors.black,
+                                              fontFamily:
+                                                  'IBMPlexSansDevanagari'),
+                                          children: <TextSpan>[
+                                            TextSpan(
+                                              text: 'Click Here',
+                                              style: TextStyle(color: appBlue),
+                                            ),
+                                            const TextSpan(
+                                                text: ' to add a image')
+                                          ],
                                         ),
                                       ),
-                              ),
-                              GestureDetector(
-                                onTap: () async {
-                                  // pick photo
-                                  //_showDialog(context);
-                                  _showActionSheet(
-                                      context, imageController, setImageStatus);
-                                },
-                                child: RichText(
-                                  text: TextSpan(
-                                    style: TextStyle(
-                                        fontSize: fontSize20,
-                                        color: Colors.black,
-                                        fontFamily: 'IBMPlexSansDevanagari'),
-                                    children: <TextSpan>[
-                                      TextSpan(
-                                        text: 'Click Here',
-                                        style: TextStyle(color: appBlue),
-                                      ),
-                                      const TextSpan(text: ' to add a image')
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
+                              )
+                            : Container(),
                         SizedBox(height: height10),
                         //Prep, Cook, Servings Row
                         Container(

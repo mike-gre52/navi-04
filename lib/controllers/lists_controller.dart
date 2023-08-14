@@ -194,19 +194,31 @@ class ListsController extends GetxController {
   Future<void> deleteListItem(Item item, String listId, bool showSnackBar,
       bool addToRecentlyDeleted) async {
     if (addToRecentlyDeleted) {
-      //add to recently deleted
-      item.imageUrl = "";
-      try {
-        firestore
-            .collection('groups')
-            .doc(globalGroupId)
-            .collection('lists')
-            .doc(listId) //specific list
-            .collection('recently-deleted')
-            .doc(item.id)
-            .set(item.toJson());
-      } catch (e) {
-        print("error deleting item");
+      //delete image if it exists
+      bool didDeleteImage;
+      if (item.imageUrl != '') {
+        didDeleteImage = await deleteListItemImage(item, listId);
+      } else {
+        didDeleteImage = true;
+      }
+      if (didDeleteImage) {
+        //add to recently deleted
+        item.imageUrl = "";
+        try {
+          firestore
+              .collection('groups')
+              .doc(globalGroupId)
+              .collection('lists')
+              .doc(listId) //specific list
+              .collection('recently-deleted')
+              .doc(item.id)
+              .set(item.toJson());
+        } catch (e) {
+          Get.snackbar(
+            'Error deleting list item',
+            '',
+          );
+        }
       }
     }
 
@@ -215,12 +227,6 @@ class ListsController extends GetxController {
     List<Item> recentlyDeleted = await getRecentlyDeletedTest(listId);
     if (recentlyDeleted.length > 20) {
       deleteRecentlyDeletedItem(recentlyDeleted.first.id, listId);
-    }
-
-    //delete image if it exists
-    if (item.imageUrl != '') {
-      deleteListItemImage(item, listId);
-      item.imageUrl = '';
     }
 
     firestore
@@ -236,49 +242,25 @@ class ListsController extends GetxController {
 
     int numItems = await getListLength(listId);
     adjustListCounter(listId, numItems);
-    /*
-    if (showSnackBar) {
-      Get.snackbar(
-        '',
-        '',
-        messageText: Container(
-          margin: EdgeInsets.only(bottom: 10),
-          child: const Align(
-            alignment: Alignment.center,
-            child: Text(
-              'Undo',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ),
-        //backgroundColor: red,
-        //maxWidth: ,
-        //margin: EdgeInsets.only(left: 150),
-
-        duration: const Duration(milliseconds: 3500),
-        padding: const EdgeInsets.all(0),
-        snackPosition: SnackPosition.BOTTOM,
-
-        onTap: (snack) {
-          restoreListItem(item, listId);
-        },
-      );
-    }
-    */
   }
 
-  void deleteListItemImage(Item item, String listId) {
-    firebaseStorage
-        .ref()
-        .child(globalGroupId)
-        .child('listImages')
-        .child('list-$listId')
-        .child(item.id)
-        .delete();
+  Future<bool> deleteListItemImage(Item item, String listId) async {
+    try {
+      await firebaseStorage
+          .ref()
+          .child(globalGroupId)
+          .child('listImages')
+          .child('list-$listId')
+          .child(item.id)
+          .delete();
+      return true;
+    } catch (e) {
+      Get.snackbar(
+        'Error deleting list item',
+        '',
+      );
+      return false;
+    }
   }
 
   void updateListImageUrl(Item item, String listId, String imageUrl) {

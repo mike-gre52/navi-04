@@ -174,9 +174,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        ProfileRow(name: data.name, icon: Icons.person_rounded),
+                        ProfileRow(
+                          name: data.name,
+                          icon: Icons.person_rounded,
+                        ),
                         SizedBox(height: height10),
-                        ProfileRow(name: data.email, icon: CupertinoIcons.mail),
+                        ProfileRow(
+                          name: data.email,
+                          icon: CupertinoIcons.mail,
+                        ),
                         SizedBox(height: height20),
                         const CurrentPlan(),
                         SizedBox(height: height20),
@@ -369,13 +375,16 @@ class ProfileRow extends StatelessWidget {
           color: royalYellow,
         ),
         SizedBox(width: width20),
-        Text(
-          name,
-          style: TextStyle(
-            fontSize: fontSize22,
-            fontWeight: FontWeight.w200,
+        Expanded(
+          child: Text(
+            name,
+            style: TextStyle(
+              fontSize: fontSize22,
+              fontWeight: FontWeight.w200,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
-        ),
+        )
       ],
     );
   }

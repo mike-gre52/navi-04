@@ -78,10 +78,14 @@ class _RecipePopupState extends State<RecipePopup> {
       }
     }
 
+    bool canEditImage() {
+      return isPremium &&
+          widget.recipe.isImport != null &&
+          !widget.recipe.isImport!;
+    }
+
     return Container(
-      height: widget.recipe.isImport != null && !widget.recipe.isImport!
-          ? height280
-          : height240,
+      height: canEditImage() ? height280 : height240,
       child: Column(
         children: [
           Container(
@@ -129,7 +133,7 @@ class _RecipePopupState extends State<RecipePopup> {
               ]);
             },
           ),
-          widget.recipe.isImport != null && !widget.recipe.isImport!
+          canEditImage()
               ? PopupButton(
                   icon: Icons.image,
                   isRed: false,
