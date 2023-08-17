@@ -193,58 +193,70 @@ class ListsController extends GetxController {
 
   Future<void> deleteListItem(Item item, String listId, bool showSnackBar,
       bool addToRecentlyDeleted) async {
+    bool didDeleteImage = await deleteListItemImage(item, listId);
     if (addToRecentlyDeleted) {
-      //delete image if it exists
-      bool didDeleteImage;
-      if (item.imageUrl != '') {
-        didDeleteImage = await deleteListItemImage(item, listId);
-      } else {
-        didDeleteImage = true;
-      }
-      if (didDeleteImage) {
-        //add to recently deleted
-        item.imageUrl = "";
-        try {
-          firestore
-              .collection('groups')
-              .doc(globalGroupId)
-              .collection('lists')
-              .doc(listId) //specific list
-              .collection('recently-deleted')
-              .doc(item.id)
-              .set(item.toJson());
-        } catch (e) {
-          Get.snackbar(
-            'Error deleting list item',
-            '',
-          );
-        }
+      item.imageUrl = "";
+      try {
+        firestore
+            .collection('groups')
+            .doc(globalGroupId)
+            .collection('lists')
+            .doc(listId) //specific list
+            .collection('recently-deleted')
+            .doc(item.id)
+            .set(item.toJson());
+      } catch (e) {
+        Get.snackbar(
+          'Error deleting list item',
+          '',
+        );
       }
     }
-
     //delete last recently deleted if full
-
     List<Item> recentlyDeleted = await getRecentlyDeletedTest(listId);
     if (recentlyDeleted.length > 20) {
       deleteRecentlyDeletedItem(recentlyDeleted.first.id, listId);
     }
 
-    firestore
-        .collection('groups')
-        .doc(globalGroupId)
-        .collection('lists')
-        .doc(listId) //specific list
-        .collection('items')
-        .doc(item.id)
-        .delete(); //will need to build Item
-
-    //update itemCount
-
+    try {
+      firestore
+          .collection('groups')
+          .doc(globalGroupId)
+          .collection('lists')
+          .doc(listId) //specific list
+          .collection('items')
+          .doc(item.id)
+          .delete(); //will need to build Item
+    } catch (e) {
+      print("error");
+    }
     int numItems = await getListLength(listId);
     adjustListCounter(listId, numItems);
   }
 
   Future<bool> deleteListItemImage(Item item, String listId) async {
+    if (item.imageUrl != null && item.imageUrl != "") {
+      try {
+        await firebaseStorage
+            .ref()
+            .child(globalGroupId)
+            .child('listImages')
+            .child('list-$listId')
+            .child(item.id)
+            .delete();
+        return true;
+      } catch (e) {
+        Get.snackbar(
+          'Error deleting list item',
+          '',
+        );
+        return false;
+      }
+    }
+    return true;
+  }
+
+  Future<void> deleteListItemImageFirebase(Item item, String listId) async {
     try {
       await firebaseStorage
           .ref()
@@ -253,18 +265,17 @@ class ListsController extends GetxController {
           .child('list-$listId')
           .child(item.id)
           .delete();
-      return true;
     } catch (e) {
       Get.snackbar(
         'Error deleting list item',
         '',
       );
-      return false;
     }
   }
 
-  void updateListImageUrl(Item item, String listId, String imageUrl) {
-    firestore
+  Future<void> updateListImageUrl(
+      Item item, String listId, String imageUrl) async {
+    await firestore
         .collection('groups')
         .doc(globalGroupId)
         .collection('lists')

@@ -28,11 +28,11 @@ class AuthController extends GetxController {
   User get user => _user.value!;
 
   @override
-  void onReady() async {
+  Future<void> onReady() async {
     super.onReady();
     _user = Rx<User?>(firebaseAuth.currentUser);
     _user.bindStream(firebaseAuth.authStateChanges());
-    ever(_user, _setInitialScreen);
+    ever(_user, setInitialScreen);
   }
 
   Future<void> getUserData() async {
@@ -59,6 +59,8 @@ class AuthController extends GetxController {
         },
         onError: (e) => print("Error getting document: $e"),
       );
+    } else {
+      categories = [];
     }
   }
 
@@ -72,7 +74,7 @@ class AuthController extends GetxController {
     }
   }
 
-  _setInitialScreen(User? user) async {
+  setInitialScreen(User? user) async {
     await Future.delayed(const Duration(milliseconds: 300));
     if (user == null) {
       Get.offAll(() => SignIn(), transition: Transition.cupertino);
@@ -125,7 +127,6 @@ class AuthController extends GetxController {
           'Profile Picture', 'You have successfully selected [] image');
     }
     pickedImageSignUp = Rx<File?>(File(pickedImage!.path));
-    print(' test: ${profileImage} ');
   }
 
   // upload to firebase storage
@@ -197,6 +198,28 @@ class AuthController extends GetxController {
     }
   }
 
+  Future<bool> validateCredentials(String password) async {
+    try {
+      await firebaseAuth.signInWithEmailAndPassword(
+          email: user.email!, password: password);
+      return true;
+    } catch (e) {
+      if (e.toString() ==
+          "[firebase_auth/wrong-password] The password is invalid or the user does not have a password.") {
+        Get.snackbar(
+          'Incorrect Password',
+          'The password is invalid',
+        );
+      } else {
+        Get.snackbar(
+          'Incorrect Password',
+          filterErrorMessage(e.toString()),
+        );
+      }
+      return false;
+    }
+  }
+
   Future<void> loginUser(String email, String password) async {
     try {
       if (email.isNotEmpty && password.isNotEmpty) {
@@ -221,5 +244,37 @@ class AuthController extends GetxController {
 
   void signOut() async {
     await firebaseAuth.signOut();
+  }
+
+  void updateLocalDataOnSignOut() {
+    globalGroupId = user.uid;
+    globalUsername = user.uid;
+    inGroup = false;
+    isPremium = false;
+    categories = [];
+  }
+
+  Future<void> deleteUserAccount(String password) async {
+    try {
+      await firebaseAuth.currentUser!.delete();
+    } on FirebaseAuthException catch (e) {
+      if (e.code == "requires-recent-login") {
+        await _reauthenticateAndDelete(password);
+      } else {
+        // Handle other Firebase exceptions
+      }
+    } catch (e) {
+      // Handle general exception
+    }
+  }
+
+  Future<void> _reauthenticateAndDelete(String password) async {
+    print("need to reauth with password proviuded");
+    AuthCredential auth = EmailAuthProvider.credential(
+      email: user.email!,
+      password: password,
+    );
+    await firebaseAuth.currentUser!.reauthenticateWithCredential(auth);
+    await firebaseAuth.currentUser!.delete();
   }
 }

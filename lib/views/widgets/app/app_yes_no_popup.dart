@@ -3,17 +3,17 @@ import 'package:flutter/cupertino.dart';
 class AppYesNoPopup extends StatelessWidget {
   final String header;
   final String subHeader;
-  final String leftActionButton;
-  final String rightActionButton;
-  final Function leftActionFunction;
+  final String confirmAction;
+  final String cancelAction;
+  final Function confirmActionFunction;
 
   const AppYesNoPopup({
     super.key,
     required this.header,
     required this.subHeader,
-    required this.leftActionButton,
-    required this.rightActionButton,
-    required this.leftActionFunction,
+    required this.confirmAction,
+    required this.cancelAction,
+    required this.confirmActionFunction,
   });
 
   @override
@@ -23,15 +23,15 @@ class AppYesNoPopup extends StatelessWidget {
       content: Text(subHeader),
       actions: [
         CupertinoDialogAction(
-          child: Text(leftActionButton),
+          child: Text(cancelAction),
           onPressed: () {
-            leftActionFunction();
+            Navigator.pop(context);
           },
         ),
         CupertinoDialogAction(
-          child: Text(rightActionButton),
+          child: Text(confirmAction),
           onPressed: () {
-            Navigator.pop(context);
+            confirmActionFunction();
           },
         ),
       ],

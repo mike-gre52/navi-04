@@ -25,7 +25,7 @@ class ListBottomPopup extends StatefulWidget {
 }
 
 class _ListBottomPopupState extends State<ListBottomPopup> {
-  void onDiologAction() {
+  void _confirmActionFunction() {
     Navigator.pop(context);
     Navigator.pop(context);
     Navigator.pop(context);
@@ -42,9 +42,9 @@ class _ListBottomPopupState extends State<ListBottomPopup> {
       builder: (_) => AppYesNoPopup(
         header: 'Are you sure you want to delete this list?',
         subHeader: 'All data will be lost',
-        leftActionButton: "Yes",
-        rightActionButton: "No",
-        leftActionFunction: onDiologAction,
+        confirmAction: "Yes",
+        cancelAction: "No",
+        confirmActionFunction: _confirmActionFunction,
       ),
       barrierDismissible: true,
     );
@@ -124,7 +124,7 @@ class _ListBottomPopupState extends State<ListBottomPopup> {
                     },
                   ),
                   PopupButton(
-                    icon: CupertinoIcons.arrowshape_turn_up_left,
+                    icon: CupertinoIcons.arrow_counterclockwise,
                     buttonName: 'Recently Deleted',
                     onClick: () {
                       Get.toNamed(

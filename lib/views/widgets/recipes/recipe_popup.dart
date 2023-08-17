@@ -28,7 +28,7 @@ class RecipePopup extends StatefulWidget {
 }
 
 class _RecipePopupState extends State<RecipePopup> {
-  void onDialogAction() {
+  void _confirmActionFunction() {
     Navigator.pop(context);
     Navigator.pop(context);
     Navigator.pop(context);
@@ -41,9 +41,9 @@ class _RecipePopupState extends State<RecipePopup> {
       builder: (_) => AppYesNoPopup(
           header: 'Are you sure you want to delete this Recipe?',
           subHeader: 'All data will be lost',
-          leftActionButton: "Yes",
-          rightActionButton: 'Cancel',
-          leftActionFunction: onDialogAction),
+          confirmAction: "Yes",
+          cancelAction: 'Cancel',
+          confirmActionFunction: _confirmActionFunction),
       barrierDismissible: true,
     );
   }

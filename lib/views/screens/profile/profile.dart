@@ -93,7 +93,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   _signOutDialog(BuildContext context) {
-    void _onRightAction() {
+    void _confirmActionFunction() {
       Navigator.pop(context);
       authController.signOut();
     }
@@ -103,9 +103,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
       builder: (_) => AppYesNoPopup(
         header: 'Are you sure you want to sign out?',
         subHeader: "",
-        leftActionButton: "Yes",
-        rightActionButton: "No",
-        leftActionFunction: _onRightAction,
+        confirmAction: "Yes",
+        cancelAction: "No",
+        confirmActionFunction: _confirmActionFunction,
+      ),
+      barrierDismissible: true,
+    );
+  }
+
+  _deleteAccountDialog(BuildContext context) {
+    void _confirmActionFunction() async {
+      Navigator.pop(context);
+      Get.toNamed(RouteHelper.getReauthScreen());
+    }
+
+    showDialog(
+      context: context,
+      builder: (_) => AppYesNoPopup(
+        header: 'Are you sure you want to delete your account?',
+        subHeader:
+            "All user data will be lost. You must enter your password to delete the account.",
+        confirmAction: "Yes",
+        cancelAction: "No",
+        confirmActionFunction: _confirmActionFunction,
       ),
       barrierDismissible: true,
     );
@@ -131,9 +151,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     double width80 = screenWidth / 5.175;
     double width200 = screenWidth / 2.07;
     double width350 = screenWidth / 1.182;
-    double fontSize14 = screenHeight / 64;
-    double fontSize16 = screenHeight / 56;
-    double fontSize18 = screenHeight / 49.777;
+
+    double fontSize12 = screenHeight / 74.666;
+    double fontSize18 = screenHeight / 49.7778;
     double fontSize20 = screenHeight / 44.8;
     double fontSize22 = screenHeight / 40.727;
 
@@ -235,14 +255,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           },
                           child: Text(
                             "Sign Out",
-                            style: TextStyle(color: darkRed, fontSize: 22),
+                            style: TextStyle(
+                              color: black,
+                              fontSize: fontSize22,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: height10),
+                        GestureDetector(
+                          onTap: () {
+                            _deleteAccountDialog(context);
+                          },
+                          child: Text(
+                            "Delete Account",
+                            style: TextStyle(
+                              color: darkRed,
+                              fontSize: fontSize18,
+                            ),
                           ),
                         ),
                         Align(
                           alignment: Alignment.center,
                           child: Text(
-                            "v1.0.34",
-                            style: TextStyle(color: darkGrey, fontSize: 12),
+                            "v1.0.36",
+                            style: TextStyle(
+                              color: darkGrey,
+                              fontSize: fontSize12,
+                            ),
                           ),
                         ),
                       ],

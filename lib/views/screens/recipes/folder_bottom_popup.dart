@@ -29,7 +29,7 @@ class FolderBottomPopup extends StatefulWidget {
 }
 
 class _FolderBottomPopupState extends State<FolderBottomPopup> {
-  void onDiologAction() {
+  void _confirmActionFunction() {
     Navigator.pop(context);
     Navigator.pop(context);
     recipeController.deleteRecipeCategory(widget.category);
@@ -43,9 +43,9 @@ class _FolderBottomPopupState extends State<FolderBottomPopup> {
       builder: (_) => AppYesNoPopup(
         header: 'Are you sure you want to delete this folder?',
         subHeader: 'All data will be lost',
-        leftActionButton: "Yes",
-        rightActionButton: "No",
-        leftActionFunction: onDiologAction,
+        confirmAction: "Yes",
+        cancelAction: "No",
+        confirmActionFunction: _confirmActionFunction,
       ),
       barrierDismissible: true,
     );

@@ -22,7 +22,7 @@ class RecipesPopup extends StatelessWidget {
   }) : super(key: key);
 
   _showDialog(BuildContext context) {
-    void onDialogAction() {
+    void _confirmActionFunction() {
       Navigator.pop(context);
       Navigator.pop(context);
       recipeController.deleteRecipe(recipe);
@@ -33,9 +33,9 @@ class RecipesPopup extends StatelessWidget {
       builder: (_) => AppYesNoPopup(
         header: "Are you sure you want to delete this Recipe?",
         subHeader: "All data will be lost",
-        leftActionButton: "Yes",
-        rightActionButton: "Cancel",
-        leftActionFunction: onDialogAction,
+        confirmAction: "Yes",
+        cancelAction: "Cancel",
+        confirmActionFunction: _confirmActionFunction,
       ),
       barrierDismissible: true,
     );

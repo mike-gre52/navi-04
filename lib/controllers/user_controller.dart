@@ -69,4 +69,9 @@ class UserController extends GetxController {
         .doc(firebaseAuth.currentUser!.uid)
         .update({"color": color});
   }
+
+  Future<void> deleteUserDocument(String userId) async {
+    print(userId);
+    await firestore.collection('users').doc(userId).delete();
+  }
 }

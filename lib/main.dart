@@ -34,7 +34,6 @@ Future<void> main() async {
 
 getData() async {
   await authController.getUserData();
-  print(signUpDate);
 }
 
 late String globalUsername;

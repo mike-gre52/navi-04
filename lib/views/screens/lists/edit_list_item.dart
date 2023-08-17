@@ -459,10 +459,12 @@ Widget buildBlur({
     );
 
 _showDialog(BuildContext context, Item item, String listId, Function onDelete) {
-  void onDiologAction() {
+  void confirmActionFunction() async {
     Navigator.pop(context);
-    listController.updateListImageUrl(item, listId, "");
-    listController.deleteListItemImage(item, listId);
+
+    await listController.updateListImageUrl(item, listId, "");
+    await listController.deleteListItemImageFirebase(item, listId);
+
     onDelete();
   }
 
@@ -471,9 +473,9 @@ _showDialog(BuildContext context, Item item, String listId, Function onDelete) {
     builder: (_) => AppYesNoPopup(
       header: 'Are you sure you want to delete the uploaded image?',
       subHeader: '',
-      leftActionButton: "Yes",
-      rightActionButton: "Cancel",
-      leftActionFunction: onDiologAction,
+      confirmAction: "Yes",
+      cancelAction: "Cancel",
+      confirmActionFunction: confirmActionFunction,
     ),
     barrierDismissible: true,
   );

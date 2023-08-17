@@ -54,7 +54,7 @@ class _GroupScreenState extends State<GroupScreen> {
   }
 
   _leaveGroupDialog(BuildContext context, Group group) {
-    void _onRightAction() {
+    void _confirmActionFunction() {
       groupController.leaveGroup(group);
       widget.setRecipeNavigator(recipePage.allRecipes, "");
       setState(() {
@@ -68,9 +68,9 @@ class _GroupScreenState extends State<GroupScreen> {
       builder: (_) => AppYesNoPopup(
         header: 'Are you sure you want to leave the group?',
         subHeader: "",
-        leftActionButton: "Yes",
-        rightActionButton: "No",
-        leftActionFunction: _onRightAction,
+        confirmAction: "Yes",
+        cancelAction: "No",
+        confirmActionFunction: _confirmActionFunction,
       ),
       barrierDismissible: true,
     );

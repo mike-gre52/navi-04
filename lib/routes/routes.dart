@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:whats_for_dinner/test.dart';
 import 'package:whats_for_dinner/views/screens/app/textfield_And_Submit_Screen.dart';
 import 'package:whats_for_dinner/views/screens/auth/confirm_reset_email_sent.dart';
+import 'package:whats_for_dinner/views/screens/auth/reauth.dart';
 import 'package:whats_for_dinner/views/screens/auth/reset_password.dart';
 import 'package:whats_for_dinner/views/screens/lists/add_list.dart';
 import 'package:whats_for_dinner/views/screens/lists/edit_list_item.dart';
@@ -87,6 +88,7 @@ class RouteHelper {
   static String selectCategoriesScreen = '/selectCateogriesScreen';
   static String editNameScreen = '/editNameScreen';
   static String selectRecipeAddToFolder = '/selectRecipeAddToFolder';
+  static String reauthScreen = '/reauthScreen';
   static String testScreen = '/testScreen';
 
   static String getHomeRoute() => home;
@@ -129,6 +131,7 @@ class RouteHelper {
   static String getRecipeFoldersScreen() => recipeFoldersScreen;
   static String getSelectCategoriesScreen() => selectCategoriesScreen;
   static String getEditNameScreen() => editNameScreen;
+  static String getReauthScreen() => reauthScreen;
   static String getSelectRecipesAddToFolder() => selectRecipeAddToFolder;
 
   static String getTestScreen() => testScreen;
@@ -372,6 +375,12 @@ class RouteHelper {
       transitionDuration: const Duration(milliseconds: 250),
     ),
     */
+    GetPage(
+      name: reauthScreen,
+      page: () => const Reauth(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 250),
+    ),
     GetPage(
       name: selectRecipeAddToFolder,
       page: () => SelectRecipesAddToFolderScreen(),

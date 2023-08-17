@@ -23,6 +23,14 @@ class GroupController extends GetxController {
     return data;
   }
 
+  Future<Group> getGroupCall(String groupID) async {
+    final data = await firestore.collection('groups').doc(globalGroupId).get();
+
+    Group group = Group.static().fromJson(data);
+
+    return group;
+  }
+
   // Future<List<String>> getGroupCategories() async {
   //   final recipeData =
   //       firestore.collection('groups').doc(globalGroupId).collection('recipes');
@@ -52,14 +60,13 @@ class GroupController extends GetxController {
       (snapshot) {
         List<Member> members =
             snapshot.docs.map((doc) => Member.fromJson(doc.data())).toList();
-        print(members[0].name);
         return members;
       },
     );
     return data;
   }
 
-  void leaveGroup(Group group) {
+  Future<void> leaveGroup(Group group) async {
     final username = globalUsername;
     final color = globalColor;
     categories = [];

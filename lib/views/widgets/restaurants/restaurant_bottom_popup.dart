@@ -24,7 +24,7 @@ class RestaurantBottomPopup extends StatefulWidget {
 }
 
 class _RestaurantBottomPopupState extends State<RestaurantBottomPopup> {
-  onDialogAction() {
+  _confirmActionFunction() {
     Navigator.pop(context);
     Navigator.pop(context);
     Navigator.pop(context);
@@ -37,9 +37,9 @@ class _RestaurantBottomPopupState extends State<RestaurantBottomPopup> {
       builder: (_) => AppYesNoPopup(
         header: 'Are you sure you want to delete the restaurant?',
         subHeader: 'All data will be lost',
-        leftActionButton: "Yes",
-        rightActionButton: "Cancel",
-        leftActionFunction: onDialogAction,
+        confirmAction: "Yes",
+        cancelAction: "Cancel",
+        confirmActionFunction: _confirmActionFunction,
       ),
       barrierDismissible: true,
     );
